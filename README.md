@@ -1,6 +1,3 @@
-# sudoku-test
+# Private Learning Repository
 
-Test repository for a collaborative sudoku solving program
-
-
-This repository is for learning purposes
+This repository is a personal sandbox for learning GitHub workflows and improving Python skills. It is not an active project and not open for contributions.
