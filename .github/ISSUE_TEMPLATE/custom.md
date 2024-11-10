@@ -1,10 +1,3 @@
----
-name: Custom issue template
-about: Describe this issue template's purpose here.
-title: ''
-labels: ''
-assignees: ''
+## Issue Template
 
----
-
-
+Thank you for your interest! This repository is for personal learning purposes only. No contributions are currently being accepted.
