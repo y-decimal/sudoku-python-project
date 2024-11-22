@@ -31,14 +31,9 @@ root.configure(bg="#181819")
 root.iconbitmap('./assets/images/sudoku.ico')
 
 message = tk.Label(root, text="Hello, World!", font=("Helvetica", 24), background="#181a1b", foreground="white")
-testString = "Hello, World, Fuck!"    
-neuerstr = testString.upper().split()
-
-def function(content):
-    print(content[::-1])
 
 
-button = ttk.Button(root, text="Click me!", command=function)
+button = ttk.Button(root, text="Click me!", command=lambda: print("Hello, World!"))
 
 messageButBetter = ttk.Label(root, text="Hello, World! But better tho", font=("Helvetica", 24), background="#1a1a33", foreground="white")
 
