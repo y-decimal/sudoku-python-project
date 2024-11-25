@@ -1,7 +1,8 @@
 import tkinter as tk
+import customtkinter as ctk
 
 
-class App(tk.Tk):
+class App(ctk.CTk):
 
     def __init__(self):
 
@@ -21,15 +22,13 @@ class App(tk.Tk):
 
         self.title(SUDOKU_TEST_TEXT)
 
-        self.configure(bg="#1f1f1f")
-
         self.set_window_size(RELATIVE_SIZE, MINIMUM_SIZE, ASPECT_RATIO)
 
         #self.iconbitmap('./assets/images/sudoku.ico')
 
 
-        self.sudoku_frame = tk.Frame(self)
-        self.sudoku_frame.configure(borderwidth=5)
+        self.sudoku_frame = ctk.CTkFrame(self)
+        self.sudoku_frame.configure(border_color="lightgreen", border_width=5)
 
         # App Grid Configuration
         #self.grid_columnconfigure((0,3), weight=1)
@@ -44,21 +43,20 @@ class App(tk.Tk):
 
         self.sudoku_frame.grid(row=0, column=0, padx=10, pady=10, columnspan=2) 
 
-        class SudokuField(tk.Entry):
+        class SudokuField(ctk.CTkEntry):
 
             def __init__(self, master, row, column, window_height, scale):      
 
 
-                self.entry_variable = tk.StringVar()          
-                super().__init__(master,  
-                                 background="#1f1f1f",
-                                 foreground="white",
+                self.entry_variable = ctk.StringVar()          
+                super().__init__(master, 
+                                 width= window_height*scale, 
+                                 height = window_height*scale, 
                                  font=("Arial", 30), 
-                                 width=30,
                                  textvariable=self.entry_variable, 
                                  justify="center"
                                 )
-                # self.configure(borderwidth=1)
+                # self.configure(border_color="lightgreen", border_width=1)
                 self.grid(row=row, column=column, sticky="nsew")
                 self.entry_variable.trace_add("write", self.callback)
 
@@ -97,37 +95,37 @@ class App(tk.Tk):
 
 
 
-        self.sudoku_button_frame = tk.Frame(self)
+        self.sudoku_button_frame = ctk.CTkFrame(self)
+        self.sudoku_button_frame_border_color = "#FFFFAA"
 
-
-        self.button1 = tk.Button(self.sudoku_button_frame, text="Click Me!", command=self.button_callback)
+        self.button1 = ctk.CTkButton(self.sudoku_button_frame, text="Click Me!", command=self.button_callback)
         self.button1.grid(row = 0, column = 0, padx=10, pady=10, sticky="ew")
+        self.button1.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
 
-
-        self.clear_button = tk.Button(self.sudoku_button_frame, text="Clear", command=self.clearbutton_callback)
+        self.clear_button = ctk.CTkButton(self.sudoku_button_frame, text="Clear", command=self.clearbutton_callback)
         self.clear_button.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
+        self.clear_button.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
 
-
-        self.toggle_button = tk.Button(self.sudoku_button_frame, text="Toggle Test", command=self.togglebutton_callback)
-        self.toggle_state = True
+        self.toggle_button = ctk.CTkButton(self.sudoku_button_frame, text="Toggle Test", command=self.togglebutton_callback)
+        self.toggle_state = False
         self.toggle_button.grid(row = 0, column = 2, padx=10, pady=10, sticky="ew")
-
+        self.toggle_button.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
 
         self.sudoku_button_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         self.sudoku_button_frame.grid_columnconfigure((0,2), weight=1)
         self.sudoku_button_frame.grid_rowconfigure(0, weight=1)
-        # self.sudoku_button_frame.configure(borderwidth=3)
+        # self.sudoku_button_frame.configure(border_color=self.sudoku_button_frame_border_color, border_width=3)
 
 
 
-        self.label = tk.Label(self, text="", font=("Arial", 20), justify="center")
+        self.label = ctk.CTkLabel(self, text="", font=("Arial", 20), justify="center")
         self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="ew")
         #self.label.configure(bg_color="darkblue")
 
 
-        self.labelTopright = tk.Label(self, text="TEST", font=("Arial", 20), justify="center")
-        # self.labelTopright.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
-        # self.labelTopright.configure(bg_color="darkblue")
+        self.labelTopright = ctk.CTkLabel(self, text="TEST", font=("Arial", 20), justify="center")
+        self.labelTopright.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
+        #self.labelTopright.configure(bg_color="darkblue")
 
 
     def button_callback(self):
