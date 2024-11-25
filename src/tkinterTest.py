@@ -39,12 +39,14 @@ class App(tk.Tk):
 
 
         # Frame Grid Configuration
-        self.sudoku_frame.grid_columnconfigure( (0,1,2,3,4,5,6,7,8), weight=1)
+        
+
+        self.sudoku_frame.grid_columnconfigure((0,1,2,3,4,5,6,7,8), weight=1)
         self.sudoku_frame.grid_rowconfigure( (0,1,2,3,4,5,6,7,8), weight=1)
 
         self.sudoku_frame.grid(row=0, column=0, padx=10, pady=10, columnspan=2) 
 
-        class SudokuField(tk.Entry):
+        class SudokuField(tk.Text):
 
             def __init__(self, master, row, column, window_height, scale):      
 

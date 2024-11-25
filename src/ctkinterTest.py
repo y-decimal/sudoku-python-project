@@ -1,30 +1,25 @@
 import tkinter as tk
+import GameEntryField
 import customtkinter as ctk
 
 
-class App(ctk.CTk):
+class SudokuApp(ctk.CTk):
 
-    def __init__(self):
 
-        super().__init__()
+    def __init__(self, sudoku_test_text = "Sudoku Test", relative_size = 0.5, minimum_size = 0.5, aspect_ratio = 5/4):
 
-        SUDOKU_TEST_TEXT = "Sudoku Test Print"
-        RELATIVE_SIZE = 0.5
-        MINIMUM_SIZE = 0.25
-        ASPECT_RATIO = 5/4
+        ctk.CTk.__init__(self)
 
-        self.screen_width = self.winfo_screenwidth()
-        self.screen_height = self.winfo_screenheight()
 
-        #set the window size relative to the screen size
-        self.window_height = int(self.screen_height*RELATIVE_SIZE)
-        self.window_width = int(self.window_height*ASPECT_RATIO)
+        self.sudoku_test_text = sudoku_test_text
+        self.relative_size = relative_size
+        self.minimum_size = minimum_size
+        self.aspect_ratio = aspect_ratio
 
-        self.title(SUDOKU_TEST_TEXT)
+        self.set_window_parameters()
 
-        self.set_window_size(RELATIVE_SIZE, MINIMUM_SIZE, ASPECT_RATIO)
-
-        #self.iconbitmap('./assets/images/sudoku.ico')
+        # set the icon of the window
+        self.iconbitmap('./assets/images/sudoku.ico')
 
 
         self.sudoku_frame = ctk.CTkFrame(self)
@@ -38,60 +33,17 @@ class App(ctk.CTk):
 
 
         # Frame Grid Configuration
-        self.sudoku_frame.grid_columnconfigure( (0,1,2,3,4,5,6,7,8), weight=1)
-        self.sudoku_frame.grid_rowconfigure( (0,1,2,3,4,5,6,7,8), weight=1)
+        self.sudoku_frame.grid_columnconfigure([i for i in range(9)], weight=1)
+        self.sudoku_frame.grid_rowconfigure( [i for i in range(9)], weight=1)
 
         self.sudoku_frame.grid(row=0, column=0, padx=10, pady=10, columnspan=2) 
 
-        class SudokuField(ctk.CTkEntry):
-
-            def __init__(self, master, row, column, window_height, scale):      
-
-
-                self.entry_variable = ctk.StringVar()          
-                super().__init__(master, 
-                                 width= window_height*scale, 
-                                 height = window_height*scale, 
-                                 font=("Arial", 30), 
-                                 textvariable=self.entry_variable, 
-                                 justify="center"
-                                )
-                # self.configure(border_color="lightgreen", border_width=1)
-                self.grid(row=row, column=column, sticky="nsew")
-                self.entry_variable.trace_add("write", self.callback)
-
-
-            def callback(self , *args):
-
-                #pass
-                if len(self.entry_variable.get()) > 1:
-                    self.entry_variable.set(self.entry_variable.get()[:1])
-
-                if not self.entry_variable.get().isdigit():
-                    self.entry_variable.set("")
-
-
 
         self.sudoku_field = []
+        self.sudokuEntrySize = self.window_height*0.15
+
         for i in range(9*9):
-
-            # sticky = ""
-
-            # if i//9 == 0: 
-            #     sticky += "n"
-            # elif i//9 == 8:
-            #     sticky += "s"
-
-
-            # if i%9 == 0:
-            #     sticky += "w"
-            # elif i%9 == 8:
-            #     sticky += "e"
-
-
-            # print(sticky)
-
-            self.sudoku_field.append(SudokuField(self.sudoku_frame, i//9, i%9, self.window_height, 0.15))
+            self.sudoku_field.append(SudokuApp.SudokuGameEntryField(self.sudoku_frame, i//9, i%9, self.sudokuEntrySize))
 
 
 
@@ -128,12 +80,28 @@ class App(ctk.CTk):
         #self.labelTopright.configure(bg_color="darkblue")
 
 
+
+
+        
+    class SudokuGameEntryField(GameEntryField.GameEntryField): 
+           
+            def callback(self, *args):
+
+                if len(self.entry_variable.get()) > 1:
+                    self.entry_variable.set(self.entry_variable.get()[:1])
+
+                if not self.entry_variable.get().isdigit():
+                    self.entry_variable.set("")
+
+
     def button_callback(self):
         self.label.configure(text="Button Clicked!")
+
 
     def clearbutton_callback(self):
         self.label.configure(text="")
         
+
     def togglebutton_callback(self):
         if self.toggle_state:
             self.labelTopright.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
@@ -142,7 +110,16 @@ class App(ctk.CTk):
             self.labelTopright.grid_forget()
             self.toggle_state = True
 
-    def set_window_size(self, relative_size, minimum_size, aspect_ratio):
+
+    def set_window_parameters(self):
+
+         # get the screen width and height
+        self.screen_width = self.winfo_screenwidth()
+        self.screen_height = self.winfo_screenheight()
+
+        # set the window size relative to the screen size
+        self.window_height = int(self.screen_height*self.relative_size)
+        self.window_width = int(self.window_height*self.aspect_ratio)
 
         # find the center point of the screen
         center_x = int(self.screen_width/2 - self.window_width/2)
@@ -152,21 +129,18 @@ class App(ctk.CTk):
         self.geometry(f'{self.window_width}x{self.window_height}+{center_x}+{center_y}')
 
         # set the minimum size of the window
-        minimum_height = int(self.screen_height*minimum_size)
-        minimum_width = int(minimum_height*aspect_ratio)
+        minimum_height = int(self.screen_height*self.minimum_size)
+        minimum_width = int(minimum_height*self.aspect_ratio)
         self.minsize(minimum_width, minimum_height)
+
+        # set the title of the window
+        self.title(self.sudoku_test_text)
+        
+        
     
 
 
 
-root = App()
-
-# entry = SudokuEntry(root)
-
-root.sudoku_field[1].entry_variable.set("1")
-root.sudoku_field[1].configure(state="disabled")
-
-root.sudoku_field[2].entry_variable.set("2")
-root.sudoku_field[2].configure(state="disabled")
+root = SudokuApp()
 
 root.mainloop()
