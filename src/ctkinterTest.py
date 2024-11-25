@@ -1,5 +1,5 @@
 import tkinter as tk
-import GameEntryField
+import SudokuGridHelper
 import customtkinter as ctk
 
 
@@ -22,9 +22,7 @@ class SudokuApp(ctk.CTk):
         self.iconbitmap('./assets/images/sudoku.ico')
 
 
-        self.sudoku_frame = ctk.CTkFrame(self)
-        self.sudoku_frame.configure(border_color="lightgreen", border_width=5)
-
+       
         # App Grid Configuration
         #self.grid_columnconfigure((0,3), weight=1)
         #self.grid_rowconfigure((0,3), weight=1)
@@ -32,18 +30,13 @@ class SudokuApp(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
 
 
+
+
         # Frame Grid Configuration
-        self.sudoku_frame.grid_columnconfigure([i for i in range(9)], weight=1)
-        self.sudoku_frame.grid_rowconfigure( [i for i in range(9)], weight=1)
+        self.sudoku_frame = SudokuGridHelper.SudokuGameFrame(self, self.window_height*0.90)
+        self.sudoku_frame.configure(bg_color="lightblue")
 
         self.sudoku_frame.grid(row=0, column=0, padx=10, pady=10, columnspan=2) 
-
-
-        self.sudoku_field = []
-        self.sudokuEntrySize = self.window_height*0.15
-
-        for i in range(9*9):
-            self.sudoku_field.append(SudokuApp.SudokuGameEntryField(self.sudoku_frame, i//9, i%9, self.sudokuEntrySize))
 
 
 
@@ -63,9 +56,9 @@ class SudokuApp(ctk.CTk):
         self.toggle_button.grid(row = 0, column = 2, padx=10, pady=10, sticky="ew")
         self.toggle_button.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
 
-        self.sudoku_button_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        self.sudoku_button_frame.grid_columnconfigure((0,2), weight=1)
-        self.sudoku_button_frame.grid_rowconfigure(0, weight=1)
+        # self.sudoku_button_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        # self.sudoku_button_frame.grid_columnconfigure((0,2), weight=1)
+        # self.sudoku_button_frame.grid_rowconfigure(0, weight=1)
         # self.sudoku_button_frame.configure(border_color=self.sudoku_button_frame_border_color, border_width=3)
 
 
@@ -80,18 +73,6 @@ class SudokuApp(ctk.CTk):
         #self.labelTopright.configure(bg_color="darkblue")
 
 
-
-
-        
-    class SudokuGameEntryField(GameEntryField.GameEntryField): 
-           
-            def callback(self, *args):
-
-                if len(self.entry_variable.get()) > 1:
-                    self.entry_variable.set(self.entry_variable.get()[:1])
-
-                if not self.entry_variable.get().isdigit():
-                    self.entry_variable.set("")
 
 
     def button_callback(self):
@@ -142,5 +123,8 @@ class SudokuApp(ctk.CTk):
 
 
 root = SudokuApp()
+
+# root.sudoku_field[0].entry_variable.set("1")
+# root.sudoku_field[0].configure(status="disabled")
 
 root.mainloop()
