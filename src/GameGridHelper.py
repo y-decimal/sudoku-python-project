@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import tkinter as tk
 from abc import ABC, abstractmethod
 
 class GameEntryField(ABC):
@@ -27,7 +28,7 @@ class GameEntryField(ABC):
 
 
 
-class SquareGameFrame(ctk.CTkFrame, ABC):
+class SquareGameFrame(tk.ttk.Frame, ABC):
 
     def initialize_game_frame(self, master, gridsize, frame_height):
 

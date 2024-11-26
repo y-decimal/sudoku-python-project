@@ -26,17 +26,17 @@ class SudokuApp(ctk.CTk):
         # App Grid Configuration
         #self.grid_columnconfigure((0,3), weight=1)
         #self.grid_rowconfigure((0,3), weight=1)
-        self.grid_columnconfigure((0,1), weight=1)
-        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure((0), weight=1)
+        self.grid_rowconfigure((0,1), weight=1)
 
 
 
 
         # Frame Grid Configuration
         self.sudoku_frame = SudokuGridHelper.SudokuGameFrame(self, self.window_height*0.90)
-        self.sudoku_frame.configure(bg_color="lightblue")
+        self.sudoku_frame.configure(padding=5)
 
-        self.sudoku_frame.grid(row=0, column=0, padx=10, pady=10, columnspan=2) 
+        self.sudoku_frame.grid(row=0, column=0, padx=10, columnspan=1) 
 
 
 
@@ -51,26 +51,18 @@ class SudokuApp(ctk.CTk):
         self.clear_button.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
         self.clear_button.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
 
-        self.toggle_button = ctk.CTkButton(self.sudoku_button_frame, text="Toggle Test", command=self.togglebutton_callback)
-        self.toggle_state = False
-        self.toggle_button.grid(row = 0, column = 2, padx=10, pady=10, sticky="ew")
-        self.toggle_button.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
 
-        # self.sudoku_button_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        # self.sudoku_button_frame.grid_columnconfigure((0,2), weight=1)
-        # self.sudoku_button_frame.grid_rowconfigure(0, weight=1)
-        # self.sudoku_button_frame.configure(border_color=self.sudoku_button_frame_border_color, border_width=3)
+        self.sudoku_button_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ns")
+        self.sudoku_button_frame.grid_columnconfigure((0,1), weight=1)
+        self.sudoku_button_frame.grid_rowconfigure(0, weight=1)
+        self.sudoku_button_frame.configure(border_color=self.sudoku_button_frame_border_color, border_width=3)
 
 
 
         self.label = ctk.CTkLabel(self, text="", font=("Arial", 20), justify="center")
-        self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="ew")
+        #self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="ew")
         #self.label.configure(bg_color="darkblue")
 
-
-        self.labelTopright = ctk.CTkLabel(self, text="TEST", font=("Arial", 20), justify="center")
-        self.labelTopright.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
-        #self.labelTopright.configure(bg_color="darkblue")
 
 
 
