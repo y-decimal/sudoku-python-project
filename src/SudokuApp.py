@@ -1,6 +1,9 @@
 import tkinter as tk
-import SudokuGridHelper
 import customtkinter as ctk
+
+import gridhelpers.SudokuGridHelper as SudokuGridHelper
+import customframes as customframes
+
 
 
 class SudokuApp(ctk.CTk):
