@@ -1,8 +1,9 @@
 import tkinter as tk
 import customtkinter as ctk
 
+import customframes.ButtonFrame
 import gridhelpers.SudokuGridHelper as SudokuGridHelper
-import customframes as customframes
+from customframes import ButtonFrame, CheckboxFrame
 
 
 
@@ -31,40 +32,34 @@ class SudokuApp(ctk.CTk):
         #self.grid_rowconfigure((0,3), weight=1)
         self.grid_columnconfigure((0,2), weight=0)
         self.grid_columnconfigure((1), weight=2)
-        self.grid_rowconfigure((0,1), weight=1)
+        self.grid_rowconfigure(0, weight=2)
+        self.grid_rowconfigure((1,2), weight=1)
 
 
 
 
         # Frame Grid Configuration
         self.sudoku_frame = SudokuGridHelper.SudokuGameFrame(self, self.window_height*0.90)
-
         self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
 
 
-
-        self.sudoku_button_frame = ctk.CTkFrame(self)
+        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 2)
         self.sudoku_button_frame_border_color = "#FFFFAA"
 
-        self.button1 = ctk.CTkButton(self.sudoku_button_frame, text="Click Me!", command=self.button_callback)
-        self.button1.grid(row = 0, column = 0, padx=10, pady=10, sticky="ew")
-        self.button1.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
 
-        self.clear_button = ctk.CTkButton(self.sudoku_button_frame, text="Clear", command=self.clearbutton_callback)
-        self.clear_button.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
-        self.clear_button.configure(border_color=self.sudoku_button_frame_border_color, border_width=1)
+        self.sudoku_button_frame.buttons[0].configure(text="Click Me!", command=self.button_callback)
+        self.sudoku_button_frame.buttons[1].configure(text="Clear", command=self.clearbutton_callback)
 
 
-        self.sudoku_button_frame.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
-        self.sudoku_button_frame.grid_columnconfigure((0,1), weight=1)
-        self.sudoku_button_frame.grid_rowconfigure(0, weight=1)
+        self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
         self.sudoku_button_frame.configure(border_color=self.sudoku_button_frame_border_color, border_width=3)
 
 
 
+    	# Label Configuration
         self.label = ctk.CTkLabel(self, text="", font=("Arial", 20), justify="center")
-        #self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="ew")
-        #self.label.configure(bg_color="darkblue")
+        self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="nsew")
+
 
 
 
@@ -117,7 +112,7 @@ class SudokuApp(ctk.CTk):
 
 
 
-root = SudokuApp()
+root = SudokuApp(minimum_size=0.6, aspect_ratio=5/6)
 
 # root.sudoku_field[0].entry_variable.set("1")
 # root.sudoku_field[0].configure(status="disabled")
