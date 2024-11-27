@@ -1,4 +1,4 @@
-from GameGridHelper import SquareGameFrame, GameEntryField
+from gridhelpers.GameGridHelper import SquareGameFrame, GameEntryField
 
 class SudokuGameFrame(SquareGameFrame):
 

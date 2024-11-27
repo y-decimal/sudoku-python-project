@@ -28,7 +28,7 @@ class GameEntryField(ABC):
 
 
 
-class SquareGameFrame(tk.ttk.Frame, ABC):
+class SquareGameFrame(ctk.CTkFrame, ABC):
 
     def initialize_game_frame(self, master, gridsize, frame_height):
 

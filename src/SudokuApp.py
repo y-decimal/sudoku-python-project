@@ -38,7 +38,6 @@ class SudokuApp(ctk.CTk):
 
         # Frame Grid Configuration
         self.sudoku_frame = SudokuGridHelper.SudokuGameFrame(self, self.window_height*0.90)
-        self.sudoku_frame.configure(padding=5)
 
         self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
 
