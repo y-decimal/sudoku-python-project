@@ -130,9 +130,9 @@ class SudokuApp(ctk.CTk):
 
         # set the title of the window
         self.title(self.sudoku_test_text)
-        
-        
-    
+
+
+
 
 
 
