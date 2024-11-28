@@ -53,7 +53,7 @@ class SquareGameFrame(ctk.CTkFrame, ABC):
         
 
         self.gridsize = game_gridsize+(game_gridsize//separator_spacing-1)
-        print(self.gridsize)
+        # print(self.gridsize)
 
         # Frame Grid Configuration
         self.grid_columnconfigure([i for i in range(self.gridsize)], weight=1)
