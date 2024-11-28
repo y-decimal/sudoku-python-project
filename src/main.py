@@ -1,7 +1,10 @@
+from ISudokuInterface import ISudokuInterface as Intermediary
+
+
 
 def main():
 
-    print("Hello, World!")
+    print(Intermediary.getFieldValue(None, 1,1))
     print("skill issue")
     print("This is my test branch!")
 
