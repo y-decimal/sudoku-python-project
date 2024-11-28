@@ -61,10 +61,10 @@ class SudokuApp(ctk.CTk):
         self.label = ctk.CTkLabel(self, text="", font=("Arial", 20), justify="center")
         self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="nsew")
 
-        #Checkbox Configuration
-        self.checkbox_frame = CheckboxFrame.CheckboxFrame(self, 9, 1)
-        self.checkbox_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
-        self.rowconfigure(0, weight=2)
+        # #Checkbox Configuration
+        # self.checkbox_frame = CheckboxFrame.CheckboxFrame(self, 9, 1)
+        # self.checkbox_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
+        # self.rowconfigure(0, weight=2)
 
 
 
