@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class ISudokuInterface(ABC):
     '''Interface for Sudoku fields'''
 
@@ -35,3 +36,5 @@ class ISudokuInterface(ABC):
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
         '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
         return False
+
+# Hi
