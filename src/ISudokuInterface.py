@@ -6,7 +6,7 @@ class ISudokuInterface(ABC):
 
 
     @abstractmethod
-    def __init__(self, givenfield: list, starterfield: list):
+    def __init__(self, givenfield: list):
         self.block_index = [0,3,6,27,30,33, 54, 57, 60]
         self.fields = {}
         for field in givenfield:
