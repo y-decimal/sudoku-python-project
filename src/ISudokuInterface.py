@@ -8,12 +8,12 @@ class ISudokuInterface(ABC):
     @abstractmethod
     def __init__(self, givenfield: list):
         self.block_index = [0,3,6,27,30,33, 54, 57, 60]
-        self.fields = {}
+        self.fields = []
         for field in givenfield:
             if isinstance(field, int) and 0 <= field <= 9:
                 self.fields.append(field)#transferring the initial field values as a list, empty fields contain the value 0
             elif field == "" or field == None:
-                self.fields.append(0)
+                self.fields.append(0) # for connectivity purposes, depending on the format of the values given by the interface
             else:
                 raise ValueError(f"Invalid Value at position {givenfield.index(field)}")
         self.starterfield = []
@@ -49,7 +49,7 @@ class ISudokuInterface(ABC):
         '''Returns 0 if value is empty (0), 1 if value is number, 2 if value is invalid'''
         if not self.is_field_editable(row,column):
             return 2
-        elif value == "":
+        elif value == "" or value == None or value == 0:
             return 0
         elif not isinstance(value, int):
             return 2
