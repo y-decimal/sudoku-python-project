@@ -71,7 +71,7 @@ class SudokuApp(ctk.CTk):
 
 
 
-    def fetchbutton_callback(self, row, column):
+    def fetchbutton_callback(self, master):
         print("Fetch Button Clicked")
         
         
@@ -129,27 +129,27 @@ class SudokuApp(ctk.CTk):
 
 
 
-# root = SudokuApp(minimum_size=0.6, aspect_ratio=5/4)
+root = SudokuApp(minimum_size=0.6, aspect_ratio=5/4)
 
-# # Fucked and not final 
-# # def callback(var, indx, mode):
-# #     try: print(f"Value {int(root.sudoku_frame.game_field[int(var[-2:])].entry_variable.get()[1])} changed at index {int(var[-2:])}")
-# #     except IndexError: print(f"Value at index {int(var[-2:])} empty")
+# Fucked and not final 
+# def callback(var, indx, mode):
+#     try: print(f"Value {int(root.sudoku_frame.game_field[int(var[-2:])].entry_variable.get()[1])} changed at index {int(var[-2:])}")
+#     except IndexError: print(f"Value at index {int(var[-2:])} empty")
     
 
-# # for i in range(81):
-# #     root.sudoku_frame.game_field[i].entry_variable.trace("w", callback)
-
-
-
-# # Just for testing
 # for i in range(81):
-#     if (i % random.randint(1,9) == 0):
-#         root.sudoku_frame.game_field[i].entry_variable.set(str(random.randint(1,9)))
-#         root.sudoku_frame.game_field[i].configure(state="disabled")
-#         root.sudoku_frame.game_field[i].configure(fg_color="#303032")
-#         root.sudoku_frame.game_field[i].configure(text_color="#9cdcf1")
+#     root.sudoku_frame.game_field[i].entry_variable.trace("w", callback)
 
 
 
-# root.mainloop()
+# Just for testing
+for i in range(81):
+    if (i % random.randint(1,9) == 0):
+        root.sudoku_frame.game_field[i].entry_variable.set(str(random.randint(1,9)))
+        root.sudoku_frame.game_field[i].configure(state="disabled")
+        root.sudoku_frame.game_field[i].configure(fg_color="#303032")
+        root.sudoku_frame.game_field[i].configure(text_color="#9cdcf1")
+
+
+
+root.mainloop()
