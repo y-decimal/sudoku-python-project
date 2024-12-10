@@ -2,7 +2,6 @@ import tkinter as tk
 import customtkinter as ctk
 import random
 
-import customframes.ButtonFrame
 from gridhelpers.GameGridHelper import SudokuGameFrame
 from customframes import ButtonFrame, CheckboxFrame
 
@@ -20,6 +19,7 @@ class SudokuApp(ctk.CTk):
         self.relative_size = relative_size
         self.minimum_size = minimum_size
         self.aspect_ratio = aspect_ratio
+
 
         self.set_window_parameters()
 
@@ -48,8 +48,8 @@ class SudokuApp(ctk.CTk):
         self.sudoku_button_frame_border_color = "#FFFFAA"
 
 
-        self.sudoku_button_frame.buttons[0].configure(text="Click Me!", command=lambda: self.restorebutton_callback(self.sudoku_frame))
-        self.sudoku_button_frame.buttons[1].configure(text="Clear", command=lambda: self.clearbutton_callback(self.sudoku_frame))
+        self.sudoku_button_frame.buttons[0].configure(text="Submit", command=lambda: self.submitbutton_callback(self))
+        self.sudoku_button_frame.buttons[1].configure(text="Fetch", command=lambda: self.fetchbutton_callback(self))
 
 
         self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
@@ -71,30 +71,14 @@ class SudokuApp(ctk.CTk):
 
 
 
-    def clearbutton_callback(self, master):
-
-        master.previous_grid_info = master.grid_info()
-        print(master.previous_grid_info)
-        master.grid_forget()
+    def fetchbutton_callback(self, row, column):
+        print("Fetch Button Clicked")
+        
         
 
-
-    def restorebutton_callback(self, master):
-
-        if master.previous_grid_info == None:
-            print("No previous grid info")
-            return
-        
-        # print("Row: " + str(master.previous_grid_info.get("row")))
-        # print("Column: " + str(master.previous_grid_info.get("column")))
-
-        master.grid(row = master.previous_grid_info.get("row"),
-                    column = master.previous_grid_info.get("column"), 
-                    padx = master.previous_grid_info.get("padx"), 
-                    pady = master.previous_grid_info.get("pady"), 
-                    sticky = master.previous_grid_info.get("sticky"))
-        
-        master.previous_grid_info = None
+    def submitbutton_callback(self, master):
+        print("Submit Button Clicked")
+       
         
 
     def togglebutton_callback(self):
@@ -132,31 +116,40 @@ class SudokuApp(ctk.CTk):
         self.title(self.sudoku_test_text)
 
 
+    def set_field_not_editable(self, row: int, column: int):
+        self.sudoku_frame.game_field[row*9 + column].configure(state="disabled")
+        self.sudoku_frame.game_field[row*9 + column].configure(fg_color="#303032")
+        self.sudoku_frame.game_field[row*9 + column].configure(text_color="#9cdcf1")
+
+
+    def set_field_value(self, row: int, column: int, value: int):
+
+        if (value != 0):
+            self.sudoku_frame.game_field[row*9 + column].entry_variable.set(str(value))
 
 
 
+# root = SudokuApp(minimum_size=0.6, aspect_ratio=5/4)
 
-root = SudokuApp(minimum_size=0.6, aspect_ratio=5/4)
-
-# Fucked and not final 
-# def callback(var, indx, mode):
-#     try: print(f"Value {int(root.sudoku_frame.game_field[int(var[-2:])].entry_variable.get()[1])} changed at index {int(var[-2:])}")
-#     except IndexError: print(f"Value at index {int(var[-2:])} empty")
+# # Fucked and not final 
+# # def callback(var, indx, mode):
+# #     try: print(f"Value {int(root.sudoku_frame.game_field[int(var[-2:])].entry_variable.get()[1])} changed at index {int(var[-2:])}")
+# #     except IndexError: print(f"Value at index {int(var[-2:])} empty")
     
 
+# # for i in range(81):
+# #     root.sudoku_frame.game_field[i].entry_variable.trace("w", callback)
+
+
+
+# # Just for testing
 # for i in range(81):
-#     root.sudoku_frame.game_field[i].entry_variable.trace("w", callback)
+#     if (i % random.randint(1,9) == 0):
+#         root.sudoku_frame.game_field[i].entry_variable.set(str(random.randint(1,9)))
+#         root.sudoku_frame.game_field[i].configure(state="disabled")
+#         root.sudoku_frame.game_field[i].configure(fg_color="#303032")
+#         root.sudoku_frame.game_field[i].configure(text_color="#9cdcf1")
 
 
 
-# Just for testing
-for i in range(81):
-    if (i % random.randint(1,9) == 0):
-        root.sudoku_frame.game_field[i].entry_variable.set(str(random.randint(1,9)))
-        root.sudoku_frame.game_field[i].configure(state="disabled")
-        root.sudoku_frame.game_field[i].configure(fg_color="#303032")
-        root.sudoku_frame.game_field[i].configure(text_color="#9cdcf1")
-
-
-
-root.mainloop()
+# root.mainloop()
