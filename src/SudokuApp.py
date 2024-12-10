@@ -128,6 +128,8 @@ class SudokuApp(ctk.CTk):
             self.sudoku_frame.game_field[row*9 + column].entry_variable.set(str(value))
 
 
+    def get_field_value(self, row: int, column: int) -> int:
+        return int(self.sudoku_frame.game_field[row*9 + column].entry_variable.get())
 
 root = SudokuApp(minimum_size=0.6, aspect_ratio=5/4)
 
