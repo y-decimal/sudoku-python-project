@@ -1,12 +1,9 @@
-from src.App import App
+from App import App
 
 def null_test():
 
     # Initialize the App
     app = App()
-    
-    # Check if the App is not None
-    assert app is not None
     
     # Check if the MVC components are not None
     assert app.controller is not None
