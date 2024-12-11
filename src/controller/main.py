@@ -1,4 +1,4 @@
-from ISudokuInterface import ISudokuInterface as Intermediary
+from model.ISudokuInterface import ISudokuInterface as Intermediary
 
 
 
