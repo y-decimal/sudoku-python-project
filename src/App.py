@@ -22,14 +22,14 @@ class App(ctk.CTk):
         self.iconbitmap('./assets/images/sudoku.ico')
 
 
-        model = Model()
+        self.model = Model()
 
-        view = View(self)
-        view.pack(fill="both", expand=True)
+        self.view = View(self)
+        self.view.pack(fill="both", expand=True)
 
-        controller = Controller(model, view)
+        self.controller = Controller(self.model, self.view)
         
-        view.set_controller(controller)
+        self.view.set_controller(self.controller)
 
 
 
