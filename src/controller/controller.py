@@ -1,4 +1,4 @@
-from model.DummyImplementation import DummyImplementation as Model
+
 
 class Controller:
 
