@@ -9,9 +9,9 @@ from view.customframes import ButtonFrame, CheckboxFrame
 class View(ctk.CTkFrame):
 
 
-    def __init__(self, master):
+    def __init__(self, parent):
 
-        super.__init__(self, master)
+        super().__init__(parent)
 
        
         # App Grid Configuration
@@ -25,7 +25,7 @@ class View(ctk.CTkFrame):
 
 
         # Frame Grid Configuration
-        self.sudoku_frame = SudokuGameFrame(self, self.window_height*0.90, seperator_spacing=1)
+        self.sudoku_frame = SudokuGameFrame(self, 600, seperator_spacing=1)
         self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
 
 
@@ -81,7 +81,6 @@ class View(ctk.CTkFrame):
 
 
     def set_field_value(self, row: int, column: int, value: int):
-
         if (value != 0):
             self.sudoku_frame.game_field[row*9 + column].entry_variable.set(str(value))
 
