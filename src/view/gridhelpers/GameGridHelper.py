@@ -38,8 +38,9 @@ class SudokuEntryField(GameEntryField):
         if len(self.entry_variable.get()) > 1:
 
             self.entry_variable.set(self.entry_variable.get()[1:])
-        if not self.entry_variable.get().isdigit():
+        if (not self.entry_variable.get().isdigit() or self.entry_variable.get() == "0"):
             self.entry_variable.set("")
+            
 
 
 
