@@ -7,25 +7,12 @@ from customframes import ButtonFrame, CheckboxFrame
 
 
 
-class SudokuApp(ctk.CTk):
+class View(ctk.CTkFrame):
 
 
-    def __init__(self, sudoku_test_text = "Sudoku Test", relative_size = 0.5, minimum_size = 0.5, aspect_ratio = 5/4):
+    def __init__(self, master):
 
-        ctk.CTk.__init__(self)
-
-
-        self.sudoku_test_text = sudoku_test_text
-        self.relative_size = relative_size
-        self.minimum_size = minimum_size
-        self.aspect_ratio = aspect_ratio
-
-
-        self.set_window_parameters()
-
-        # set the icon of the window
-        self.iconbitmap('./assets/images/sudoku.ico')
-        
+        super.__init__(self, master)
 
        
         # App Grid Configuration
@@ -35,7 +22,6 @@ class SudokuApp(ctk.CTk):
         self.grid_columnconfigure((1), weight=2)
         self.grid_rowconfigure(0, weight=2)
         self.grid_rowconfigure((1,2), weight=1)
-
 
 
 
@@ -69,8 +55,6 @@ class SudokuApp(ctk.CTk):
 
 
 
-
-
     def fetchbutton_callback(self, master):
         print("Fetch Button Clicked")
         
@@ -90,31 +74,6 @@ class SudokuApp(ctk.CTk):
             self.toggle_state = True
 
 
-    def set_window_parameters(self):
-
-         # get the screen width and height
-        self.screen_width = self.winfo_screenwidth()
-        self.screen_height = self.winfo_screenheight()
-
-        # set the window size relative to the screen size
-        self.window_height = int(self.screen_height*self.relative_size)
-        self.window_width = int(self.window_height*self.aspect_ratio)
-
-        # find the center point of the screen
-        center_x = int(self.screen_width/2 - self.window_width/2)
-        center_y = int(self.screen_height/2 - self.window_height/2)
-
-        # set the position of the window to the center of the screen
-        self.geometry(f'{self.window_width}x{self.window_height}+{center_x}+{center_y}')
-
-        # set the minimum size of the window
-        minimum_height = int(self.screen_height*self.minimum_size)
-        minimum_width = int(minimum_height*self.aspect_ratio)
-        self.minsize(minimum_width, minimum_height)
-
-        # set the title of the window
-        self.title(self.sudoku_test_text)
-
 
     def set_field_not_editable(self, row: int, column: int):
         self.sudoku_frame.game_field[row*9 + column].configure(state="disabled")
@@ -131,27 +90,32 @@ class SudokuApp(ctk.CTk):
     def get_field_value(self, row: int, column: int) -> int:
         return int(self.sudoku_frame.game_field[row*9 + column].entry_variable.get())
 
-root = SudokuApp(minimum_size=0.6, aspect_ratio=5/4)
 
-# Fucked and not final 
-# def callback(var, indx, mode):
-#     try: print(f"Value {int(root.sudoku_frame.game_field[int(var[-2:])].entry_variable.get()[1])} changed at index {int(var[-2:])}")
-#     except IndexError: print(f"Value at index {int(var[-2:])} empty")
+
+
+
+
+# root = SudokuApp(minimum_size=0.6, aspect_ratio=5/4)
+
+# # Fucked and not final 
+# # def callback(var, indx, mode):
+# #     try: print(f"Value {int(root.sudoku_frame.game_field[int(var[-2:])].entry_variable.get()[1])} changed at index {int(var[-2:])}")
+# #     except IndexError: print(f"Value at index {int(var[-2:])} empty")
     
 
+# # for i in range(81):
+# #     root.sudoku_frame.game_field[i].entry_variable.trace("w", callback)
+
+
+
+# # Just for testing
 # for i in range(81):
-#     root.sudoku_frame.game_field[i].entry_variable.trace("w", callback)
+#     if (i % random.randint(1,9) == 0):
+#         root.sudoku_frame.game_field[i].entry_variable.set(str(random.randint(1,9)))
+#         root.sudoku_frame.game_field[i].configure(state="disabled")
+#         root.sudoku_frame.game_field[i].configure(fg_color="#303032")
+#         root.sudoku_frame.game_field[i].configure(text_color="#9cdcf1")
 
 
 
-# Just for testing
-for i in range(81):
-    if (i % random.randint(1,9) == 0):
-        root.sudoku_frame.game_field[i].entry_variable.set(str(random.randint(1,9)))
-        root.sudoku_frame.game_field[i].configure(state="disabled")
-        root.sudoku_frame.game_field[i].configure(fg_color="#303032")
-        root.sudoku_frame.game_field[i].configure(text_color="#9cdcf1")
-
-
-
-root.mainloop()
+# root.mainloop()
