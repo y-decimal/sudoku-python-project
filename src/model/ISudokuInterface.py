@@ -4,11 +4,6 @@ from abc import ABC, abstractmethod
 class ISudokuInterface(ABC):
     '''Interface for Sudoku fields'''
 
-    @abstractmethod
-    def __init__(self):
-        pass
-
-
 
     @abstractmethod
     def get_field_value(self, row: int, column: int) -> int:
