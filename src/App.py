@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from model.FileManager import FileManager
 from model.model import DummyImplementation as Model
 from view.view import View
 from controller.controller import Controller
@@ -23,6 +24,7 @@ class App(ctk.CTk):
 
 
         self.model = Model()
+        self.model.file_manager = FileManager("\\assets\\SavedSudokus\\")
 
         self.view = View(self)
         self.view.pack(fill="both", expand=True)

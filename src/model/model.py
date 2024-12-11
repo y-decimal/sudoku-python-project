@@ -1,17 +1,20 @@
 from model.ISudokuInterface import ISudokuInterface
-from model.FileSaver import FileManager
 import random
 
 class DummyImplementation(ISudokuInterface):
     '''Dummy implementation of the ISudokuInterface to use for testing'''
 
     __game_field = []
+    
+    file_manager = None
+
 
     def __init__(self):
         '''Initializes the DummyImplementation'''
 
         # Initialize the game field with 0s for the value and True for the editable flag
         self.__game_field = [[(0, True) for _ in range(9)] for _ in range(9)] 
+        
 
         # Set some fields to random values
         for row in range (9):
@@ -51,6 +54,7 @@ class DummyImplementation(ISudokuInterface):
         self.__game_field[row][column] = (value, True)
         return True
     
+    
 
     def is_field_editable(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
@@ -77,6 +81,7 @@ class DummyImplementation(ISudokuInterface):
         return True
     
     
+    
     def get_sudoku_string(self) -> str:
         '''Returns a string representation of the game field'''
 
@@ -91,21 +96,25 @@ class DummyImplementation(ISudokuInterface):
         
         return string
     
+    
+    
+    def attach_file_manager(self, file_manager):
+        '''Attaches a file manager to the DummyImplementation'''
+
+        self.file_manager = file_manager
+    
+    
+    
     def save_sudoku(self, file_name: str):
         '''Saves the game field to a file'''
-
-        # Define the relative path to the file
-        relative_path = f"\\assets\\SavedSudokus\\{file_name}.txt"
         
         # Save the content to the file
-        FileManager(relative_path).save_sudoku(self.__game_field)
+        return self.file_manager.save_sudoku(self.__game_field, file_name)
+        
         
         
     def load_sudoku(self, file_name: str):
         '''Loads the game field from a file'''
 
-        # Define the relative path to the file
-        relative_path = f"\\assets\\SavedSudokus\\{file_name}.txt"
-
         # Load the content from the file
-        self.__game_field = FileManager(relative_path).load_sudoku()
+        self.__game_field = self.file_manager.load_sudoku(file_name)
