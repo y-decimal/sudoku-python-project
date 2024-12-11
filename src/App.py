@@ -6,7 +6,7 @@ from controller.controller import Controller
 
 class App(ctk.CTk):
 
-    def __init__(self, sudoku_test_text = "Sudoku Test", relative_size = 0.5, minimum_size = 0.5, aspect_ratio = 5/4):
+    def __init__(self, sudoku_test_text = "Sudoku MVC Test", relative_size = 0.55, minimum_size = 0.55, aspect_ratio = 5/4):
 
         super().__init__()
 
@@ -16,17 +16,16 @@ class App(ctk.CTk):
         self.aspect_ratio = aspect_ratio
 
         
-
         self.set_window_parameters()
 
         # set the icon of the window
         self.iconbitmap('./assets/images/sudoku.ico')
 
-        self.title("Sudoku MVC Test")
 
         model = Model()
 
-        view = View()
+        view = View(self)
+        view.pack(fill="both", expand=True)
 
         controller = Controller(model, view)
 
