@@ -24,7 +24,7 @@ class App(ctk.CTk):
 
 
         self.model = Model()
-        self.model.file_manager = FileManager("\\assets\\SavedSudokus\\")
+        self.model.file_manager = FileManager("\\assets\\TestFiles\\")
 
         self.view = View(self)
         self.view.pack(fill="both", expand=True)

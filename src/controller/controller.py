@@ -20,7 +20,7 @@ class Controller:
         
         print("Fetch Button Clicked")
         
-        self.model.load_sudoku("sudoku")
+        self.model.load_sudoku("test_sudoku")
         
         for row in range(9):           
             for column in range(9):
@@ -48,5 +48,5 @@ class Controller:
                     self.model.set_field_value(row, column, value)
 
 
-        self.model.save_sudoku("sudoku")
+        self.model.save_sudoku("test_sudoku")
         
