@@ -47,7 +47,7 @@ class DummyImplementation(ISudokuInterface):
             return False
         
         # Set the value of the field by overwriting the first element of the tuple
-        self.game_field[row][column][0] = value
+        self.game_field[row][column] = (value, True)
         return True
     
 
