@@ -28,6 +28,8 @@ class App(ctk.CTk):
         view.pack(fill="both", expand=True)
 
         controller = Controller(model, view)
+        
+        view.set_controller(controller)
 
 
 
@@ -60,5 +62,6 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
+    
     app = App()
     app.mainloop()
