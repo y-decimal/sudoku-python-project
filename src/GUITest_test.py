@@ -1,7 +1,7 @@
 
 from App import App
 
-def null_test():
+def test_null():
 
     # Initialize the App
     app = App()
