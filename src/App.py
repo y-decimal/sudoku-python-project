@@ -6,16 +6,16 @@ from controller.controller import Controller
 
 class App(ctk.CTk):
 
-    def __init__(self, sudoku_test_text = "Sudoku MVC Test", relative_size = 0.55, minimum_size = 0.55, aspect_ratio = 5/4):
+    def __init__(self):
 
         super().__init__()
 
-        self.sudoku_test_text = sudoku_test_text
-        self.relative_size = relative_size
-        self.minimum_size = minimum_size
-        self.aspect_ratio = aspect_ratio
+        self.sudoku_test_text = "Sudoku MVC Test"
+        self.relative_size = 0.55
+        self.minimum_size = self.relative_size
+        self.aspect_ratio = 5/4
 
-        
+        # set window title, window size and aspect ratio
         self.set_window_parameters()
 
         # set the icon of the window
@@ -34,7 +34,7 @@ class App(ctk.CTk):
 
 
     def set_window_parameters(self):
-        '''Sets the parameters of the window'''
+        '''Sets window title, window size and aspect ratio'''
 
          # get the screen width and height
         self.screen_width = self.winfo_screenwidth()
