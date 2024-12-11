@@ -178,4 +178,4 @@ cython_debug/
 *.vsix
 
 # File Manager Test files
-*.TestFiles
+TestFiles/
