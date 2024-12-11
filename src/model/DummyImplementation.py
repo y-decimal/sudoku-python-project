@@ -1,4 +1,5 @@
 from model.ISudokuInterface import ISudokuInterface
+from model.FileSaver import FileManager
 import random
 
 class DummyImplementation(ISudokuInterface):
@@ -74,3 +75,37 @@ class DummyImplementation(ISudokuInterface):
 
         # Actual check not Implemented
         return True
+    
+    
+    def get_sudoku_string(self) -> str:
+        '''Returns a string representation of the game field'''
+
+        # Initialize the string
+        string = ""
+        
+        # Iterate over the game field and add the values to the string
+        for row in range(9):
+            for column in range(9):
+                string += str(self.__game_field[row][column])
+                string += "\n"
+        
+        return string
+    
+    def save_sudoku(self, file_name: str):
+        '''Saves the game field to a file'''
+
+        # Define the relative path to the file
+        relative_path = f"\\assets\\SavedSudokus\\{file_name}.txt"
+        
+        # Save the content to the file
+        FileManager(relative_path).save_sudoku(self.__game_field)
+        
+        
+    def load_sudoku(self, file_name: str):
+        '''Loads the game field from a file'''
+
+        # Define the relative path to the file
+        relative_path = f"\\assets\\SavedSudokus\\{file_name}.txt"
+
+        # Load the content from the file
+        self.__game_field = FileManager(relative_path).load_sudoku()

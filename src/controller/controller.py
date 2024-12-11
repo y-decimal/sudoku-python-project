@@ -1,5 +1,3 @@
-
-
 class Controller:
 
     def __init__(self, model, view):
@@ -21,6 +19,8 @@ class Controller:
         '''Callback for the fetch button'''
         
         print("Fetch Button Clicked")
+        
+        self.model.load_sudoku("sudoku")
         
         for row in range(9):           
             for column in range(9):
@@ -46,3 +46,7 @@ class Controller:
                     
                     if value != 0: print(f"Setting field at row {row} and column {column} to value {value}")
                     self.model.set_field_value(row, column, value)
+
+
+        self.model.save_sudoku("sudoku")
+        
