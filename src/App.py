@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from model.DummyImplementation import DummyImplementation as Model
+from model.model import DummyImplementation as Model
 from view.view import View
 from controller.controller import Controller
 
