@@ -33,8 +33,9 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame_border_color = "#FFFFAA"
 
 
-        self.sudoku_button_frame.buttons[0].configure(text="Submit", command=lambda: self.submitbutton_callback(self))
-        self.sudoku_button_frame.buttons[1].configure(text="Fetch", command=lambda: self.fetchbutton_callback(self))
+
+        self.sudoku_button_frame.buttons[0].configure(text="Fetch", command=lambda: self.fetchbutton_callback(self))
+        self.sudoku_button_frame.buttons[1].configure(text="Submit", command=lambda: self.submitbutton_callback(self))
 
 
         self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
@@ -46,21 +47,19 @@ class View(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self, text="", font=("Arial", 20), justify="center")
         self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="nsew")
 
-        # #Checkbox Configuration
-        # self.checkbox_frame = CheckboxFrame.CheckboxFrame(self, 9, 1)
-        # self.checkbox_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
-        # self.rowconfigure(0, weight=2)
 
-
+    def set_controller(self, controller):
+        '''Sets the controller of the view'''
+        self.controller = controller
 
 
     def fetchbutton_callback(self, master):
-        print("Fetch Button Clicked")
+        if self.controller: self.controller.fetch_button_clicked()
         
         
 
     def submitbutton_callback(self, master):
-        print("Submit Button Clicked")
+        if self.controller: self.controller.submit_button_clicked()
        
         
 
@@ -81,12 +80,19 @@ class View(ctk.CTkFrame):
 
 
     def set_field_value(self, row: int, column: int, value: int):
-        if (value != 0):
+        if (value > 0 and value < 10):
             self.sudoku_frame.game_field[row*9 + column].entry_variable.set(str(value))
+        elif (value == 0):
+            self.sudoku_frame.game_field[row*9 + column].entry_variable.set("")
 
 
     def get_field_value(self, row: int, column: int) -> int:
-        return int(self.sudoku_frame.game_field[row*9 + column].entry_variable.get())
+        
+        value = self.sudoku_frame.game_field[row*9 + column].entry_variable.get()
+        if value == "":
+            return 0
+        else:
+            return int(value)
 
 
 
