@@ -1,4 +1,4 @@
-import ISudokuInterface as ISudokuInterface
+import model.ISudokuInterface as ISudokuInterface
 import random
 
 class DummyImplementation(ISudokuInterface):
