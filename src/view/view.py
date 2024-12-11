@@ -24,22 +24,23 @@ class View(ctk.CTkFrame):
 
 
 
+
         # Frame Grid Configuration
+        
+        # Sudoku Frame
         self.sudoku_frame = SudokuGameFrame(self, 600, seperator_spacing=1)
         self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
 
 
+        # Button Frame
         self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 2)
         self.sudoku_button_frame_border_color = "#FFFFAA"
 
-
-
-        self.sudoku_button_frame.buttons[0].configure(text="Fetch", command=lambda: self.fetchbutton_callback(self))
-        self.sudoku_button_frame.buttons[1].configure(text="Submit", command=lambda: self.submitbutton_callback(self))
-
+        self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
+        self.sudoku_button_frame.buttons[1].configure(text="Submit", command = self.submitbutton_callback)
+        
 
         self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
-
 
 
 
@@ -53,24 +54,15 @@ class View(ctk.CTkFrame):
         self.controller = controller
 
 
-    def fetchbutton_callback(self, master):
+    def fetchbutton_callback(self):
         if self.controller: self.controller.fetch_button_clicked()
         
         
 
-    def submitbutton_callback(self, master):
+    def submitbutton_callback(self):
         if self.controller: self.controller.submit_button_clicked()
        
         
-
-    def togglebutton_callback(self):
-        if self.toggle_state:
-            self.labelTopright.grid(row = 0, column = 1, padx=10, pady=10, sticky="ew")
-            self.toggle_state = False
-        elif not self.toggle_state:
-            self.labelTopright.grid_forget()
-            self.toggle_state = True
-
 
 
     def set_field_not_editable(self, row: int, column: int):
