@@ -4,19 +4,19 @@ import random
 class DummyImplementation(ISudokuInterface):
     '''Dummy implementation of the ISudokuInterface to use for testing'''
 
-    game_field = []
+    __game_field = []
 
     def __init__(self):
         '''Initializes the DummyImplementation'''
 
         # Initialize the game field with 0s for the value and True for the editable flag
-        self.game_field = [[(0, True) for _ in range(9)] for _ in range(9)] 
+        self.__game_field = [[(0, True) for _ in range(9)] for _ in range(9)] 
 
         # Set some fields to random values
         for row in range (9):
             for column in range(9):
                 if (random.randint(1,9) < 3):
-                    self.game_field[row][column] = (random.randint(1,9), False)
+                    self.__game_field[row][column] = (random.randint(1,9), False)
         
     
 
@@ -29,7 +29,7 @@ class DummyImplementation(ISudokuInterface):
             return -1
         
         # Return the value of the field by accessing the first element of the tuple
-        return self.game_field[row][column][0]
+        return self.__game_field[row][column][0]
     
 
 
@@ -42,12 +42,12 @@ class DummyImplementation(ISudokuInterface):
             return False
         
         # Abort if the field is not editable
-        if (not self.game_field[row][column][1]):
+        if (not self.__game_field[row][column][1]):
             print(f"Field at row {row} and column {column} is not editable")
             return False
         
         # Set the value of the field by overwriting the first element of the tuple
-        self.game_field[row][column] = (value, True)
+        self.__game_field[row][column] = (value, True)
         return True
     
 
@@ -60,7 +60,7 @@ class DummyImplementation(ISudokuInterface):
             return False
         
         # Return the editable flag by accessing the second element of the tuple
-        return self.game_field[row][column][1]
+        return self.__game_field[row][column][1]
     
 
 
