@@ -53,8 +53,7 @@ class Controller:
     def generate(self):
         '''Callback for the generate button'''
         
-        print("Generate Button Clicked")
+        print("Generating")
         
         self.model.random_sudoku()
-        self.model.save_sudoku("test_sudoku")
         self.fetch()
