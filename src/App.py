@@ -4,6 +4,9 @@ from model.model import DummyImplementation as Model
 from view.view import View
 from controller.controller import Controller
 
+sudoku_testfiles_path = "\\assets\\TestFiles\\"
+sudoku_files_path = "\\assets\\SudokuFiles\\"
+icon_path = ".\\assets\\images\\sudoku.ico"
 
 class App(ctk.CTk):
 
@@ -20,11 +23,11 @@ class App(ctk.CTk):
         self.set_window_parameters()
 
         # set the icon of the window
-        self.iconbitmap('./assets/images/sudoku.ico')
+        self.iconbitmap(icon_path)
 
 
         self.model = Model()
-        self.model.file_manager = FileManager("\\assets\\TestFiles\\")
+        self.model.file_manager = FileManager(sudoku_testfiles_path)
 
         self.view = View(self)
         self.view.pack(fill="both", expand=True)
