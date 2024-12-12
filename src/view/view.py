@@ -59,16 +59,16 @@ class View(ctk.CTkFrame):
 
 
     def fetchbutton_callback(self):
-        if self.controller: self.controller.fetch_button_clicked()
+        if self.controller: self.controller.fetch()
         
         
 
     def submitbutton_callback(self):
-        if self.controller: self.controller.submit_button_clicked()
+        if self.controller: self.controller.submit()
        
     
     def generatebutton_callback(self):
-        if self.controller: self.controller.generate_button_clicked()
+        if self.controller: self.controller.generate()
 
 
     def set_field_not_editable(self, row: int, column: int):

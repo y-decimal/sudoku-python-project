@@ -15,13 +15,11 @@ class Controller:
         
     
     
-    def fetch_button_clicked(self):
-        '''Callback for the fetch button'''
+    def fetch(self):
+        '''Fetch updated values from the model'''
         
-        print("Fetch Button Clicked")
-        
-        self.model.load_sudoku("test_sudoku")
-        
+        print("Fetching")
+     
         for row in range(9):           
             for column in range(9):
                 
@@ -29,17 +27,16 @@ class Controller:
                 
                 self.view.set_field_value(row, column, value)
                 
-                if not self.model.is_field_editable(row, column):
-                    self.view.set_field_not_editable(row, column)
-                else:
-                    self.view.set_field_editable(row, column)
+                if not self.model.is_field_editable(row, column): self.view.set_field_not_editable(row, column)
+                    
+                else: self.view.set_field_editable(row, column)
                 
         
         
-    def submit_button_clicked(self):
-        '''Callback for the submit button'''
+    def submit(self):
+        '''Push updated values to the model | To be replaced'''
         
-        print("Submit Button Clicked")
+        print("Submitting")
         
         for row in range(9):
             for column in range(9):
@@ -51,14 +48,13 @@ class Controller:
                     self.model.set_field_value(row, column, value)
 
 
-        self.model.save_sudoku("test_sudoku")
         
 
-    def generate_button_clicked(self):
+    def generate(self):
         '''Callback for the generate button'''
         
         print("Generate Button Clicked")
         
         self.model.random_sudoku()
         self.model.save_sudoku("test_sudoku")
-        self.fetch_button_clicked()
+        self.fetch()
