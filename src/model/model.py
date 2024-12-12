@@ -16,13 +16,22 @@ class DummyImplementation(ISudokuInterface):
         self.__game_field = [[(0, True) for _ in range(9)] for _ in range(9)] 
         
 
-        # Set some fields to random values
+        
+        
+        
+        
+    def random_sudoku(self):
+        '''Sets random values for some fields in the game field'''
+        
+        
+        
         for row in range (9):
             for column in range(9):
+                self.__game_field[row][column] = (0, True)
                 if (random.randint(1,9) < 3):
                     self.__game_field[row][column] = (random.randint(1,9), False)
-        
     
+
 
     def get_field_value(self, row: int, column: int) -> int:
         '''Returns the value of the field at the given row and column'''
