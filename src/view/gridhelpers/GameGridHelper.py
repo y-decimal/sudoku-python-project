@@ -99,7 +99,7 @@ class SudokuGameFrame(SquareGameFrame):
 
     SUDOKUGRIDSIZE = 9
 
-    def __init__(self, master, frame_height, seperator_spacing = 0):
+    def __init__(self, master, frame_height, seperator_spacing = 1):
         self.initialize_game_frame(master, self.SUDOKUGRIDSIZE, frame_height, seperator_spacing)
 
     def set_game_field(self):
