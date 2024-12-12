@@ -29,7 +29,7 @@ class App(ctk.CTk):
         self.model = Model()
         self.model.file_manager = FileManager(sudoku_testfiles_path)
 
-        self.view = View(self)
+        self.view = View(self, self.window_height, self.window_width)
         self.view.pack(fill="both", expand=True)
 
         self.controller = Controller(self.model, self.view)

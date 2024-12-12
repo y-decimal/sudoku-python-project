@@ -9,14 +9,12 @@ from view.customframes import ButtonFrame, CheckboxFrame
 class View(ctk.CTkFrame):
 
 
-    def __init__(self, parent):
+    def __init__(self, parent, height, width):
 
         super().__init__(parent)
 
        
         # App Grid Configuration
-        #self.grid_columnconfigure((0,3), weight=1)
-        #self.grid_rowconfigure((0,3), weight=1)
         self.grid_columnconfigure((0,2), weight=0)
         self.grid_columnconfigure((1), weight=2)
         self.grid_rowconfigure(0, weight=2)
@@ -28,7 +26,7 @@ class View(ctk.CTkFrame):
         # Frame Grid Configuration
         
         # Sudoku Frame
-        self.sudoku_frame = SudokuGameFrame(self, 600, seperator_spacing=1)
+        self.sudoku_frame = SudokuGameFrame(self, height*0.75)
         self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
 
 
