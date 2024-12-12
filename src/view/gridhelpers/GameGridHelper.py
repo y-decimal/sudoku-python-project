@@ -1,6 +1,4 @@
 import customtkinter as ctk
-import tkinter as tk
-from tkinter import ttk
 from abc import ABC, abstractmethod
 
 class GameEntryField(ctk.CTkEntry, ABC):
@@ -67,8 +65,7 @@ class SquareGameFrame(ctk.CTkFrame, ABC):
         self.game_entry_dimension = frame_height / game_gridsize
         self.game_field = []
         self.iterator = 0
-        self.separator_style = ttk.Style()
-        self.separator_style.configure("TSeparator", background="lightgreen")
+
 
         for row in range(self.gridsize):
             if row % 2 == 0:
