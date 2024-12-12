@@ -1,3 +1,5 @@
+from src.App import App
+
 def test_placeholder():
     # This is a placeholder test
-    pass
+    app = App()
