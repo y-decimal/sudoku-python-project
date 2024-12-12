@@ -2,7 +2,7 @@ from model.ISudokuInterface import ISudokuInterface
 import random
 
 class DummyImplementation(ISudokuInterface):
-    '''Dummy implementation of the ISudokuInterface to use for testing'''
+    '''Dummy implementation of the ISudokuInterface to use for testing or reference'''
 
     __game_field = []
     
