@@ -9,6 +9,9 @@ from view.customframes import ButtonFrame, CheckboxFrame
 class View(ctk.CTkFrame):
 
 
+    disabled_color = ("#303032", "#9cdcf1")
+    enabled_color = ("#343638", "#FFFFFF")
+
     def __init__(self, parent, height, width):
 
         super().__init__(parent)
@@ -37,7 +40,7 @@ class View(ctk.CTkFrame):
 
         self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
         self.sudoku_button_frame.buttons[1].configure(text="Submit", command = self.submitbutton_callback)
-        self.sudoku_button_frame.buttons[2].configure(text="EGenerate", command = self.generatebutton_callback)
+        self.sudoku_button_frame.buttons[2].configure(text="Generate", command = self.generatebutton_callback)
         
 
         self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
@@ -70,17 +73,24 @@ class View(ctk.CTkFrame):
 
     def set_field_not_editable(self, row: int, column: int):
         self.sudoku_frame.game_field[row*9 + column].configure(state="disabled")
-        self.sudoku_frame.game_field[row*9 + column].configure(fg_color="#303032")
-        self.sudoku_frame.game_field[row*9 + column].configure(text_color="#9cdcf1")
+        self.sudoku_frame.game_field[row*9 + column].configure(fg_color=self.disabled_color[0])
+        self.sudoku_frame.game_field[row*9 + column].configure(text_color=self.disabled_color[1])
+        
+    
+    
+    def set_field_editable(self, row: int, column: int):
+        self.sudoku_frame.game_field[row*9 + column].configure(state="normal")
+        self.sudoku_frame.game_field[row*9 + column].configure(fg_color=self.enabled_color[0])
+        self.sudoku_frame.game_field[row*9 + column].configure(text_color=self.enabled_color[1])
 
 
 
     def set_field_value(self, row: int, column: int, value: int):
+        
         if (value > 0 and value < 10):
-            print(f"Setting field at row {row} and column {column} to {value}")
             self.sudoku_frame.game_field[row*9 + column].entry_variable.set(str(value))
+            
         elif (value == 0):
-            print(f"Setting field at row {row} and column {column} to empty")
             self.sudoku_frame.game_field[row*9 + column].entry_variable.set("")
 
 
