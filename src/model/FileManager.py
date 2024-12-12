@@ -1,6 +1,8 @@
 from pathlib import Path
 
+
 class FileManager:
+    '''Dummy File Manager to use for testing or reference'''
     
     def __init__(self, relative_path):
         '''Initializes the FileManager with a path relative to the root directory'''
