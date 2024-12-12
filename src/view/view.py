@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 
-from view.gridhelpers.GameGridHelper import SudokuGameFrame
+from view.gridhelpers.GameGridHelper import SquareGameFrame
 from view.customframes import ButtonFrame, CheckboxFrame
 
 
@@ -26,16 +26,18 @@ class View(ctk.CTkFrame):
         # Frame Grid Configuration
         
         # Sudoku Frame
-        self.sudoku_frame = SudokuGameFrame(self, height*0.75)
+        self.sudoku_frame = SquareGameFrame(self, 9)
+        print("Sudoku Frame initialized")
         self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
 
 
         # Button Frame
-        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 2)
+        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 3)
         self.sudoku_button_frame_border_color = "#FFFFAA"
 
         self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
         self.sudoku_button_frame.buttons[1].configure(text="Submit", command = self.submitbutton_callback)
+        self.sudoku_button_frame.buttons[2].configure(text="EGenerate", command = self.generatebutton_callback)
         
 
         self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
@@ -52,6 +54,7 @@ class View(ctk.CTkFrame):
         self.controller = controller
 
 
+
     def fetchbutton_callback(self):
         if self.controller: self.controller.fetch_button_clicked()
         
@@ -60,7 +63,9 @@ class View(ctk.CTkFrame):
     def submitbutton_callback(self):
         if self.controller: self.controller.submit_button_clicked()
        
-        
+    
+    def generatebutton_callback(self):
+        if self.controller: self.controller.generate_button_clicked()
 
 
     def set_field_not_editable(self, row: int, column: int):
@@ -69,11 +74,15 @@ class View(ctk.CTkFrame):
         self.sudoku_frame.game_field[row*9 + column].configure(text_color="#9cdcf1")
 
 
+
     def set_field_value(self, row: int, column: int, value: int):
         if (value > 0 and value < 10):
+            print(f"Setting field at row {row} and column {column} to {value}")
             self.sudoku_frame.game_field[row*9 + column].entry_variable.set(str(value))
         elif (value == 0):
+            print(f"Setting field at row {row} and column {column} to empty")
             self.sudoku_frame.game_field[row*9 + column].entry_variable.set("")
+
 
 
     def get_field_value(self, row: int, column: int) -> int:
