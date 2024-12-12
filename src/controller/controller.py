@@ -27,8 +27,12 @@ class Controller:
                 
                 value = self.model.get_field_value(row, column)
                 
-                if value != 0: print(f"Field at row {row} and column {column} has value {value}")
                 self.view.set_field_value(row, column, value)
+                
+                if not self.model.is_field_editable(row, column):
+                    self.view.set_field_not_editable(row, column)
+                else:
+                    self.view.set_field_editable(row, column)
                 
         
         
@@ -44,9 +48,17 @@ class Controller:
                 
                 if self.model.is_field_editable(row, column):
                     
-                    if value != 0: print(f"Setting field at row {row} and column {column} to value {value}")
                     self.model.set_field_value(row, column, value)
 
 
         self.model.save_sudoku("test_sudoku")
         
+
+    def generate_button_clicked(self):
+        '''Callback for the generate button'''
+        
+        print("Generate Button Clicked")
+        
+        self.model.random_sudoku()
+        self.model.save_sudoku("test_sudoku")
+        self.fetch_button_clicked()
