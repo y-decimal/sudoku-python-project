@@ -39,7 +39,7 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame_border_color = "#FFFFAA"
 
         self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
-        self.sudoku_button_frame.buttons[1].configure(text="Submit", command = self.submitbutton_callback)
+        self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
         self.sudoku_button_frame.buttons[2].configure(text="Generate", command = self.generatebutton_callback)
         
 
@@ -62,10 +62,9 @@ class View(ctk.CTkFrame):
     def fetchbutton_callback(self):
         if self.controller: self.controller.fetch()
         
-        
 
-    def submitbutton_callback(self):
-        if self.controller: self.controller.submit()
+    def pushbutton_callback(self):
+        if self.controller: self.controller.push()
        
     
     def generatebutton_callback(self):

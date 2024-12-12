@@ -33,10 +33,10 @@ class Controller:
                 
         
         
-    def submit(self):
+    def push(self):
         '''Push updated values to the model | To be replaced'''
         
-        print("Submitting")
+        print("Pushing")
         
         for row in range(9):
             for column in range(9):
@@ -47,8 +47,7 @@ class Controller:
                     
                     self.model.set_field_value(row, column, value)
 
-
-        
+    
 
     def generate(self):
         '''Callback for the generate button'''
