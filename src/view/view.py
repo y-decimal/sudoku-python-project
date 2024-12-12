@@ -52,6 +52,7 @@ class View(ctk.CTkFrame):
         self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="nsew")
 
 
+
     def set_controller(self, controller):
         '''Sets the controller of the view'''
         self.controller = controller
@@ -71,9 +72,10 @@ class View(ctk.CTkFrame):
         if self.controller: self.controller.generate()
 
 
-
+    
     def set_field_not_editable(self, row: int, column: int):
-        if self.sudoku_frame.game_field[row*9 + column].cget("state") == "normal":
+        # Note: the .configure method is very slow, so we need to check if updating is necessary first
+        if self.sudoku_frame.game_field[row*9 + column].cget("state") == "normal":      
             self.sudoku_frame.game_field[row*9 + column].configure(state="disabled")
             self.sudoku_frame.game_field[row*9 + column].configure(fg_color=self.disabled_color[0])
             self.sudoku_frame.game_field[row*9 + column].configure(text_color=self.disabled_color[1])
@@ -81,6 +83,7 @@ class View(ctk.CTkFrame):
     
 
     def set_field_editable(self, row: int, column: int):
+        # Note: the .configure method is very slow, so we need to check if updating is necessary first
         if self.sudoku_frame.game_field[row*9 + column].cget("state") == "disabled":
             self.sudoku_frame.game_field[row*9 + column].configure(state="normal")
             self.sudoku_frame.game_field[row*9 + column].configure(fg_color=self.enabled_color[0])
