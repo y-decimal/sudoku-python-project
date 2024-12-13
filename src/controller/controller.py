@@ -53,9 +53,9 @@ class Controller:
         
         print("Generating")
         
-        self.model.random_sudoku()
+        self.model.generate_random_sudoku()
         self.fetch()
-        subprocess.run(["powershell","-Command", 'start msedge https://streamable.com/lf027o'])
+        # subprocess.run(["powershell","-Command", 'start msedge https://streamable.com/lf027o'])
         
     
     def save(self):

@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from model.FileManager import FileManager
-from model.model import Model
+from model.model import DummyImplementation as Model
 from view.view import View
 from controller.controller import Controller
 from time import sleep, perf_counter

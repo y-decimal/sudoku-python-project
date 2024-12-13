@@ -1,7 +1,10 @@
 from model.ISudokuInterface import ISudokuInterface
+import random
 
 class Model(ISudokuInterface):
     '''Model for Sudoku fields'''
+
+    
 
     def __init__(self, givenfield: list = [0 for _ in range (81)]):
         self.block_index = [0,3,6,27,30,33, 54, 57, 60]
@@ -109,4 +112,18 @@ class Model(ISudokuInterface):
                     else:
                         invalid.update({self.block_index.index(b)+1:sudoku[b + r*9 + c]})
         return invalid
+
+
+    def generate_random_sudoku(self):
+        '''Sets random values for some fields in the game field'''   
+        
+        for row in range (9):
+            for column in range(9):
+                self.fields[row*9+column] = 0
+                if (random.randint(1,9) < 3):
+                    self.fields[row*9+column] = random.randint(1,9)
+                    self.starterfield[row*9+column] = True
+
+
+
 # Hi
