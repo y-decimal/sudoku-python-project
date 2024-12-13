@@ -29,7 +29,7 @@ class SudokuFrame(ctk.CTkFrame):
 
     def initialize_fields(self):
         
-        self.game_entry_dimension = int(self.master.cget("height")) // self.game_gridsize*3
+        self.game_entry_dimension = int(self.master.master.window_height) // self.game_gridsize * 0.75
 
         self.sudoku_row = 0
         for row in range(self.gridsize):        
