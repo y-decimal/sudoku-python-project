@@ -40,7 +40,7 @@ class Controller:
                 
                 value = self.view.get_field_value(row, column)
                 
-                self.model.would_value_be_valid(row, column, value)
+                # self.model.would_value_be_valid(row, column, value)
                 
                 if self.model.is_field_editable(row, column):
                     
