@@ -34,13 +34,13 @@ class Controller:
         '''Push updated values to the model | To be replaced'''
         
         print("Pushing")
-        
+        #self.model.clear()
         for row in range(9):
             for column in range(9):     
                 
                 value = self.view.get_field_value(row, column)
                 
-                # self.model.would_value_be_valid(row, column, value)
+                #self.model.would_value_be_valid(row, column, value)
                 
                 if self.model.is_field_editable(row, column):
                     
