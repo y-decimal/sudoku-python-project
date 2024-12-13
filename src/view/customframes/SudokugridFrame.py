@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 
-class SquareGameFrame(ctk.CTkFrame):
+class SudokuFrame(ctk.CTkFrame):
 
     game_field = []
 
