@@ -38,11 +38,11 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 3)
         self.sudoku_button_frame_border_color = "#FFFFAA"
 
-        self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
-        self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
-        self.sudoku_button_frame.buttons[2].configure(text="Generate", command = self.generatebutton_callback)
-        # self.sudoku_button_frame.buttons[3].configure(text="Save", command = self.savebutton_callback)
-        # self.sudoku_button_frame.buttons[4].configure(text="Load", command = self.loadbutton_callback)
+        # self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
+        # self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
+        self.sudoku_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
+        self.sudoku_button_frame.buttons[1].configure(text="Save", command = self.savebutton_callback)
+        self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
 
         self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
@@ -80,35 +80,35 @@ class View(ctk.CTkFrame):
     
     def set_field_not_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.sudoku_frame.game_field[row*9 + column].cget("state") == "normal":      
-            self.sudoku_frame.game_field[row*9 + column].configure(state="disabled")
-            self.sudoku_frame.game_field[row*9 + column].configure(fg_color=self.disabled_color[0])
-            self.sudoku_frame.game_field[row*9 + column].configure(text_color=self.disabled_color[1])
+        if self.sudoku_frame.game_field[row][column].cget("state") == "normal":      
+            self.sudoku_frame.game_field[row][column].configure(state="disabled")
+            self.sudoku_frame.game_field[row][column].configure(fg_color=self.disabled_color[0])
+            self.sudoku_frame.game_field[row][column].configure(text_color=self.disabled_color[1])
         
     
 
     def set_field_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.sudoku_frame.game_field[row*9 + column].cget("state") == "disabled":
-            self.sudoku_frame.game_field[row*9 + column].configure(state="normal")
-            self.sudoku_frame.game_field[row*9 + column].configure(fg_color=self.enabled_color[0])
-            self.sudoku_frame.game_field[row*9 + column].configure(text_color=self.enabled_color[1])
+        if self.sudoku_frame.game_field[row][column].cget("state") == "disabled":
+            self.sudoku_frame.game_field[row][column].configure(state="normal")
+            self.sudoku_frame.game_field[row][column].configure(fg_color=self.enabled_color[0])
+            self.sudoku_frame.game_field[row][column].configure(text_color=self.enabled_color[1])
 
 
 
     def set_field_value(self, row: int, column: int, value: int):
         
         if (value > 0 and value < 10):
-            self.sudoku_frame.game_field[row*9 + column].entry_variable.set(str(value))
+            self.sudoku_frame.game_field[row][column].entry_variable.set(str(value))
             
         elif (value == 0):
-            self.sudoku_frame.game_field[row*9 + column].entry_variable.set("")
+            self.sudoku_frame.game_field[row][column].entry_variable.set("")
 
 
 
     def get_field_value(self, row: int, column: int) -> int:
         
-        value = self.sudoku_frame.game_field[row*9 + column].entry_variable.get()
+        value = self.sudoku_frame.game_field[row][column].entry_variable.get()
         if value == "":
             return 0
         else:

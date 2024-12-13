@@ -3,7 +3,7 @@ import customtkinter as ctk
 
 class SudokuFrame(ctk.CTkFrame):
 
-    game_field = []
+    game_field = [[0 for _ in range(9)] for _ in range(9)]
 
     def __init__(self, master, game_gridsize):
         
@@ -30,15 +30,18 @@ class SudokuFrame(ctk.CTkFrame):
     def initialize_fields(self, frame_height, game_gridsize):
         
         self.game_entry_dimension = frame_height / game_gridsize
-        self.iterator = 0
 
-        for row in range(self.gridsize):
+        self.sudoku_row = 0
+        for row in range(self.gridsize):        
             if row % 2 == 0:
+                self.sudoku_column = 0
                 for column in range(self.gridsize):
                     if column % 2 == 0:
-                        self.game_field.append(SudokuEntryField(self, self.game_entry_dimension))
-                        self.game_field[self.iterator].grid(row=row, column=column, sticky="nsew", padx=2, pady=2)
-                        self.iterator += 1
+                        self.game_field[self.sudoku_row][self.sudoku_column] = SudokuEntryField(self, self.game_entry_dimension)
+                        self.game_field[self.sudoku_row][self.sudoku_column].grid(row=row, column=column, sticky="nsew", padx=2, pady=2)
+                        self.sudoku_column += 1
+                self.sudoku_row += 1
+
 
 
 
