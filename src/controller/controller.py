@@ -23,6 +23,7 @@ class Controller:
                 
                 self.view.set_field_value(row, column, value)
                 
+                
                 if not self.model.is_field_editable(row, column): self.view.set_field_not_editable(row, column)
                     
                 else: self.view.set_field_editable(row, column)
@@ -35,9 +36,11 @@ class Controller:
         print("Pushing")
         
         for row in range(9):
-            for column in range(9):
+            for column in range(9):     
                 
                 value = self.view.get_field_value(row, column)
+                
+                # self.model.would_value_be_valid(row, column, value)
                 
                 if self.model.is_field_editable(row, column):
                     
@@ -50,9 +53,9 @@ class Controller:
         
         print("Generating")
         
-        self.model.random_sudoku()
+        self.model.generate_random_sudoku()
         self.fetch()
-        subprocess.run(["powershell","-Command", 'start msedge https://streamable.com/lf027o'])
+        # subprocess.run(["powershell","-Command", 'start msedge https://streamable.com/lf027o'])
         
     
     def save(self):

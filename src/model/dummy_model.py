@@ -1,129 +1,133 @@
 from model.ISudokuInterface import ISudokuInterface
 import random
 
-class DummyImplementation(ISudokuInterface):
-    '''Dummy implementation of the ISudokuInterface to use for testing or reference'''
+class Model(ISudokuInterface):
+    '''Model for Sudoku fields'''
 
-    __game_field = []
     
-    file_manager = None
 
+    def __init__(self, givenfield: list = [0 for _ in range (81)]):
+        self.block_index = [0,3,6,27,30,33, 54, 57, 60]
+        self.fields = []
+        for field in givenfield:
+            if isinstance(field, int) and 0 <= field <= 9:
+                self.fields.append(field)#transferring the initial field values as a list, empty fields contain the value 0
+            elif field == "" or field == None:
+                self.fields.append(0)
+            else:
+                raise ValueError(f"Invalid Value at position {givenfield.index(field)}")
+        self.starterfield = []
+        for field in self.fields:
+            self.starterfield.append(field != 0) #mirroring the information, whether the field was given from the start. True if Starterfield, false if empty (0) at start
 
-    def __init__(self):
-        '''Initializes the DummyImplementation'''
+    def rc_to_index(self,row: int, column: int):
+        return (row-1)* 9 + column - 1
 
-        # Initialize the game field with 0s for the value and True for the editable flag
-        self.__game_field = [[(0, True) for _ in range(9)] for _ in range(9)] 
-        
-
-        
-        
-        
-        
-    def random_sudoku(self):
-        '''Sets random values for some fields in the game field'''
-        
-        
-        
-        for row in range (9):
-            for column in range(9):
-                self.__game_field[row][column] = (0, True)
-                if (random.randint(1,9) < 3):
-                    self.__game_field[row][column] = (random.randint(1,9), False)
-    
 
 
     def get_field_value(self, row: int, column: int) -> int:
         '''Returns the value of the field at the given row and column'''
+        return self.fields[self.rc_to_index(row, column)]
 
-        # Return -1 if the row or column is out of bounds
-        if (row < 0 or row > 8 or column < 0 or column > 8):
-            print(f"Row {row} or column {column} out of bounds")
-            return -1
-        
-        # Return the value of the field by accessing the first element of the tuple
-        return self.__game_field[row][column][0]
-    
+
 
 
     def set_field_value(self, row: int, column: int, value: int) -> bool:
         '''Returns true if value was set, returns false if value could not be set (e.g. because it is a field that is not editable)'''
+        if self.entry_status(row, column, value) == 2:
+            return False
+        elif self.entry_status(row, column, value) == 0:
+            self.fields[self.rc_to_index(row,column)] = 0
+            return True
+        elif self.entry_status(row, column, value) == 1:
+            self.fields[self.rc_to_index(row,column)] = value
+            return True
 
-        # Abort if the row or column is out of bounds
-        if (row < 0 or row > 8 or column < 0 or column > 8):
-            print(f"Row {row} or column {column} out of bounds")
-            return False
-        
-        # Abort if the field is not editable
-        if (not self.__game_field[row][column][1]):
-            print(f"Field at row {row} and column {column} is not editable")
-            return False
-        
-        # Set the value of the field by overwriting the first element of the tuple
-        self.__game_field[row][column] = (value, True)
-        return True
-    
-    
+            
+
+    def entry_status(self, row: int, column: int, value: int) -> bool:
+        '''Returns 0 if value is empty (0), 1 if value is number, 2 if value is invalid'''
+        if not self.is_field_editable(row,column):
+            return 2
+        elif value == "":
+            return 0
+        elif not isinstance(value, int):
+            return 2
+        elif value < 1 or value > 9:
+            return 2
+        else: 
+            return 1
+
 
     def is_field_editable(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
+        return not self.starterfield[self.rc_to_index(row, column)]
 
-        # Abort if the row or column is out of bounds
-        if (row < 0 or row > 8 or column < 0 or column > 8):
-            print(f"Row {row} or column {column} out of bounds")
-            return False
-        
-        # Return the editable flag by accessing the second element of the tuple
-        return self.__game_field[row][column][1]
-    
+
 
 
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
         '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
-
-        # Abort if the row or column is out of bounds
-        if (row < 0 or row > 8 or column < 0 or column > 8):
-            print(f"Row {row} or column {column} out of bounds")
+        
+        if self.entry_status(row, column, value) == 2:
             return False
+        possible_fields = [field for field in self.fields]
+        possible_fields[self.rc_to_index(row,column)] = value
+        check = self.invalid_rows(possible_fields) == {} and self.invalid_column(possible_fields) == {} and self.invalid_blocks(possible_fields) == {}
+        print (check)
+        return check
 
-        # Actual check not Implemented
-        return True
-    
-    
-    
-    def get_sudoku_string(self) -> str:
-        '''Returns a string representation of the game field'''
 
-        # Initialize the string
-        string = ""
+    def invalid_rows(self, sudoku):
+        invalid= {}
+        for r in range(9):
+            space = []
+            for c in range(9):
+                if sudoku[r*9+c] not in space:
+                    space.append(sudoku[r*9+c]) 
+                else:
+                    invalid.update({r+1:sudoku[r*9+c]})
+        return invalid
+
+    def invalid_column(self, sudoku):
+        invalid= {}
+        for c in range(9):
+            space = []
+            for r in range(9):
+                if sudoku[r*9+c] not in space:
+                    space.append(sudoku[r*9+c]) 
+                else:
+                    invalid.update({r+1:sudoku[r*9+c]})
+        return invalid
+    
+    
+    def invalid_blocks(self,sudoku):
+        invalid= {}
+        for b in self.block_index:
+            space = []
+            for r in range(3):
+                for c in range(3):
+                    if sudoku[b+r*9+c] not in space:
+                        space.append(sudoku[b + r*9 + c])
+                    else:
+                        invalid.update({self.block_index.index(b)+1:sudoku[b + r*9 + c]})
+        return invalid
+
+
+    def generate_random_sudoku(self):
+        '''Sets random values for some fields in the game field'''   
         
-        # Iterate over the game field and add the values to the string
-        for row in range(9):
+        for row in range (9):
             for column in range(9):
-                string += str(self.__game_field[row][column])
-                string += "\n"
-        
-        return string
-    
-    
-    
-    def attach_file_manager(self, file_manager):
-        '''Attaches a file manager to the DummyImplementation'''
+                
+                self.fields[self.rc_to_index(row, column)] = 0
+                self.starterfield[self.rc_to_index(row, column)] = False
+                
+                if (random.randint(1,9) < 3):
+                    
+                    self.fields[self.rc_to_index(row, column)] = random.randint(1,9)
+                    self.starterfield[self.rc_to_index(row, column)] = True
 
-        self.file_manager = file_manager
-    
-    
-    
-    def save_sudoku(self, file_name: str):
-        '''Saves the game field to a file'''
-        
-        # Save the content to the file
-        return self.file_manager.save_sudoku(self.__game_field, file_name)
-        
-        
-        
-    def load_sudoku(self, file_name: str):
-        '''Loads the game field from a file'''
 
-        # Load the content from the file
-        self.__game_field = self.file_manager.load_sudoku(file_name)
+
+# Test 2, test2

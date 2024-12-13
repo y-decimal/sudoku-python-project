@@ -31,6 +31,12 @@ class ISudokuInterface(ABC):
         '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
         pass
 
+    
+    @abstractmethod
+    def generate_random_sudoku(self):
+        '''Generates a random sudoku'''
+        pass
+
 
 
     @abstractmethod
