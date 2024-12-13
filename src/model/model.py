@@ -16,8 +16,10 @@ class Model(ISudokuInterface):
     def rc_to_index(self,row: int, column: int):
         return (row)* 9 + column
 
-    def clear(self):
+    def clear(self, clearstarter = False):
         self.fields = [0 for _ in range (81)]
+        if clearstarter:
+            self.starterfield = [False for _ in range (81)]
 
     def get_field_value(self, row: int, column: int) -> int:
         '''Returns the value of the field at the given row and column'''
@@ -48,9 +50,9 @@ class Model(ISudokuInterface):
         possible_fields = [field for field in self.fields]
         possible_fields[self.rc_to_index(row,column)] = value
         check = self.invalid_rows(possible_fields) == {} and self.invalid_column(possible_fields) == {} and self.invalid_blocks(possible_fields) == {}
-    
         print(f'{self.rc_to_index(row,column)}:{check}:{value}')
         return check
+
 
     def invalid_rows(self, sudoku):
         invalid= {}
@@ -90,7 +92,7 @@ class Model(ISudokuInterface):
 
     def generate_random_sudoku(self):
         '''Sets random values for some fields in the game field'''   
-        
+        self.clear(True)
         for row in range (9):
             for column in range(9):
                 
