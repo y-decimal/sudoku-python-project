@@ -13,9 +13,11 @@ class App(ctk.CTk):
     def __init__(self):
 
         super().__init__()
+        
+
 
         self.sudoku_test_text = "Sudoku MVC Test"
-        self.relative_size = 0.55
+        self.relative_size = 0.6
         self.minimum_size = self.relative_size
         self.aspect_ratio = 5/4
 
