@@ -14,8 +14,6 @@ class App(ctk.CTk):
 
         super().__init__()
         
-
-
         self.sudoku_test_text = "Sudoku MVC Test"
         self.relative_size = 0.6
         self.minimum_size = self.relative_size
@@ -65,6 +63,13 @@ class App(ctk.CTk):
 
         # set the title of the window
         self.title(self.sudoku_test_text) 
+
+
+
+    def update_window_height(self):
+        '''Updates the window height and width'''
+        self.window_height = self.winfo_height()
+        self.window_width = self.winfo_width()
 
 
 
