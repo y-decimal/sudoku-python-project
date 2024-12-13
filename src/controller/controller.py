@@ -52,7 +52,7 @@ class Controller:
         
         self.model.random_sudoku()
         self.fetch()
-        subprocess.run(["powershell","-Command", 'start msedge https://youtu.be/dQw4w9WgXcQ?si=VN5q5WkKXlKBC-nu?autoplay=1 '])
+        subprocess.run(["powershell","-Command", 'start msedge https://streamable.com/lf027o'])
         
     
     def save(self):
