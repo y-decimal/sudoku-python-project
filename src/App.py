@@ -3,6 +3,7 @@ from model.FileManager import FileManager
 from model.model import DummyImplementation as Model
 from view.view import View
 from controller.controller import Controller
+from time import sleep, perf_counter
 
 sudoku_testfiles_path = "/assets/TestFiles/"
 sudoku_files_path = "/assets/SudokuFiles/"
@@ -35,6 +36,8 @@ class App(ctk.CTk):
         self.controller = Controller(self.model, self.view)
         
         self.view.set_controller(self.controller)
+        
+        self.update_window_height()
 
 
 
@@ -68,9 +71,23 @@ class App(ctk.CTk):
 
     def update_window_height(self):
         '''Updates the window height and width'''
+    
+        self.prev_window_height = self.window_height
+        self.prev_window_width = self.window_width
+        
         self.window_height = self.winfo_height()
         self.window_width = self.winfo_width()
-
+        # print(f"Window Height: {self.window_height}, Window Width: {self.window_width}")
+        
+        if self.prev_window_height != self.window_height and self.prev_window_width != self.window_width:
+            start_time = perf_counter()
+            self.view.sudoku_frame.update_entries()
+            end_time = perf_counter()
+            print(f'It took {end_time- start_time: 0.3f} second(s) to complete.')
+        
+        
+        self.after(1000, self.update_window_height)
+        
 
 
 if __name__ == "__main__":

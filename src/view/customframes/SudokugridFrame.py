@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from threading import Thread
 
 
 class SudokuFrame(ctk.CTkFrame):
@@ -28,8 +29,8 @@ class SudokuFrame(ctk.CTkFrame):
 
 
     def initialize_fields(self):
-        
-        self.game_entry_dimension = int(self.master.master.window_height) // self.game_gridsize * 0.75
+    
+        self.game_entry_dimension = int(self.master.master.window_height // self.game_gridsize * 0.75)
 
         self.sudoku_row = 0
         for row in range(self.gridsize):        
@@ -38,10 +39,11 @@ class SudokuFrame(ctk.CTkFrame):
                 for column in range(self.gridsize):
                     if column % 2 == 0:
                         self.game_field[self.sudoku_row][self.sudoku_column] = SudokuEntryField(self, self.game_entry_dimension)
-                        self.game_field[self.sudoku_row][self.sudoku_column].grid(row=row, column=column, sticky="nsew", padx=2, pady=2)
+                        self.game_field[self.sudoku_row][self.sudoku_column].grid(row=row, column=column, padx=2, pady=2)
                         self.sudoku_column += 1
                 self.sudoku_row += 1
 
+        self.update_entries()
 
 
 
@@ -58,8 +60,23 @@ class SudokuFrame(ctk.CTkFrame):
                 ctk.CTkFrame(self, width=4, fg_color="#505070", corner_radius=2).grid(row=0, column=col, rowspan=self.gridsize, sticky="ns", padx=3)
                
                 
-            
+    def update_entries(self):
+           
+        self.game_entry_dimension = int(self.master.master.window_height // self.game_gridsize * 0.75)
 
+        for row in range(9): Thread(target = self.update(row)).start()
+            
+            
+    def update(self, row):
+        
+        for column in range(9):
+            self.game_field[row][column].configure(width=self.game_entry_dimension, height=self.game_entry_dimension)
+            #print(f"Entry row {row}, column {column} updated")
+        
+        # for row in range(self.game_gridsize):
+        #     for column in range(self.game_gridsize):
+        #         self.game_field[row][column].configure(width=self.game_entry_dimension, height=self.game_entry_dimension)
+        #         self.game_field[row][column].configure(font=("Arial", int(0.75*self.game_entry_dimension)))
 
     
 
