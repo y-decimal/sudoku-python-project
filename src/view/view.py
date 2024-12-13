@@ -85,7 +85,7 @@ class View(ctk.CTkFrame):
             # print(self.mouse_position.position)
             row = self.mouse_position.position[0]
             column = self.mouse_position.position[1]
-            self.onhover_callback(self.mouse_position, row, column)
+            self.highlight_fields(self.mouse_position, row, column)
         else:
             self.reset_fields()
 
@@ -105,14 +105,16 @@ class View(ctk.CTkFrame):
     def loadbutton_callback(self):
         if self.controller: self.controller.load()
     
-    def onhover_callback(self, widget, row, column):
+    def highlight_fields(self, widget, row, column):
                 
         self.changed_fields = [(row, column)]
         
         if widget.state:
             widget.configure(fg_color=self.highlight_color[0])
+            widget.focus()
         else:
             widget.configure(fg_color=self.highlight_color[1])
+            widget.focus()
         
         for i in range(9):
             if i != column:
