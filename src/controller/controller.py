@@ -5,13 +5,7 @@ class Controller:
         self.model = model
         self.view = view
         
-        for row in range(9):
-            for column in range(9):
-                
-                value = self.model.get_field_value(row, column)
-                if value != 0:
-                    self.view.set_field_value(row, column, value)
-                    self.view.set_field_not_editable(row, column)
+        self.fetch()
         
     
     
@@ -56,3 +50,18 @@ class Controller:
         
         self.model.random_sudoku()
         self.fetch()
+        
+    
+    def save(self):
+        '''Callback for the save button'''
+        
+        self.push()
+        self.model.save_sudoku("test")
+        
+    
+    def load(self):
+        '''Callback for the load button'''
+        
+        self.model.load_sudoku("test")
+        self.fetch()
+        
