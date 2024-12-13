@@ -13,14 +13,14 @@ class View(ctk.CTkFrame):
     enabled_color = ("#343638", "#FFFFFF")
 
     def __init__(self, parent):
-
+        
         super().__init__(parent)
 
        
-        # App Grid Configuration
+        # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0,2), weight=0)
-        self.grid_columnconfigure((1), weight=2)
-        self.grid_rowconfigure(0, weight=2)
+        self.grid_columnconfigure(1, weight=2)
+        self.grid_rowconfigure(0, weight=3)
         self.grid_rowconfigure((1,2), weight=1)
 
 
@@ -31,7 +31,7 @@ class View(ctk.CTkFrame):
         # Sudoku Frame
         self.sudoku_frame = SudokuFrame(self, 9)
         print("Sudoku Frame initialized")
-        self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
+        self.sudoku_frame.grid(row=0, column=1, padx=10) 
 
 
         # Button Frame
