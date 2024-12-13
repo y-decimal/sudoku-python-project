@@ -39,6 +39,7 @@ class SudokuFrame(ctk.CTkFrame):
                 for column in range(self.gridsize):
                     if column % 2 == 0:
                         self.game_field[self.sudoku_row][self.sudoku_column] = SudokuEntryField(self, self.game_entry_dimension)
+                        self.game_field[self.sudoku_row][self.sudoku_column].position = (self.sudoku_row, self.sudoku_column)
                         self.game_field[self.sudoku_row][self.sudoku_column].grid(row=row, column=column, padx=2, pady=2)
                         self.sudoku_column += 1
                 self.sudoku_row += 1
@@ -63,21 +64,25 @@ class SudokuFrame(ctk.CTkFrame):
     def update_entries(self):
            
         self.game_entry_dimension = int(self.master.master.window_height // self.game_gridsize * 0.75)
+ 
+        self.update()
+        #Thread(target = self.update, args = (0, 9)).start()
+        
 
-        for row in range(9): Thread(target = self.update(row)).start()
+        
+        
+        
             
             
-    def update(self, row):
+    def update(self, start= 0, end=9):
         
-        for column in range(9):
-            self.game_field[row][column].configure(width=self.game_entry_dimension, height=self.game_entry_dimension)
-            #print(f"Entry row {row}, column {column} updated")
+        for row in range(start, end):
+            for column in range(9):
+                self.game_field[row][column].configure( width=self.game_entry_dimension, height=self.game_entry_dimension )
+                self.game_field[row][column].configure( font = ("Arial", 0.75*self.game_entry_dimension) )
+                #print(f"Entry row {row}, column {column} updated")
         
-        # for row in range(self.game_gridsize):
-        #     for column in range(self.game_gridsize):
-        #         self.game_field[row][column].configure(width=self.game_entry_dimension, height=self.game_entry_dimension)
-        #         self.game_field[row][column].configure(font=("Arial", int(0.75*self.game_entry_dimension)))
-
+        
     
 
 
@@ -90,12 +95,13 @@ class SudokuEntryField(ctk.CTkEntry):
                 super().__init__(master, 
                                  width= entry_dimensions, 
                                  height = entry_dimensions, 
-                                 font = ("Arial", 34), 
+                                 font = ("Arial", 0.75*entry_dimensions), 
                                  textvariable=self.entry_variable, 
                                  justify="center"
                                 )
 
-           
+                self.state = True
+                self.position = (-1, -1)
                 self.entry_variable.trace_add("write", self.sudoku_callback)
 
 
