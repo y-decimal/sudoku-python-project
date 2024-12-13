@@ -1,5 +1,3 @@
-import subprocess
-
 class Controller:
 
     def __init__(self, model, view):
@@ -55,7 +53,7 @@ class Controller:
         
         self.model.generate_random_sudoku()
         self.fetch()
-        # subprocess.run(["powershell","-Command", 'start msedge https://streamable.com/lf027o'])
+
         
     
     def save(self):
