@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 
-from view.gridhelpers.GameGridHelper import SquareGameFrame
+from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes import ButtonFrame, CheckboxFrame
 
 
@@ -12,7 +12,7 @@ class View(ctk.CTkFrame):
     disabled_color = ("#303032", "#9cdcf1")
     enabled_color = ("#343638", "#FFFFFF")
 
-    def __init__(self, parent, height, width):
+    def __init__(self, parent):
 
         super().__init__(parent)
 
@@ -29,7 +29,7 @@ class View(ctk.CTkFrame):
         # Frame Grid Configuration
         
         # Sudoku Frame
-        self.sudoku_frame = SquareGameFrame(self, 9)
+        self.sudoku_frame = SudokuFrame(self, 9)
         print("Sudoku Frame initialized")
         self.sudoku_frame.grid(row=0, column=1, padx=10, columnspan=1) 
 
@@ -41,6 +41,8 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
         self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
         self.sudoku_button_frame.buttons[2].configure(text="Generate", command = self.generatebutton_callback)
+        # self.sudoku_button_frame.buttons[3].configure(text="Save", command = self.savebutton_callback)
+        # self.sudoku_button_frame.buttons[4].configure(text="Load", command = self.loadbutton_callback)
         
 
         self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
@@ -70,7 +72,11 @@ class View(ctk.CTkFrame):
     def generatebutton_callback(self):
         if self.controller: self.controller.generate()
 
-
+    def savebutton_callback(self):
+        if self.controller: self.controller.save()
+        
+    def loadbutton_callback(self):
+        if self.controller: self.controller.load()
     
     def set_field_not_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
