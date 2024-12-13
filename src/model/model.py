@@ -3,9 +3,7 @@ import random
 
 class Model(ISudokuInterface):
     '''Model for Sudoku fields'''
-
     
-
     def __init__(self, givenfield: list = [0 for _ in range (81)]):
         self.block_index = [0,3,6,27,30,33, 54, 57, 60]
         self.fields = []
@@ -18,14 +16,12 @@ class Model(ISudokuInterface):
     def rc_to_index(self,row: int, column: int):
         return (row)* 9 + column
 
-
+    def clear(self):
+        self.fields = [0 for _ in range (81)]
 
     def get_field_value(self, row: int, column: int) -> int:
         '''Returns the value of the field at the given row and column'''
         return self.fields[self.rc_to_index(row, column)]
-
-
-
 
     def set_field_value(self, row: int, column: int, value: int) -> bool:
         '''Returns true if value was set, returns false if value could not be set (e.g. because it is a field that is not editable)'''
@@ -36,8 +32,6 @@ class Model(ISudokuInterface):
             self.fields[self.rc_to_index(row,column)] = value
             return True
 
-
-
     def is_field_editable(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
         
@@ -45,9 +39,6 @@ class Model(ISudokuInterface):
         #print("Check1")
         #print(check1)
         return check1
-
-
-
 
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
         '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
@@ -60,7 +51,6 @@ class Model(ISudokuInterface):
     
         print(f'{self.rc_to_index(row,column)}:{check}:{value}')
         return check
-
 
     def invalid_rows(self, sudoku):
         invalid= {}
