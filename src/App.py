@@ -23,7 +23,7 @@ class App(ctk.CTk):
         self.set_window_parameters()
 
         # set the icon of the window
-        # self.iconbitmap(icon_path)
+        self.iconbitmap(icon_path)
 
 
         self.model = Model()
