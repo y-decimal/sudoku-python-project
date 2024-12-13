@@ -7,13 +7,13 @@ class SudokuFrame(ctk.CTkFrame):
 
     def __init__(self, master, game_gridsize):
         
-
         super().__init__(master)
         
-        self.gridsize = game_gridsize+(game_gridsize-1)
+        self.game_gridsize = game_gridsize
+        self.gridsize = self.game_gridsize+(self.game_gridsize-1)
         
         self.configure_grid()
-        self.initialize_fields(600, game_gridsize)  # ideally should be dynamically scaled
+        self.initialize_fields()  # ideally should be dynamically scaled
         
 
         self.add_horizontal_separators()
@@ -27,9 +27,9 @@ class SudokuFrame(ctk.CTkFrame):
 
 
 
-    def initialize_fields(self, frame_height, game_gridsize):
+    def initialize_fields(self):
         
-        self.game_entry_dimension = frame_height / game_gridsize
+        self.game_entry_dimension = int(self.master.cget("height")) // self.game_gridsize*3
 
         self.sudoku_row = 0
         for row in range(self.gridsize):        
