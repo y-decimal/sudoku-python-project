@@ -119,10 +119,14 @@ class Model(ISudokuInterface):
         
         for row in range (9):
             for column in range(9):
-                self.fields[row*9+column] = 0
+                
+                self.fields[self.rc_to_index(row, column)] = 0
+                self.starterfield[self.rc_to_index(row, column)] = False
+                
                 if (random.randint(1,9) < 3):
-                    self.fields[row*9+column] = random.randint(1,9)
-                    self.starterfield[row*9+column] = True
+                    
+                    self.fields[self.rc_to_index(row, column)] = random.randint(1,9)
+                    self.starterfield[self.rc_to_index(row, column)] = True
 
 
 
