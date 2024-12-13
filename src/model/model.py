@@ -130,4 +130,12 @@ class Model(ISudokuInterface):
 
 
 
+    def load_sudoku(self, file_name: str) -> bool:
+        # Note: This method is not implemented yet
+        pass
+    
+    def save_sudoku(self, file_name: str) -> bool:
+        # Note: This method is not implemented yet
+        pass
+
 # Test 2, test2
