@@ -3,9 +3,9 @@ from model.ISudokuInterface import ISudokuInterface
 class Model(ISudokuInterface):
     '''Model for Sudoku fields'''
 
-    def __init__(self, givenfield: list):
+    def __init__(self, givenfield: list = [0 for _ in range (81)]):
         self.block_index = [0,3,6,27,30,33, 54, 57, 60]
-        self.fields = {}
+        self.fields = []
         for field in givenfield:
             if isinstance(field, int) and 0 <= field <= 9:
                 self.fields.append(field)#transferring the initial field values as a list, empty fields contain the value 0
@@ -65,11 +65,14 @@ class Model(ISudokuInterface):
 
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
         '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
+        
         if self.entry_status(row, column, value) == 2:
             return False
         possible_fields = [field for field in self.fields]
         possible_fields[self.rc_to_index(row,column)] = value
-        return self.invalid_rows(possible_fields) == {} and self.invalid_column(possible_fields) == {} and self.invalid_blocks(possible_fields) == {}
+        check = self.invalid_rows(possible_fields) == {} and self.invalid_column(possible_fields) == {} and self.invalid_blocks(possible_fields) == {}
+        print (check)
+        return check
 
 
     def invalid_rows(self, sudoku):
