@@ -11,11 +11,16 @@ class View(ctk.CTkFrame):
 
     disabled_color = ("#303032", "#9cdcf1")
     enabled_color = ("#343638", "#FFFFFF")
+    highlight_color = ("#5F4648", "#3F2628")
+    adjacent_color = ("#445F48", "#243F28")
+    changed_fields = []
 
     def __init__(self, parent):
         
         super().__init__(parent)
 
+       
+        self.mouse_position = None
        
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0,2), weight=0)
@@ -32,7 +37,16 @@ class View(ctk.CTkFrame):
         self.sudoku_frame = SudokuFrame(self, 9)
         print("Sudoku Frame initialized")
         self.sudoku_frame.grid(row=0, column=1, padx=10) 
+        
+        
+        for row in range(9):
+            for column in range(9):
+                self.sudoku_frame.game_field[row][column].bind("<Enter> ", lambda args, widget = self.sudoku_frame.game_field[row][column]: self.set_mouse_position(widget))
+                self.sudoku_frame.game_field[row][column].bind("<Leave>", lambda args: self.set_mouse_position(None), add="+")
+                self.sudoku_frame.game_field[row][column].bind("<Button-1>", lambda args: self.mousebutton_callback(), add="+")
+                
 
+        self.bind("<Button-1>", lambda args: self.mousebutton_callback())
 
         # Button Frame
         self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 5)
@@ -59,16 +73,29 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
+    def set_mouse_position (self, widget):
+        self.mouse_position = widget
+        # print(f"Mouse position set to: {self.mouse_position}")
+
+    def mousebutton_callback(self):
+        # print(self.mouse_position)
+        if self.mouse_position != None:
+            self.reset_fields()
+            # print(f"Mouse clicked at position: {self.mouse_position.position}")
+            # print(self.mouse_position.position)
+            row = self.mouse_position.position[0]
+            column = self.mouse_position.position[1]
+            self.highlight_fields(self.mouse_position, row, column)
+        else:
+            self.reset_fields()
 
 
     def fetchbutton_callback(self):
         if self.controller: self.controller.fetch()
         
-
     def pushbutton_callback(self):
         if self.controller: self.controller.push()
        
-    
     def generatebutton_callback(self):
         if self.controller: self.controller.generate()
 
@@ -78,21 +105,67 @@ class View(ctk.CTkFrame):
     def loadbutton_callback(self):
         if self.controller: self.controller.load()
     
+    def highlight_fields(self, widget, row, column):
+                
+        self.changed_fields = [(row, column)]
+        
+        if widget.state:
+            widget.configure(fg_color=self.highlight_color[0])
+            widget.focus()
+        else:
+            widget.configure(fg_color=self.highlight_color[1])
+            widget.focus()
+        
+        for i in range(9):
+            if i != column:
+                self.changed_fields.append((row, i))
+                if self.sudoku_frame.game_field[row][i].state:
+                    self.sudoku_frame.game_field[row][i].configure(fg_color=self.adjacent_color[0])
+                else:
+                    self.sudoku_frame.game_field[row][i].configure(fg_color=self.adjacent_color[1])
+
+            if i != row:
+                self.changed_fields.append((i, column))
+                if self.sudoku_frame.game_field[i][column].state:
+                    self.sudoku_frame.game_field[i][column].configure(fg_color=self.adjacent_color[0])
+                else:
+                    self.sudoku_frame.game_field[i][column].configure(fg_color=self.adjacent_color[1])
+                
+                
+    
+    def reset_fields(self):
+
+        for row, column in self.changed_fields:
+        
+            if self.sudoku_frame.game_field[row][column].state:
+                self.set_field_color_editable(row, column)
+            else:
+                self.set_field_color_not_editable(row, column)
+                
+
+    def set_field_color_not_editable(self, row: int, column: int):
+        self.sudoku_frame.game_field[row][column].configure(fg_color=self.disabled_color[0])
+        self.sudoku_frame.game_field[row][column].configure(text_color=self.disabled_color[1])
+    
+    def set_field_color_editable(self, row: int, column: int):
+        self.sudoku_frame.game_field[row][column].configure(fg_color=self.enabled_color[0])
+        self.sudoku_frame.game_field[row][column].configure(text_color=self.enabled_color[1])
+        
     def set_field_not_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.sudoku_frame.game_field[row][column].cget("state") == "normal":      
+        if self.sudoku_frame.game_field[row][column].cget("state") == "normal":     
             self.sudoku_frame.game_field[row][column].configure(state="disabled")
-            self.sudoku_frame.game_field[row][column].configure(fg_color=self.disabled_color[0])
-            self.sudoku_frame.game_field[row][column].configure(text_color=self.disabled_color[1])
+            self.set_field_color_not_editable(row, column)
+            self.sudoku_frame.game_field[row][column].state = False
         
-    
-
     def set_field_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
         if self.sudoku_frame.game_field[row][column].cget("state") == "disabled":
             self.sudoku_frame.game_field[row][column].configure(state="normal")
-            self.sudoku_frame.game_field[row][column].configure(fg_color=self.enabled_color[0])
-            self.sudoku_frame.game_field[row][column].configure(text_color=self.enabled_color[1])
+            self.set_field_color_editable(row, column)
+            self.sudoku_frame.game_field[row][column].state = True
+
+    
 
 
 
@@ -103,8 +176,6 @@ class View(ctk.CTkFrame):
             
         elif (value == 0):
             self.sudoku_frame.game_field[row][column].entry_variable.set("")
-
-
 
     def get_field_value(self, row: int, column: int) -> int:
         
