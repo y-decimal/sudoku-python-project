@@ -86,7 +86,7 @@ class App(ctk.CTk):
             print(f'It took {end_time- start_time: 0.3f} second(s) to complete.')
         
         
-        self.after(1000, self.update_window_height)
+        self.after(500, self.update_window_height)
         
 
 

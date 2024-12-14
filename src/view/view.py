@@ -9,16 +9,21 @@ from view.customframes import ButtonFrame, CheckboxFrame
 class View(ctk.CTkFrame):
 
 
-    disabled_color = ("#303032", "#9cdcf1")
-    enabled_color = ("#343638", "#FFFFFF")
-    highlight_color = ("#5F4648", "#3F2628")
-    adjacent_color = ("#445F48", "#243F28")
+    
+
+    disabled_color = ("#2F2F32", "#86ff7b") # (Background color, Text color)
+    enabled_color = ("#343638", "#DDDDDD")  # (Background color, Text color)
+    highlight_color = ("#5F4648", "#3F2628") # (Enabled color, disabled color)
+    adjacent_color = ("#445F48", "#243F28") # (Enabled color, disabled color)
     changed_fields = []
 
     def __init__(self, parent):
         
         super().__init__(parent)
 
+        test = (0xDD, 0xDD, 0xDD)
+        test2 = (0xCC, 0xCC, 0xCC)
+        for values in test: print(f"#{test[0]}")
        
         self.mouse_position = None
        
