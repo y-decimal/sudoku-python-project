@@ -3,23 +3,22 @@ import random
 
 class Model(ISudokuInterface):
     '''Model for Sudoku fields'''
-    
-    def __init__(self, givenfield: list = [0 for _ in range (81)]):
-        self.block_index = [0,3,6,27,30,33, 54, 57, 60]
-        self.fields = []
-        for field in givenfield:
-            self.fields.append(field)#transferring the initial field values as a list, empty fields contain the value 0
-        self.starterfield = []
-        for field in self.fields:
-            self.starterfield.append(field != 0) #mirroring the information, whether the field was given from the start. True if Starterfield, false if empty (0) at start
+    block_index = [0,3,6,27,30,33, 54, 57, 60]
+    def __init__(self):
+        self.set_new_fields()
+        self.clear()
 
     def rc_to_index(self,row: int, column: int):
         return (row)* 9 + column
 
-    def clear(self, clearstarter = False):
+    def clear(self):
         self.fields = [0 for _ in range (81)]
-        if clearstarter:
-            self.starterfield = [False for _ in range (81)]
+        self.starterfield = [False for _ in range (81)]
+
+    def new_sudoku(self, newSudoku: list):
+        self.fields = [field for field in newSudoku]
+        self.starterfield = [field != 0 for field in self.fields]
+            
 
     def get_field_value(self, row: int, column: int) -> int:
         '''Returns the value of the field at the given row and column'''
