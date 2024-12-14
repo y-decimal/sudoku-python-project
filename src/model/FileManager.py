@@ -4,7 +4,10 @@ from pathlib import Path
 class FileManager:
     '''Dummy File Manager to use for testing or reference'''
     
-    def __init__(self, relative_path):
+    sudoku_testfiles_path = "/assets/TestFiles/"
+    sudoku_files_path = "/assets/SudokuFiles/"
+    
+    def __init__(self, relative_path = sudoku_testfiles_path):
         '''Initializes the FileManager with a path relative to the root directory'''
         
         # Get the root directory of the project
