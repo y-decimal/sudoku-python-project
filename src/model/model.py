@@ -5,7 +5,6 @@ class Model(ISudokuInterface):
     '''Model for Sudoku fields'''
     block_index = [0,3,6,27,30,33, 54, 57, 60]
     def __init__(self):
-        self.set_new_fields()
         self.clear()
 
     def rc_to_index(self,row: int, column: int):
