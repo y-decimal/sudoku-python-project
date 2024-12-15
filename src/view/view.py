@@ -20,10 +20,6 @@ class View(ctk.CTkFrame):
     def __init__(self, parent):
         
         super().__init__(parent)
-
-        test = (0xDD, 0xDD, 0xDD)
-        test2 = (0xCC, 0xCC, 0xCC)
-        for values in test: print(f"#{test[0]}")
        
         self.mouse_position = None
        
@@ -40,7 +36,6 @@ class View(ctk.CTkFrame):
         
         # Sudoku Frame
         self.sudoku_frame = SudokuFrame(self, 9)
-        print("Sudoku Frame initialized")
         self.sudoku_frame.grid(row=0, column=1, padx=10) 
         
         
@@ -55,7 +50,6 @@ class View(ctk.CTkFrame):
 
         # Button Frame
         self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 5)
-        self.sudoku_button_frame_border_color = "#FFFFAA"
 
         self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
         self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
@@ -64,14 +58,17 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.buttons[4].configure(text="Load", command = self.loadbutton_callback)
         
 
-        self.sudoku_button_frame.grid(row=2, column=1, padx=10, pady=10, sticky="s")
+        self.sudoku_button_frame.grid(row=3, column=1, padx=10, pady=10, sticky="s")
 
 
 
-    	# Label Configuration
-        self.label = ctk.CTkLabel(self, text="", font=("Arial", 20), justify="center")
-        self.label.grid(row = 1, column = 1, padx=10, pady=10, sticky="nsew")
+    	# Checkbox Frame
+        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self, 1, 1)
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Debug", command = self.debugcheckbox_callback)
+        self.sudoku_checkbox_frame.checkboxes[0].select()   
 
+
+        self.sudoku_checkbox_frame.grid(row=2, column=1, padx=10, pady=10)
 
 
     def set_controller(self, controller):
@@ -110,6 +107,13 @@ class View(ctk.CTkFrame):
     def loadbutton_callback(self):
         if self.controller: self.controller.load()
     
+    def debugcheckbox_callback(self):
+        if self.controller: 
+            if self.sudoku_checkbox_frame.checkboxes[0].get():
+                self.controller.set_mode("debug")
+            else:
+                self.controller.set_mode("normal")
+
     def highlight_fields(self, widget, row, column):
                 
         self.changed_fields = [(row, column)]
