@@ -116,6 +116,8 @@ class View(ctk.CTkFrame):
         row, column = widget.get_field_position()        
         self.changed_fields.append((row, column))
         
+        self.highlight_cell(widget)
+
         if widget.state:
             widget.configure(fg_color=self.highlight_color[0])
             widget.focus()
@@ -138,7 +140,7 @@ class View(ctk.CTkFrame):
                 else:
                     self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_color[1])
                     
-        self.highlight_cell(widget)
+        
                 
     def highlight_cell(self, widget):
          
@@ -155,7 +157,7 @@ class View(ctk.CTkFrame):
 
                 cell_column_offset = cell_column + column_offset
 
-                if row != cell_row + cell_row_offset and column != cell_column + cell_column_offset:
+                if row != cell_row_offset and column != cell_column_offset:
                     self.changed_fields.append((cell_row_offset, cell_column_offset))
 
                     if self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).state:
