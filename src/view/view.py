@@ -15,6 +15,7 @@ class View(ctk.CTkFrame):
     enabled_color = ("#343638", "#DDDDDD")  # (Background color, Text color)
     highlight_color = ("#5F4648", "#3F2628") # (Enabled color, disabled color)
     adjacent_color = ("#445F48", "#243F28") # (Enabled color, disabled color)
+    cell_color = ("#445F68", "#243F48") # (Enabled color, disabled color)
     changed_fields = []
 
     def __init__(self, parent):
@@ -90,7 +91,7 @@ class View(ctk.CTkFrame):
             # print(self.mouse_position.position)
             row = self.mouse_position.position[0]
             column = self.mouse_position.position[1]
-            self.highlight_fields(self.mouse_position, row, column)
+            self.highlight_fields(self.mouse_position)
         else:
             self.reset_fields()
 
@@ -110,8 +111,9 @@ class View(ctk.CTkFrame):
     def loadbutton_callback(self):
         if self.controller: self.controller.load()
     
-    def highlight_fields(self, widget, row, column):
-                
+    def highlight_fields(self, widget):
+
+        row, column = widget.get_field_position()        
         self.changed_fields.append((row, column))
         
         if widget.state:
@@ -135,8 +137,32 @@ class View(ctk.CTkFrame):
                     self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_color[0])
                 else:
                     self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_color[1])
+                    
+        self.highlight_cell(widget)
                 
-                
+    def highlight_cell(self, widget):
+         
+         row, column = widget.get_field_position() 
+
+         row_offset = row//3*3
+         column_offset = column//3*3    
+
+         for cell_row in range(3):
+             
+             cell_row_offset = cell_row + row_offset
+
+             for cell_column in range(3):
+
+                cell_column_offset = cell_column + column_offset
+
+                if row != cell_row + cell_row_offset and column != cell_column + cell_column_offset:
+                    self.changed_fields.append((cell_row_offset, cell_column_offset))
+
+                    if self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).state:
+                        self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).configure(fg_color=self.cell_color[0])
+                        
+                    else:
+                        self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).configure(fg_color=self.cell_color[1])        
     
     def reset_fields(self):
 
@@ -192,5 +218,5 @@ class View(ctk.CTkFrame):
         else:
             return int(value)
 
-
+    
 
