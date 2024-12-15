@@ -47,6 +47,17 @@ class SudokuFrame(ctk.CTkFrame):
         self.update_entries()
 
 
+    def get_field(self, row, column):
+        return self.game_field[row][column]
+
+    def get_field_position(self, entry_field):
+        return entry_field.position
+    
+    def get_field_row(self, entry_field):
+        return entry_field.position[0]
+    
+    def get_field_column(self, entry_field):
+        return entry_field.position[1]
 
     def add_horizontal_separators(self):
         for row in range(self.gridsize):
@@ -65,25 +76,13 @@ class SudokuFrame(ctk.CTkFrame):
            
         self.game_entry_dimension = int(self.master.master.window_height // self.game_gridsize * 0.75)
  
-        self.update()
-        #Thread(target = self.update, args = (0, 9)).start()
-        
-
-        
-        
-        
-            
-            
-    def update(self, start= 0, end=9):
-        
-        for row in range(start, end):
+        for row in range(9):
             for column in range(9):
-                self.game_field[row][column].configure( width=self.game_entry_dimension, height=self.game_entry_dimension )
-                self.game_field[row][column].configure( font = ("Arial", 0.75*self.game_entry_dimension) )
-                #print(f"Entry row {row}, column {column} updated")
+                self.get_field(row, column).configure( width=self.game_entry_dimension, height=self.game_entry_dimension )
+                self.get_field(row, column).configure( font = ("Arial", 0.75*self.game_entry_dimension) )
         
-        
-    
+      
+          
 
 
 class SudokuEntryField(ctk.CTkEntry):
