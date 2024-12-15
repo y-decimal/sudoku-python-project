@@ -78,8 +78,8 @@ class SudokuFrame(ctk.CTkFrame):
  
         for row in range(9):
             for column in range(9):
-                self.game_field[row][column].configure( width=self.game_entry_dimension, height=self.game_entry_dimension )
-                self.game_field[row][column].configure( font = ("Arial", 0.75*self.game_entry_dimension) )
+                self.get_field(row, column).configure( width=self.game_entry_dimension, height=self.game_entry_dimension )
+                self.get_field(row, column).configure( font = ("Arial", 0.75*self.game_entry_dimension) )
         
       
           
