@@ -1,9 +1,14 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+
 import customtkinter as ctk
 from model.FileManager import FileManager
-from model.model import Model
+from model.SudokuLogic import Model
 from view.view import View
 from controller.controller import Controller
 from time import sleep, perf_counter
+
 
 icon_path = "./assets/images/sudoku.ico"
 
