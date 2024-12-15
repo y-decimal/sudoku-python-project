@@ -1,7 +1,7 @@
 from model.ISudokuInterface import ISudokuInterface
 import random
 
-class Model(ISudokuInterface):
+class SudokuLogic(ISudokuInterface):
     '''Model for Sudoku fields'''
     
     def __init__(self, givenfield: list = [0 for _ in range (81)]):
@@ -41,6 +41,11 @@ class Model(ISudokuInterface):
         #print("Check1")
         #print(check1)
         return check1
+
+    def set_field_editable(self, row: int, column: int, editable: bool):
+        '''Sets the field to editable or not editable'''
+        
+        self.starterfield[self.rc_to_index(row, column)] = not editable
 
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
         '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
