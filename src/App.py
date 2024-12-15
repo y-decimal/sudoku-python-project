@@ -3,8 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 import customtkinter as ctk
-from model.FileManager import FileManager
-from model.SudokuLogic import Model
+from model.model import Model
 from view.view import View
 from controller.controller import Controller
 from time import sleep, perf_counter
@@ -31,7 +30,7 @@ class App(ctk.CTk):
 
 
         self.model = Model()
-        self.model.file_manager = FileManager()
+
 
         self.view = View(self)
         self.view.pack(fill="both", expand=True)
