@@ -2,6 +2,7 @@ from model.IModelInterface import IModelInterface
 from model.FileManager import FileManager
 from model.SudokuLogic import SudokuLogic
 
+
 class Model(IModelInterface):
 
     sudoku = None
@@ -71,3 +72,34 @@ class Model(IModelInterface):
         '''Sets the debug mode'''
 
         self.file_manager.set_file_mode(mode)
+
+    
+
+
+    def would_value_be_valid(self, row: int, col: int, value: int) -> bool:
+        '''Checks if the value at the given row and column is unique in its row, column, and grid'''
+
+        if value == 0:
+            return True
+
+        current_grid = (row / 3) * 3 + col / 3
+        value = self.sudoku_logic.get_field_value(row, col)
+
+        for i in range(9):
+            if col != i and value == self.sudoku_logic.get_field_value(row, i):
+                return False
+            if row != i and value == self.sudoku_logic.get_field_value(i, col):
+                return False
+            if ((row % 3) * 3 + col % 3) != i and value == self.value_at_grid_pos(current_grid, i):
+                return False
+
+        return True
+    
+
+    def value_at_grid_pos(self, grid, i):
+        
+            row = int((i / 3 + (grid / 3) * 3))
+            col = int((i % 3 + (grid % 3) * 3))
+           
+            return self.sudoku_logic.get_field_value(row, col)
+        
