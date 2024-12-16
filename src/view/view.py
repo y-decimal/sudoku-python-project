@@ -112,7 +112,12 @@ class View(ctk.CTkFrame):
 
         self.controller.push()
         
-        self.invalid_field(widget.position[0], widget.position[1])
+        # This is noticeably slow, needs optimization
+        for row in range(9):
+            for column in range(9):
+                self.invalid_field(row, column)
+        
+
         
 
 
