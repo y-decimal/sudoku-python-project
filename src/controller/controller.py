@@ -31,7 +31,6 @@ class Controller:
     def push(self):
         '''Push updated values to the model | To be replaced'''
         
-        print("Pushing")
         #self.model.clear()
         for row in range(9):
             for column in range(9):     
