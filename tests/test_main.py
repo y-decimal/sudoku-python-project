@@ -9,6 +9,9 @@ from model.model import Model
 def test_FileManager():
     # This tests the file manager
     model = Model()
+    assert model not None
+   
+    model.generate_sudoku()
     
     # Save empty model, should return true
     assert model.save_sudoku("testCase") is True
