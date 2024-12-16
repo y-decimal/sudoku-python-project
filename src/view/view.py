@@ -50,13 +50,13 @@ class View(ctk.CTkFrame):
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
 
         # Button Frame
-        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 5)
+        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 3)
 
-        self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
-        self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
-        self.sudoku_button_frame.buttons[2].configure(text="Generate", command = self.generatebutton_callback)
-        self.sudoku_button_frame.buttons[3].configure(text="Save", command = self.savebutton_callback)
-        self.sudoku_button_frame.buttons[4].configure(text="Load", command = self.loadbutton_callback)
+        # self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
+        # self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
+        self.sudoku_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
+        self.sudoku_button_frame.buttons[1].configure(text="Save", command = self.savebutton_callback)
+        self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
 
         self.sudoku_button_frame.grid(row=3, column=1, padx=10, pady=10, sticky="s")
@@ -76,6 +76,9 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
+        self.bind_class("Entry","<KeyPress>", lambda *args: self.controller.push(), add="+")
+
+
     def set_mouse_position (self, widget):
         self.mouse_position = widget
         # print(f"Mouse position set to: {self.mouse_position}")
@@ -84,10 +87,6 @@ class View(ctk.CTkFrame):
         # print(self.mouse_position)
         if self.mouse_position != None:
             self.reset_fields()
-            # print(f"Mouse clicked at position: {self.mouse_position.position}")
-            # print(self.mouse_position.position)
-            row = self.mouse_position.position[0]
-            column = self.mouse_position.position[1]
             self.highlight_fields(self.mouse_position)
         else:
             self.reset_fields()

@@ -40,8 +40,8 @@ class FileManager:
         
         path = self.absolute_path + file_name
         
-        if not os.path.exists(path):
-            os.makedirs(path)
+        if not os.path.exists(self.absolute_path):
+            os.makedirs(self.absolute_path)
             
         try:
             with open(path, 'w') as file:
@@ -61,27 +61,33 @@ class FileManager:
         '''Loads a sudoku from the file in format "(Value, Writeable) /n", returns a 9x9 list of tuples'''
         
         path = self.absolute_path + file_name
-        with open(path, 'r') as file:
-            
-            sudoku = [[(0, True) for _ in range(9)] for _ in range(9)]
-            
-            for row in range(9):
-                
-                for column in range(9):
-                    
-                    line = file.readline()
-                    value = int(line[1])
-                    writeable_flag = None
-                    
-                    if line[4] == 'T':
-                        writeable_flag = True
-                    elif line[4] == 'F':
-                        writeable_flag = False
-                                           
-                    sudoku[row][column] = (value, writeable_flag)
-            
-            return sudoku
         
+        try:
+            
+            with open(path, 'r') as file:
+            
+                sudoku = [[(0, True) for _ in range(9)] for _ in range(9)]
+                
+                for row in range(9):
+                    
+                    for column in range(9):
+                        
+                        line = file.readline()
+                        value = int(line[1])
+                        writeable_flag = None
+                        
+                        if line[4] == 'T':
+                            writeable_flag = True
+                        elif line[4] == 'F':
+                            writeable_flag = False
+                                            
+                        sudoku[row][column] = (value, writeable_flag)
+                
+                return sudoku
+            
+        except Exception as e:
+            print(e)
+            return None    
 
     
     def set_file_path(self, path):
