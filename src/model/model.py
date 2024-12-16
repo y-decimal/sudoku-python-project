@@ -5,7 +5,7 @@ from model.SudokuLogic import SudokuLogic
 
 class Model(IModelInterface):
 
-    sudoku = None
+    sudoku_logic = None
     file_manager = None
 
     def __init__(self):
