@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 
 class FileManager:
@@ -38,6 +39,10 @@ class FileManager:
         '''Saves a sudoku to the file in format "(Value, Writeable) /n"'''
         
         path = self.absolute_path + file_name
+        
+        if not os.path.exists(path):
+            os.makedirs(path)
+            
         try:
             with open(path, 'w') as file:
                 
