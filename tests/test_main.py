@@ -6,10 +6,10 @@ from model.model import Model
 
 
 
-def test_FileManager():
+def test_file_manager():
     # This tests the file manager
     model = Model()
-    assert model not None
+    assert model is not None
    
     model.generate_sudoku()
     
