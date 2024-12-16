@@ -6,15 +6,16 @@ class FileManager:
     
     sudoku_testfiles_path = "/assets/TestFiles/"
     sudoku_files_path = "/assets/SudokuFiles/"
+    root_dir = None
     
-    def __init__(self, relative_path = sudoku_testfiles_path):
+    def __init__(self):
         '''Initializes the FileManager with a path relative to the root directory'''
         
         # Get the root directory of the project
-        root_dir = str(Path(__file__).parent.parent.parent)
+        self.root_dir = str(Path(__file__).parent.parent.parent)
 
         # Set the absolute path using the root directory and the relative path
-        self.absolute_path = root_dir+relative_path
+        self.set_file_mode('normal')
 
 
     def save(self, content, file_name):
@@ -75,3 +76,23 @@ class FileManager:
                     sudoku[row][column] = (value, writeable_flag)
             
             return sudoku
+        
+
+    
+    def set_file_path(self, path):
+        '''Sets the path to the file'''
+        
+        self.absolute_path = self.root_dir + path
+
+        return True
+    
+
+    def set_file_mode(self, mode):
+        '''Sets the mode to the file'''
+        
+        if mode == 'debug':
+            self.absolute_path = self.root_dir + self.sudoku_testfiles_path
+        elif mode == 'normal':
+            self.absolute_path = self.root_dir + self.sudoku_files_path
+
+        return True

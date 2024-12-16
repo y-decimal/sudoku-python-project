@@ -4,7 +4,7 @@ class Controller:
         '''Initializes the Controller'''
         self.model = model
         self.view = view
-        
+
         self.fetch()
         
     
@@ -64,9 +64,15 @@ class Controller:
         self.model.save_sudoku("test")
         
     
+
     def load(self):
         '''Callback for the load button'''
         
         self.model.load_sudoku("test")
         self.fetch()
         
+
+    def set_mode(self, mode = 'normal'):
+        '''Callback for the mode button'''
+        
+        self.model.set_mode(mode)
