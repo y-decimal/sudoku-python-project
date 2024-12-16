@@ -62,7 +62,7 @@ class Model(IModelInterface):
     def save_sudoku(self, file_name: str) -> bool:
         '''Saves a sudoku to a file using the given filename. Returns true if the sudoku was saved successfully, returns false if the sudoku could not be saved'''
 
-        sudoku = [[(self.sudoku_logic.get_field_value(row, column), self.sudoku_logic.is_field_editable(row, column)) for row in range(9)] for column in range(9)]
+        sudoku = [[(self.sudoku_logic.get_field_value(row, column), self.sudoku_logic.is_field_editable(row, column)) for column in range(9)] for row in range(9)]
 
         return self.file_manager.save_sudoku(sudoku, file_name)
     
