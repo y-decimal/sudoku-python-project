@@ -11,9 +11,9 @@ def test_FileManager():
     model = Model()
     
     # Save empty model, should return true
-    assert model.save_sudoku("testCase")
+    assert model.save_sudoku("testCase") is True
 
     # Load model with invalid file path
-    assert not model.load_sudoku("wrongPath")
+    assert model.load_sudoku("wrongPath") is False
 
     
