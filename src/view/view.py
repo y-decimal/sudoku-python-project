@@ -76,6 +76,10 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
+        for row in range(9):
+            for column in range(9):
+                self.sudoku_frame.get_field(row, column).entry_variable.trace("w", lambda *args: self.controller.push())
+
     def set_mouse_position (self, widget):
         self.mouse_position = widget
         # print(f"Mouse position set to: {self.mouse_position}")
