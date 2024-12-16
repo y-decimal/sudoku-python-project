@@ -103,6 +103,7 @@ class View(ctk.CTkFrame):
         self.mouse_position = widget
         # print(f"Mouse position set to: {self.mouse_position}")
 
+
     def mousebutton_callback(self):
         # print(self.mouse_position)
         if self.mouse_position != None:
@@ -110,6 +111,7 @@ class View(ctk.CTkFrame):
             self.highlight_fields(self.mouse_position)
         else:
             self.reset_fields()
+
 
     def entry_callback(self, widget):
 
@@ -209,14 +211,19 @@ class View(ctk.CTkFrame):
                     else:
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[1])      
     
-    def reset_fields(self):
+    def reset_fields(self, mode = 'changed'):
 
+        if mode == 'all':
+            self.changed_fields = [(row, column) for row in range(9) for column in range(9)]
+            
         for row, column in self.changed_fields:
                 
             if self.sudoku_frame.get_field(row, column).state:
                     self.set_field_color(row, column, self.enabled_colors[0])
+                    self.set_field_text_color(row, column, self.enabled_colors[1])
             else:
                 self.set_field_color(row, column, self.disabled_colors[0])
+                self.set_field_text_color(row, column, self.disabled_colors[1])
 
         self.changed_fields = []
                 
