@@ -82,7 +82,7 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
-        self.bind_class("Entry","<KeyPress>", lambda *args: self.controller.push(), add="+")
+        #self.bind_class("Entry","<KeyPress>", lambda *args: self.controller.push(), add="+")
 
 
     def set_mouse_position (self, widget):
@@ -103,15 +103,19 @@ class View(ctk.CTkFrame):
 
         if len(entry_value) > 1:
             widget.entry_variable.set(widget.entry_variable.get()[1:])
+            entry_value = widget.entry_variable.get()
+
                     
         if (not entry_value.isdigit() or entry_value == "0"):
             widget.entry_variable.set("")
+            entry_value = ''
 
-        if entry_value != "" or not self.controller.model.would_value_be_valid(widget.position[0], widget.position[1], int(entry_value)):
-            widget.configure(text_color="red")
-            
-        else: 
-            widget.configure(self.enabled_color[1])
+        self.controller.push()
+        
+        self.invalid_field(widget.position[0], widget.position[1])
+        
+
+
 
     def fetchbutton_callback(self):
         if self.controller: self.controller.fetch()
@@ -143,26 +147,26 @@ class View(ctk.CTkFrame):
         self.highlight_cell(widget)
 
         if widget.state:
-            widget.configure(fg_color=self.highlight_color[0])
+            widget.configure(fg_color=self.highlight_colors[0])
             widget.focus()
         else:
-            widget.configure(fg_color=self.highlight_color[1])
+            widget.configure(fg_color=self.highlight_colors[1])
             widget.focus()
         
         for i in range(9):
             if i != column:
                 self.changed_fields.append((row, i))
                 if self.sudoku_frame.get_field(row, i).state:
-                    self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_color[0])
+                    self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_colors[0])
                 else:
-                    self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_color[1])
+                    self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_colors[1])
 
             if i != row:
                 self.changed_fields.append((i, column))
                 if self.sudoku_frame.get_field(i, column).state:
-                    self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_color[0])
+                    self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_colors[0])
                 else:
-                    self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_color[1])
+                    self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_colors[1])
                     
         
                 
@@ -185,45 +189,70 @@ class View(ctk.CTkFrame):
                     self.changed_fields.append((cell_row_offset, cell_column_offset))
 
                     if self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).state:
-                        self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).configure(fg_color=self.cell_color[0])
+                        self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[0])
                         
                     else:
-                        self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).configure(fg_color=self.cell_color[1])        
+                        self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[1])      
     
     def reset_fields(self):
 
         for row, column in self.changed_fields:
-        
+                
             if self.sudoku_frame.get_field(row, column).state:
-                self.set_field_color_editable(row, column)
+                    self.set_field_color(row, column, self.enabled_colors[0])
             else:
-                self.set_field_color_not_editable(row, column)
+                self.set_field_color(row, column, self.disabled_colors[0])
 
         self.changed_fields = []
                 
 
-    def set_field_color_not_editable(self, row: int, column: int):
+    def invalid_field(self, row: int, column: int):
         
-        self.sudoku_frame.get_field(row, column).configure(fg_color=self.disabled_color[0])
-        self.sudoku_frame.get_field(row, column).configure(text_color=self.disabled_color[1])
+        widget = self.sudoku_frame.get_field(row, column)
+        entry_value = widget.entry_variable.get()
+        
+        if entry_value == '':
+            widget.configure(text_color=self.enabled_colors[1])
+            return
+        else:
+            entry_value = int(entry_value)
+        
+        would_value_be_valid = self.controller.model.would_value_be_valid(row, column, entry_value)
+        
+        if not would_value_be_valid:
+            widget.configure(text_color="red")
+            self.changed_fields.append((row, column))
+        else: 
+            widget.configure(text_color=self.enabled_colors[1])
+        
+
+
+    def set_field_color(self, row: int, column: int, color: str):      
+        self.sudoku_frame.get_field(row, column).configure(fg_color=color)
+
+    def set_field_text_color(self, row: int, column: int, color: str):
+        self.sudoku_frame.get_field(row, column).configure(text_color=color)
     
-    def set_field_color_editable(self, row: int, column: int):
-        self.sudoku_frame.get_field(row, column).configure(fg_color=self.enabled_color[0])
-        if self.controller.model.would_value_be_valid(row, column, self.sudoku_frame.get_field(row, column).entry_variable.get()):
-            self.sudoku_frame.get_field(row, column).configure(text_color=self.enabled_color[1])
+
         
     def set_field_not_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
         if self.sudoku_frame.get_field(row, column).cget("state") == "normal":     
             self.sudoku_frame.get_field(row, column).configure(state="disabled")
-            self.set_field_color_not_editable(row, column)
+            
+            self.set_field_color(row, column, self.disabled_colors[0])
+            self.set_field_text_color(row, column, self.disabled_colors[1])
+            
             self.sudoku_frame.get_field(row, column).state = False
         
     def set_field_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
         if self.sudoku_frame.get_field(row, column).cget("state") == "disabled":
             self.sudoku_frame.get_field(row, column).configure(state="normal")
-            self.set_field_color_editable(row, column)
+            
+            self.set_field_color(row, column, self.enabled_colors[0])
+            self.set_field_text_color(row, column, self.enabled_colors[1])
+            
             self.sudoku_frame.get_field(row, column).state = True
 
 
