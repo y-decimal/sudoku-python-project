@@ -82,7 +82,7 @@ class Model(IModelInterface):
         if value == 0:
             return True
 
-        current_grid = (row / 3) * 3 + col / 3
+        current_grid = (row // 3) * 3 + col // 3
         value = self.sudoku_logic.get_field_value(row, col)
 
         for i in range(9):
@@ -98,8 +98,7 @@ class Model(IModelInterface):
 
     def value_at_grid_pos(self, grid, i):
         
-            row = int((i / 3 + (grid / 3) * 3))
-            col = int((i % 3 + (grid % 3) * 3))
-           
-            return self.sudoku_logic.get_field_value(row, col)
+        row = grid // 3 * 3 + i // 3
+        col = grid % 3 * 3 + i % 3
+        return self.sudoku_logic.get_field_value(row, col)
         
