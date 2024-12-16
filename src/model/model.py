@@ -61,8 +61,9 @@ class Model(ISudokuInterface):
             return False
         possible_fields = [field for field in self.fields]
         possible_fields[self.rc_to_index(row,column)] = value
-        check = self.invalid_rows(possible_fields) == {} and self.invalid_column(possible_fields) == {} and self.invalid_blocks(possible_fields) == {}
-        print(f'{self.rc_to_index(row,column)}:{check}:{value}')
+        check = self.invalid_rows2(possible_fields, row, column, value) == {} and self.invalid_column2(possible_fields, row, column, value) == {} and self.invalid_blocks2(possible_fields, row, column, value) == {}
+        if not check:
+            print(f'{self.rc_to_index(row,column)}:{check}:{value}:{row, column}')
         return check
 
 
@@ -103,46 +104,28 @@ class Model(ISudokuInterface):
 
 
     
-    def invalid_blocks2(self,sudoku,row,column):
+    def invalid_blocks2(self,sudoku,row,column,value):
         invalid= {}
         b = self.block_index[self.block[self.rc_to_index(row,column)]]
-        space = []
         for r in range(3):
             for c in range(3):
-                if sudoku[b+r*9+c] not in space and sudoku[b+r*9+c] !=0:
-                    space.append(sudoku[b + r*9 + c])
-                elif sudoku[b + r*9 + c] != 0:
-                    invalid.update({self.rc_to_index(row,column):sudoku[b + r*9 + c]})
+                if sudoku[b+r*9+c] ==  value and sudoku[b+r*9+c] !=0 and b+r*9+c != self.rc_to_index(row, column):
+                    invalid.update({b + r*9 + c:sudoku[b + r*9 + c]})
         return invalid
     
-    def invalid_row3(self,sudoku, row, column):
+
+    def invalid_rows2(self, sudoku, row, column, value):
         invalid= {}
-        space = []
         for c in range(9):
-            if sudoku[row*9+c] == sudoku[row*9 + column] and c != column and sudoku[row*9+c] !=0:
-                invalid.update({self.rc_to_index(row,column):sudoku[row*9+c]})
-            elif sudoku[row*9+c] != 0:
-                invalid.update({self.rc_to_index(row,column):sudoku[row*9+c]})
+            if sudoku[row*9+c] ==  value and sudoku[row*9+c] !=0 and c != column:
+                invalid.update({self.rc_to_index(row,c):sudoku[row*9+c]})
         return invalid
 
-    def invalid_rows2(self, sudoku, row, column):
+    def invalid_column2(self, sudoku,row, column, value):
         invalid= {}
-        space = []
-        for c in range(9):
-            if sudoku[row*9+c] not in space and sudoku[row*9+c] !=0:
-                space.append(sudoku[row*9+c]) 
-            elif sudoku[row*9+c] != 0:
-                invalid.update({self.rc_to_index(row,column):sudoku[row*9+c]})
-        return invalid
-
-    def invalid_column2(self, sudoku, row, column):
-        invalid= {}
-        space = []
         for r in range(9):
-            if sudoku[r*9+column] not in space and sudoku[r*9+column] !=0:
-                space.append(sudoku[r*9+column]) 
-            elif sudoku[r*9+column] != 0:
-                invalid.update({self.rc_to_index(row,column):sudoku[r*9+c]})
+            if sudoku[r*9+column] ==  value and sudoku[r*9+column] !=0 and r != row:
+                invalid.update({self.rc_to_index(r,column):sudoku[r*9+column]})
         return invalid
 
 
