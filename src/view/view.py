@@ -87,10 +87,6 @@ class View(ctk.CTkFrame):
         # print(self.mouse_position)
         if self.mouse_position != None:
             self.reset_fields()
-            # print(f"Mouse clicked at position: {self.mouse_position.position}")
-            # print(self.mouse_position.position)
-            row = self.mouse_position.position[0]
-            column = self.mouse_position.position[1]
             self.highlight_fields(self.mouse_position)
         else:
             self.reset_fields()
