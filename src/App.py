@@ -6,7 +6,7 @@ import customtkinter as ctk
 from model.model import Model
 from view.view import View
 from controller.controller import Controller
-from time import sleep, perf_counter
+
 
 
 icon_path = "./assets/images/sudoku.ico"
@@ -83,10 +83,9 @@ class App(ctk.CTk):
         # print(f"Window Height: {self.window_height}, Window Width: {self.window_width}")
         
         if self.prev_window_height != self.window_height and self.prev_window_width != self.window_width:
-            start_time = perf_counter()
             self.view.sudoku_frame.update_entries()
-            end_time = perf_counter()
-            print(f'It took {end_time- start_time: 0.3f} second(s) to complete.')
+
+
         
         
         self.after(500, self.update_window_height)
