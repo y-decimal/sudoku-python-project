@@ -50,7 +50,9 @@ class Model(IModelInterface):
         '''Loads a sudoku from a file using the given filename. Returns true if the sudoku was loaded successfully, returns false if the sudoku could not be loaded'''
 
         sudoku = self.file_manager.load_sudoku(file_name) 
-
+        if sudoku == None:
+            return False
+        
         for row in range(9):
             for column in range(9):
                     
@@ -58,6 +60,7 @@ class Model(IModelInterface):
                     self.sudoku_logic.set_field_value(row, column, sudoku[row][column][0])
                     self.sudoku_logic.set_field_editable(row, column, sudoku[row][column][1])
 
+        return True
     
 
     def save_sudoku(self, file_name: str) -> bool:
