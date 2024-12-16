@@ -174,8 +174,6 @@ class View(ctk.CTkFrame):
             self.set_field_color_editable(row, column)
             self.sudoku_frame.game_field[row][column].state = True
 
-    
-
 
 
     def set_field_value(self, row: int, column: int, value: int):
@@ -195,4 +193,11 @@ class View(ctk.CTkFrame):
             return int(value)
 
 
-
+    def set_mode(self, mode = 'normal'):
+        for checkbox in self.sudoku_checkbox_frame.checkboxes:
+            if (mode == 'debug'):
+                checkbox.select()
+                self.debugcheckbox_callback()
+            else:
+                checkbox.deselect()
+                self.debugcheckbox_callback()
