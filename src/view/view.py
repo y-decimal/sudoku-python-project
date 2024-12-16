@@ -50,13 +50,13 @@ class View(ctk.CTkFrame):
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
 
         # Button Frame
-        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 5)
+        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 3)
 
-        self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
-        self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
-        self.sudoku_button_frame.buttons[2].configure(text="Generate", command = self.generatebutton_callback)
-        self.sudoku_button_frame.buttons[3].configure(text="Save", command = self.savebutton_callback)
-        self.sudoku_button_frame.buttons[4].configure(text="Load", command = self.loadbutton_callback)
+        # self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
+        # self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
+        self.sudoku_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
+        self.sudoku_button_frame.buttons[1].configure(text="Save", command = self.savebutton_callback)
+        self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
 
         self.sudoku_button_frame.grid(row=3, column=1, padx=10, pady=10, sticky="s")
