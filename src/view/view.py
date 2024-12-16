@@ -45,7 +45,7 @@ class View(ctk.CTkFrame):
                 self.sudoku_frame.get_field(row, column).bind("<Enter> ", lambda args, widget = self.sudoku_frame.get_field(row, column): self.set_mouse_position(widget))
                 self.sudoku_frame.get_field(row, column).bind("<Leave>", lambda args: self.set_mouse_position(None), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-1>", lambda args: self.mousebutton_callback(), add="+")
-                self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget = self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
+                
 
 
             
@@ -82,7 +82,21 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
-        #self.bind_class("Entry","<KeyPress>", lambda *args: self.controller.push(), add="+")
+        for row in range(9):
+            for column in range(9):
+                self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget = self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
+
+
+
+        def on_keypress():
+            for row in range(9):
+                for column in range(9):
+                    self.invalid_field(row, column)
+        
+        self.bind_class("Entry", "<KeyPress>", lambda args: on_keypress(), add="+")
+        
+        
+
 
 
     def set_mouse_position (self, widget):
@@ -109,13 +123,9 @@ class View(ctk.CTkFrame):
         if (not entry_value.isdigit() or entry_value == "0"):
             widget.entry_variable.set("")
             entry_value = ''
+     
 
-        self.controller.push()
-        
-        # This is noticeably slow, needs optimization
-        for row in range(9):
-            for column in range(9):
-                self.invalid_field(row, column)
+        # self.invalid_field(widget.position[0], widget.position[1])
         
 
         
