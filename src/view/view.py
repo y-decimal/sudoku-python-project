@@ -11,11 +11,11 @@ class View(ctk.CTkFrame):
 
     
 
-    disabled_color = ("#2F2F32", "#86ff7b") # (Background color, Text color)
-    enabled_color = ("#343638", "#DDDDDD")  # (Background color, Text color)
-    highlight_color = ("#5F4648", "#3F2628") # (Enabled color, disabled color)
-    adjacent_color = ("#445F48", "#243F28") # (Enabled color, disabled color)
-    cell_color = adjacent_color # (Enabled color, disabled color)
+    disabled_colors = ("#2F2F32", "#86ff7b") # (Background color, Text color)
+    enabled_colors = ("#343638", "#DDDDDD")  # (Background color, Text color)
+    highlight_colors = ("#5F4648", "#3F2628") # (Enabled color, disabled color)
+    adjacent_colors = ("#445F48", "#243F28") # (Enabled color, disabled color)
+    cell_color = adjacent_colors # (Enabled color, disabled color)
     changed_fields = []
 
     def __init__(self, parent):
