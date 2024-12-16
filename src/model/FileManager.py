@@ -41,7 +41,7 @@ class FileManager:
         path = self.absolute_path + file_name
         
         if not os.path.exists(path):
-            os.makedirs(newpath)
+            os.makedirs(path)
             
         try:
             with open(path, 'w') as file:
