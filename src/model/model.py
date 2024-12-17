@@ -56,9 +56,9 @@ class Model(IModelInterface):
         for row in range(9):
             for column in range(9):
                     
-                    self.sudoku_logic.set_field_editable(row, column, True)
+                    self.sudoku_logic.set_field_state(row, column, True)
                     self.sudoku_logic.set_field_value(row, column, sudoku[row][column][0])
-                    self.sudoku_logic.set_field_editable(row, column, sudoku[row][column][1])
+                    self.sudoku_logic.set_field_state(row, column, sudoku[row][column][1])
 
         return True
     
