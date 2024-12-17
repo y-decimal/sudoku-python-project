@@ -121,7 +121,8 @@ class View(ctk.CTkFrame):
     def savebutton_callback(self):
         if self.controller: 
             file_name = self.sudoku_button_frame.file_entry.get()
-            self.reset_fields()
+            
+            
             if file_name != "":
                 self.controller.save(file_name)
             else:
