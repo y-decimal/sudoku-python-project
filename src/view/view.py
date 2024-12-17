@@ -166,7 +166,7 @@ class View(ctk.CTkFrame):
                 print(f"Field at row: {row}, column: {column} is now editable")
                 
             self.reset_fields()
-            self.highlight_fields(self.widget_at_mouse)
+            #self.highlight_fields(self.widget_at_mouse)
 
 
     def highlight_fields(self, widget):
