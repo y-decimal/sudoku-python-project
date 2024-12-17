@@ -27,8 +27,8 @@ class View(ctk.CTkFrame):
         self.widget_at_mouse = None
        
         # App Grid Configuration (3x3 Grid)
-        self.grid_columnconfigure((0,2), weight=0)
-        self.grid_columnconfigure(1, weight=2)
+        self.grid_columnconfigure((0,2), weight=1)
+        self.grid_columnconfigure(1, weight=3)
         self.grid_rowconfigure(0, weight=3)
         self.grid_rowconfigure((1,2), weight=1)
 
@@ -39,7 +39,7 @@ class View(ctk.CTkFrame):
         
         # Sudoku Frame
         self.sudoku_frame = SudokuFrame(self, 9)
-        self.sudoku_frame.grid(row=0, column=1, padx=10) 
+        self.sudoku_frame.grid(row=0, column=1, padx=10, pady=10) 
         
         
         for row in range(9):
@@ -54,36 +54,36 @@ class View(ctk.CTkFrame):
 
 
 
-
+        self.tool_frame = ctk.CTkFrame(self)
+        
         # Button Frame
-        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 3)
+        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self.tool_frame, 1, 3)
 
-        # self.sudoku_button_frame.buttons[0].configure(text="Fetch", command = self.fetchbutton_callback)
-        # self.sudoku_button_frame.buttons[1].configure(text="Push", command = self.pushbutton_callback)
         self.sudoku_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
         self.sudoku_button_frame.buttons[1].configure(text="Save", command = self.savebutton_callback)
         self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
-        self.sudoku_button_frame.checkbox = ctk.CTkCheckBox(self.sudoku_button_frame, text="Edit Mode", command =  self.set_edit_mode)
-        self.sudoku_button_frame.checkbox.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
-        
-        self.sudoku_button_frame.file_entry = ctk.CTkEntry(self.sudoku_button_frame, width=20, placeholder_text="Enter filename")
-        self.sudoku_button_frame.file_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10, sticky="ew")
-        
-        
-
-
-        self.sudoku_button_frame.grid(row=3, column=1, padx=10, pady=10, sticky="s")
-
-
+        self.sudoku_button_frame.grid(row=1, column=0, columnspan = 2, padx=10, pady=10, sticky="nsew")
+         
+        # File name entry        
+        self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
+        self.file_entry.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
     	# Checkbox Frame
-        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self, 1, 1)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Debug", command = self.debugcheckbox_callback)
+        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.tool_frame, 1, 2)
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Test Directory", command = self.debugcheckbox_callback)
         self.sudoku_checkbox_frame.checkboxes[0].select()   
+        self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
+        
+        self.sudoku_checkbox_frame.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")
 
+        
+        self.tool_frame.grid_columnconfigure((0,1), weight=1)
+        # self.tool_frame.grid_rowconfigure((1,2), weight=0)
+        # self.tool_frame.grid_rowconfigure((0,3), weight=2)
 
-        self.sudoku_checkbox_frame.grid(row=2, column=1, padx=10, pady=10)
+        self.tool_frame.grid(row=0, column=2, padx=10, pady=10, sticky="ew")
+
 
 
     def set_controller(self, controller):
@@ -98,7 +98,7 @@ class View(ctk.CTkFrame):
         # print(f"Mouse position set to: {self.mouse_position}")
 
     def set_edit_mode(self):
-        self.edit_mode = self.sudoku_button_frame.checkbox.get()
+        self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
         print(f"Edit mode set to: {self.edit_mode}")
 
     def mousebutton_callback(self):
@@ -121,7 +121,7 @@ class View(ctk.CTkFrame):
 
     def savebutton_callback(self):
         if self.controller: 
-            file_name = self.sudoku_button_frame.file_entry.get()
+            file_name = self.file_entry.get()
             
             
             if file_name != "":
@@ -132,7 +132,7 @@ class View(ctk.CTkFrame):
     def loadbutton_callback(self):
 
         if self.controller: 
-            file_name = self.sudoku_button_frame.file_entry.get()
+            file_name = self.file_entry.get()
             self.reset_fields()
             if file_name != "":
                 self.controller.load(file_name)
