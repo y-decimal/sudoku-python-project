@@ -104,11 +104,24 @@ class SudokuEntryField(ctk.CTkEntry):
                     self.entry_variable.set("")
 
 
-            def get_field_position(self):
+            def get_position(self):
                 return self.position
             
-            def get_field_row(self):
+            def get_row(self):
                 return self.position[0]
             
-            def get_field_column(self):
+            def get_column(self):
                 return self.position[1]
+            
+            def get_state(self):
+                return self.state
+                
+            def get_value(self):
+                return self.entry_variable.get()
+            
+                        
+            def set_state(self, state: bool):
+                self.state = state
+
+            def set_value(self, value):
+                self.entry_variable.set(str(value))
