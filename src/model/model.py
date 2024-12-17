@@ -27,10 +27,16 @@ class Model(IModelInterface):
         return self.sudoku_logic.set_field_value(row, column, value)
     
 
-    def is_field_editable(self, row: int, column: int) -> bool:
+    def get_field_state(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
 
         return self.sudoku_logic.is_field_editable(row, column)
+    
+    
+    def set_field_state(self, row: int, column: int, state: bool):
+        '''Sets the state of the field at the given row and column. True means the field is editable, False means the field is not editable'''
+
+        self.sudoku_logic.set_field_state(row, column, state)
     
 
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
@@ -50,6 +56,9 @@ class Model(IModelInterface):
 
         sudoku = self.file_manager.load_sudoku(file_name) 
 
+        if sudoku == None:
+            return False
+    
         for row in range(9):
             for column in range(9):
                     
@@ -71,3 +80,4 @@ class Model(IModelInterface):
         '''Sets the debug mode'''
 
         self.file_manager.set_file_mode(mode)
+
