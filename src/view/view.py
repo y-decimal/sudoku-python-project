@@ -308,12 +308,19 @@ class View(ctk.CTkFrame):
         
         would_value_be_valid = self.controller.model.would_value_be_valid(row, column, entry_value)
         
-        if not would_value_be_valid:
-            widget.configure(text_color="red")
-            self.changed_fields.append((row, column))
-        else: 
-            widget.configure(text_color=self.enabled_colors[1])
+        if widget.get_state():       
+            if not would_value_be_valid:
+                widget.configure(text_color="red")
+                self.changed_fields.append((row, column))
+            else: 
+                widget.configure(text_color=self.enabled_colors[1])
         
+        else:
+            if not would_value_be_valid:
+                widget.configure(fg_color="#403823")
+                self.changed_fields.append((row, column))
+            else: 
+                widget.configure(text_color=self.disabled_colors[1])
 
 
     def set_field_color(self, row: int, column: int, color: str):      
