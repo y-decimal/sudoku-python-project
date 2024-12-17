@@ -152,7 +152,7 @@ class View(ctk.CTkFrame):
         
         self.highlight_cell(widget)
 
-        if widget.state:
+        if widget.get_state():
             widget.configure(fg_color=self.highlight_color[0])
             widget.focus()
         else:
@@ -162,14 +162,14 @@ class View(ctk.CTkFrame):
         for i in range(9):
             if i != column:
                 self.changed_fields.append((row, i))
-                if self.sudoku_frame.get_field(row, i).state:
+                if self.sudoku_frame.get_field(row, i).get_state():
                     self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_color[0])
                 else:
                     self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_color[1])
 
             if i != row:
                 self.changed_fields.append((i, column))
-                if self.sudoku_frame.get_field(i, column).state:
+                if self.sudoku_frame.get_field(i, column).get_state():
                     self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_color[0])
                 else:
                     self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_color[1])
@@ -194,7 +194,7 @@ class View(ctk.CTkFrame):
                 if row != cell_row_offset and column != cell_column_offset:
                     self.changed_fields.append((cell_row_offset, cell_column_offset))
 
-                    if self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).state:
+                    if self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).get_state():
                         self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).configure(fg_color=self.cell_color[0])
                         
                     else:
@@ -204,7 +204,7 @@ class View(ctk.CTkFrame):
 
         for row, column in self.changed_fields:
         
-            if self.sudoku_frame.get_field(row, column).state:
+            if self.sudoku_frame.get_field(row, column).get_state():
                 self.set_field_color_editable(row, column)
             else:
                 self.set_field_color_not_editable(row, column)
