@@ -20,7 +20,7 @@ class App(ctk.CTk):
         self.sudoku_test_text = "Sudoku MVC Test"
         self.relative_size = 0.6
         self.minimum_size = self.relative_size
-        self.aspect_ratio = 5/4
+        self.aspect_ratio = 14/9
 
         # set window title, window size and aspect ratio
         self.set_window_parameters()
@@ -84,7 +84,6 @@ class App(ctk.CTk):
         
         if self.prev_window_height != self.window_height and self.prev_window_width != self.window_width:
             self.view.sudoku_frame.update_entries()
-
 
         
         
