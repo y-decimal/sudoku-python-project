@@ -1,7 +1,7 @@
 from model.ISudokuInterface import ISudokuInterface
 import random
 
-class Model(ISudokuInterface):
+class SudokuLogic(ISudokuInterface):
     '''Model for Sudoku fields'''
     block_index = [0,3,6,27,30,33, 54, 57, 60]
     block = {
