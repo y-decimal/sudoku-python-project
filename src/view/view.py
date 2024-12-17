@@ -63,6 +63,9 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.buttons[1].configure(text="Save", command = self.savebutton_callback)
         self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
+        self.sudoku_button_frame.checkbox = ctk.CTkCheckBox(self.sudoku_button_frame, text="Edit Mode", command =  self.set_edit_mode)
+        self.sudoku_button_frame.checkbox.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        
         self.sudoku_button_frame.file_entry = ctk.CTkEntry(self.sudoku_button_frame, width=20, placeholder_text="Enter filename")
         self.sudoku_button_frame.file_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10, sticky="ew")
         
