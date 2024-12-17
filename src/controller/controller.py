@@ -57,18 +57,18 @@ class Controller:
 
         
     
-    def save(self):
+    def save(self, file_name):
         '''Callback for the save button'''
         
         self.push()
-        self.model.save_sudoku("test")
+        self.model.save_sudoku(file_name)
         
     
 
-    def load(self):
+    def load(self, file_name):
         '''Callback for the load button'''
         
-        self.model.load_sudoku("test")
+        self.model.load_sudoku(file_name)
         self.fetch()
         
 

@@ -49,6 +49,9 @@ class View(ctk.CTkFrame):
 
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
 
+
+
+
         # Button Frame
         self.sudoku_button_frame = ButtonFrame.ButtonFrame(self, 1, 3)
 
@@ -58,6 +61,11 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.buttons[1].configure(text="Save", command = self.savebutton_callback)
         self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
+        self.sudoku_button_frame.file_entry = ctk.CTkEntry(self.sudoku_button_frame, width=20, placeholder_text="Enter filename")
+        self.sudoku_button_frame.file_entry.grid(row=2, column=0, columnspan=3, padx=10, pady=10, sticky="ew")
+        
+        
+
 
         self.sudoku_button_frame.grid(row=3, column=1, padx=10, pady=10, sticky="s")
 
@@ -102,10 +110,24 @@ class View(ctk.CTkFrame):
         if self.controller: self.controller.generate()
 
     def savebutton_callback(self):
-        if self.controller: self.controller.save()
+        if self.controller: 
+            file_name = self.sudoku_button_frame.file_entry.get()
+            self.reset_fields()
+            if file_name != "":
+                self.controller.save(file_name)
+            else:
+                self.controller.save("test")
         
     def loadbutton_callback(self):
-        if self.controller: self.controller.load()
+
+        if self.controller: 
+            file_name = self.sudoku_button_frame.file_entry.get()
+            self.reset_fields()
+            if file_name != "":
+                self.controller.load(file_name)
+            else:
+                self.controller.load("test")
+            
     
     def debugcheckbox_callback(self):
         if self.controller: 
