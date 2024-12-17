@@ -18,31 +18,31 @@ class Controller:
             for column in range(9):
                 
                 value = self.model.get_field_value(row, column)
+                state = self.model.get_field_state(row, column)
+
                 
                 self.view.set_field_value(row, column, value)
+                self.view.set_field_state(row, column, state)
+
                 
-                
-                if not self.model.is_field_editable(row, column): self.view.set_field_not_editable(row, column)
-                    
-                else: self.view.set_field_editable(row, column)
                 
         
         
     def push(self):
         '''Push updated values to the model | To be replaced'''
         
-        print("Pushing")
         #self.model.clear()
         for row in range(9):
             for column in range(9):     
                 
                 value = self.view.get_field_value(row, column)
+                state = self.view.get_field_state(row, column)
+
                 
-                self.model.would_value_be_valid(row, column, value)
+                self.model.set_field_value(row, column, value)
+                self.model.set_field_state(row, column, state)
                 
-                if self.model.is_field_editable(row, column):
-                    
-                    self.model.set_field_value(row, column, value)
+
 
     
 
@@ -52,23 +52,23 @@ class Controller:
         print("Generating")
         
         self.model.generate_random_sudoku()
-        self.view.reset_fields()
+        self.view.reset_fields('all')
         self.fetch()
 
         
     
-    def save(self):
+    def save(self, file_name):
         '''Callback for the save button'''
         
         self.push()
-        self.model.save_sudoku("test")
+        self.model.save_sudoku(file_name)
         
     
 
-    def load(self):
+    def load(self, file_name):
         '''Callback for the load button'''
         
-        self.model.load_sudoku("test")
+        self.model.load_sudoku(file_name)
         self.fetch()
         
 

@@ -18,10 +18,15 @@ class IModelInterface(ABC):
 
 
     @abstractmethod
-    def is_field_editable(self, row: int, column: int) -> bool:
+    def get_field_state(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
         pass
 
+
+    @abstractmethod
+    def set_field_state(self, row: int, column: int, state: bool):
+        '''Sets the state of the field at the given row and column. True means the field is editable, False means the field is not editable'''
+        pass
 
 
     @abstractmethod
@@ -46,4 +51,9 @@ class IModelInterface(ABC):
     @abstractmethod
     def save_sudoku(self, file_name: str) -> bool:
         '''Saves a sudoku to a file using the given filename. Returns true if the sudoku was saved successfully, returns false if the sudoku could not be saved'''
+        pass
+    
+    @abstractmethod
+    def set_mode(self, row: int, column: int, state: bool):
+        '''Sets the state of the field at the given row and column'''
         pass

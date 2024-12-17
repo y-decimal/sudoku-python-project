@@ -92,23 +92,27 @@ class SudokuEntryField(ctk.CTkEntry):
 
                 self.state = True
                 self.position = (-1, -1)
-                self.entry_variable.trace_add("write", self.sudoku_callback)
+                
 
 
-            def sudoku_callback(self, *args):
-
-                if len(self.entry_variable.get()) > 1:
-                    self.entry_variable.set(self.entry_variable.get()[1:])
-                    
-                if (not self.entry_variable.get().isdigit() or self.entry_variable.get() == "0"):
-                    self.entry_variable.set("")
-
-
-            def get_field_position(self):
+            def get_position(self):
                 return self.position
             
-            def get_field_row(self):
+            def get_row(self):
                 return self.position[0]
             
-            def get_field_column(self):
+            def get_column(self):
                 return self.position[1]
+            
+            def get_state(self):
+                return self.state
+                
+            def get_value(self):
+                return self.entry_variable.get()
+            
+                        
+            def set_state(self, state: bool):
+                self.state = state
+
+            def set_value(self, value):
+                self.entry_variable.set(str(value))
