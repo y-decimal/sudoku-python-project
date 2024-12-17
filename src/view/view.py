@@ -71,7 +71,7 @@ class View(ctk.CTkFrame):
 
     	# Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.tool_frame, 1, 2)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Test Directory", command = self.debugcheckbox_callback)
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = self.debugcheckbox_callback)
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
         
@@ -99,7 +99,7 @@ class View(ctk.CTkFrame):
 
     def set_edit_mode(self):
         self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
-        print(f"Edit mode set to: {self.edit_mode}")
+        # print(f"Edit mode set to: {self.edit_mode}")
 
     def mousebutton_callback(self):
         # print(self.mouse_position)
@@ -156,14 +156,14 @@ class View(ctk.CTkFrame):
             
             row, column = self.widget_at_mouse.get_position()
             
-            print(f"Toggling field at row: {row}, column: {column}")
+            # print(f"Toggling field at row: {row}, column: {column}")
             
             if self.widget_at_mouse.get_state():
                 self.set_field_not_editable(row, column)
-                print(f"Field at row: {row}, column: {column} is now not editable")
+                # print(f"Field at row: {row}, column: {column} is now not editable")
             else:
                 self.set_field_editable(row, column)
-                print(f"Field at row: {row}, column: {column} is now editable")
+                # print(f"Field at row: {row}, column: {column} is now editable")
                 
             self.reset_fields()
             #self.highlight_fields(self.widget_at_mouse)
