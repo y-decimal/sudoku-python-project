@@ -253,6 +253,17 @@ class View(ctk.CTkFrame):
             return int(value)
 
 
+    def set_field_state(self, row: int, column: int, state: bool):
+        if state:
+            self.set_field_editable(row, column)
+        else:
+            self.set_field_not_editable(row, column)
+            
+            
+    def get_field_state(self, row: int, column: int) -> bool:
+        return self.sudoku_frame.get_field(row, column).get_state()
+
+
     def set_mode(self, mode = 'normal'):
         for checkbox in self.sudoku_checkbox_frame.checkboxes:
             if (mode == 'debug'):
