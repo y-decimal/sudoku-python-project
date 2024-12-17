@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 
-
-class ISudokuInterface(ABC):
-    '''Interface for Sudoku fields'''
+class IModelInterface(ABC):
 
 
     @abstractmethod
@@ -24,10 +22,7 @@ class ISudokuInterface(ABC):
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
         pass
 
-    @abstractmethod
-    def set_field_state(self, row: int, column: int, state: bool):
-        '''Sets the state of a field. True means the field can be edited, False means the field is a given field'''
-        pass
+
 
     @abstractmethod
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
@@ -41,4 +36,14 @@ class ISudokuInterface(ABC):
         pass
 
 
+    @abstractmethod
+    def load_sudoku(self, file_name: str) -> bool:
+        '''Loads a sudoku from a file using the given filename. Returns true if the sudoku was loaded successfully, returns false if the sudoku could not be loaded'''
+        pass
     
+    
+    
+    @abstractmethod
+    def save_sudoku(self, file_name: str) -> bool:
+        '''Saves a sudoku to a file using the given filename. Returns true if the sudoku was saved successfully, returns false if the sudoku could not be saved'''
+        pass
