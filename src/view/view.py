@@ -16,7 +16,9 @@ class View(ctk.CTkFrame):
     highlight_color = ("#5F4648", "#3F2628") # (Enabled color, disabled color)
     adjacent_color = ("#445F48", "#243F28") # (Enabled color, disabled color)
     cell_color = adjacent_color # (Enabled color, disabled color)
+    
     changed_fields = []
+    edit_mode = False
 
     def __init__(self, parent):
         
@@ -62,7 +64,7 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
         self.sudoku_button_frame.file_entry = ctk.CTkEntry(self.sudoku_button_frame, width=20, placeholder_text="Enter filename")
-        self.sudoku_button_frame.file_entry.grid(row=2, column=0, columnspan=3, padx=10, pady=10, sticky="ew")
+        self.sudoku_button_frame.file_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10, sticky="ew")
         
         
 
@@ -90,6 +92,10 @@ class View(ctk.CTkFrame):
     def set_mouse_position (self, widget):
         self.mouse_position = widget
         # print(f"Mouse position set to: {self.mouse_position}")
+
+    def set_edit_mode(self):
+        self.edit_mode = self.sudoku_button_frame.checkbox.get()
+        print(f"Edit mode set to: {self.edit_mode}")
 
     def mousebutton_callback(self):
         # print(self.mouse_position)
