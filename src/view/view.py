@@ -302,7 +302,7 @@ class View(ctk.CTkFrame):
         for checkbox in self.sudoku_checkbox_frame.checkboxes:
             if (mode == 'debug'):
                 checkbox.select()
-                self.debugcheckbox_callback()
+                self.debugcheckbox_callback(checkbox)
             else:
                 checkbox.deselect()
-                self.debugcheckbox_callback()
+                self.debugcheckbox_callback(checkbox)
