@@ -39,8 +39,6 @@ class Controller:
                 state = self.view.get_field_state(row, column)
 
                 
-                self.model.would_value_be_valid(row, column, value) # just here for debugging
-                
                 self.model.set_field_value(row, column, value)
                 self.model.set_field_state(row, column, state)
                 
