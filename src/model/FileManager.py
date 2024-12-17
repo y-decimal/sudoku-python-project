@@ -38,7 +38,7 @@ class FileManager:
     def save_sudoku(self, sudoku: list, file_name):
         '''Saves a sudoku to the file in format "(Value, Writeable) /n"'''
         
-        path = self.absolute_path + file_name
+        path = self.absolute_path + file_name  + ".txt"
         
         if not os.path.exists(self.absolute_path):
             os.makedirs(self.absolute_path)
@@ -60,7 +60,7 @@ class FileManager:
     def load_sudoku(self, file_name):
         '''Loads a sudoku from the file in format "(Value, Writeable) /n", returns a 9x9 list of tuples'''
         
-        path = self.absolute_path + file_name
+        path = self.absolute_path + file_name + ".txt"
         
         try:
             
