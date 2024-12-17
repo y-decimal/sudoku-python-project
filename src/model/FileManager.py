@@ -38,6 +38,9 @@ class FileManager:
     def save_sudoku(self, sudoku: list, file_name):
         '''Saves a sudoku to the file in format "(Value, Writeable) /n"'''
         
+        if file_name == "" or file_name == None:
+            return False
+        
         path = self.absolute_path + file_name  + ".txt"
         
         if not os.path.exists(self.absolute_path):
