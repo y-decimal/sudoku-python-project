@@ -147,5 +147,7 @@ class SudokuLogic(ISudokuInterface):
                     self.starterfield[self.rc_to_index(row, column)] = True
 
 
-
+    def set_field_state(self, row: int, column: int, state: bool):
+        '''Sets the state of a field. True means the field can be edited, False means the field is a given field'''
+        self.starterfield[self.rc_to_index(row, column)] = not state
     
