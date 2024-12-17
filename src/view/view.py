@@ -212,6 +212,21 @@ class View(ctk.CTkFrame):
         self.changed_fields = []
                 
 
+    def set_field_not_editable(self, row: int, column: int):
+        # Note: the .configure method is very slow, so we need to check if updating is necessary first
+        #if self.sudoku_frame.get_field(row, column).cget("state") == "normal":     
+            self.sudoku_frame.get_field(row, column).configure(state="disabled")
+            self.set_field_color_not_editable(row, column)
+            self.sudoku_frame.get_field(row, column).set_state(False)
+        
+    def set_field_editable(self, row: int, column: int):
+        # Note: the .configure method is very slow, so we need to check if updating is necessary first
+        #if self.sudoku_frame.get_field(row, column).cget("state") == "disabled":
+            self.sudoku_frame.get_field(row, column).configure(state="normal")
+            self.set_field_color_editable(row, column)
+            self.sudoku_frame.get_field(row, column).set_state(True)
+
+
     def set_field_color_not_editable(self, row: int, column: int):
         self.sudoku_frame.get_field(row, column).configure(fg_color=self.disabled_color[0])
         self.sudoku_frame.get_field(row, column).configure(text_color=self.disabled_color[1])
@@ -220,20 +235,6 @@ class View(ctk.CTkFrame):
         self.sudoku_frame.get_field(row, column).configure(fg_color=self.enabled_color[0])
         self.sudoku_frame.get_field(row, column).configure(text_color=self.enabled_color[1])
         
-    def set_field_not_editable(self, row: int, column: int):
-        # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.sudoku_frame.get_field(row, column).cget("state") == "normal":     
-            self.sudoku_frame.get_field(row, column).configure(state="disabled")
-            self.set_field_color_not_editable(row, column)
-            self.sudoku_frame.get_field(row, column).state = False
-        
-    def set_field_editable(self, row: int, column: int):
-        # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.sudoku_frame.get_field(row, column).cget("state") == "disabled":
-            self.sudoku_frame.get_field(row, column).configure(state="normal")
-            self.set_field_color_editable(row, column)
-            self.sudoku_frame.get_field(row, column).state = True
-
 
 
     def set_field_value(self, row: int, column: int, value: int):
@@ -243,6 +244,7 @@ class View(ctk.CTkFrame):
             
         elif (value == 0):
             self.sudoku_frame.get_field(row, column).entry_variable.set("")
+
 
     def get_field_value(self, row: int, column: int) -> int:
         
