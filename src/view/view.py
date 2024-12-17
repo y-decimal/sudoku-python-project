@@ -217,7 +217,7 @@ class View(ctk.CTkFrame):
         self.highlight_cell(widget)
 
         if widget.get_state():
-            widget.configure(fg_color=self.highlight_color[0])
+            widget.configure(fg_color=self.highlight_colors[0])
             widget.focus()
         else:
             widget.configure(fg_color=self.highlight_colors[1])
