@@ -24,7 +24,7 @@ class View(ctk.CTkFrame):
         
         super().__init__(parent)
        
-        self.mouse_position = None
+        self.widget_at_mouse = None
        
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0,2), weight=0)
@@ -90,7 +90,7 @@ class View(ctk.CTkFrame):
 
 
     def set_mouse_position (self, widget):
-        self.mouse_position = widget
+        self.widget_at_mouse = widget
         # print(f"Mouse position set to: {self.mouse_position}")
 
     def set_edit_mode(self):
@@ -99,9 +99,9 @@ class View(ctk.CTkFrame):
 
     def mousebutton_callback(self):
         # print(self.mouse_position)
-        if self.mouse_position != None:
+        if self.widget_at_mouse != None:
             self.reset_fields()
-            self.highlight_fields(self.mouse_position)
+            self.highlight_fields(self.widget_at_mouse)
         else:
             self.reset_fields()
 
