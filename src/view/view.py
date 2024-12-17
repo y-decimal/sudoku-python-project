@@ -74,7 +74,7 @@ class View(ctk.CTkFrame):
 
     	# Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.tool_frame, 1, 2)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = self.debugcheckbox_callback)
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.debugcheckbox_callback(widget))
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
         
