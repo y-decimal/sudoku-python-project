@@ -134,7 +134,7 @@ class SudokuLogic(ISudokuInterface):
 
     def generate_random_sudoku(self):
         '''Sets random values for some fields in the game field'''   
-        self.clear(True)
+        self.clear()
         for row in range (9):
             for column in range(9):
                 
