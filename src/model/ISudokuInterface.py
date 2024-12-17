@@ -24,7 +24,10 @@ class ISudokuInterface(ABC):
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
         pass
 
-
+    @abstractmethod
+    def set_field_state(self, row: int, column: int, state: bool):
+        '''Sets the state of a field. True means the field can be edited, False means the field is a given field'''
+        pass
 
     @abstractmethod
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
@@ -37,3 +40,5 @@ class ISudokuInterface(ABC):
         '''Generates a random sudoku'''
         pass
 
+
+    
