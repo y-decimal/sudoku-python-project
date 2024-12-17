@@ -75,12 +75,3 @@ class Model(IModelInterface):
         '''Sets the debug mode'''
 
         self.file_manager.set_file_mode(mode)
-
-    
-
-
-    def would_value_be_valid(self, row: int, col: int, value: int) -> bool:
-        '''Checks if the value at the given row and column is unique in its row, column, and grid'''
-
-        return self.sudoku_logic.would_value_be_valid(row, col, value)
-        
