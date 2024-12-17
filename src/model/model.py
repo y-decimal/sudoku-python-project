@@ -50,6 +50,9 @@ class Model(IModelInterface):
 
         sudoku = self.file_manager.load_sudoku(file_name) 
 
+        if sudoku == None:
+            return False
+    
         for row in range(9):
             for column in range(9):
                     
