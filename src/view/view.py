@@ -47,6 +47,7 @@ class View(ctk.CTkFrame):
                 self.sudoku_frame.get_field(row, column).bind("<Enter> ", lambda args, widget = self.sudoku_frame.get_field(row, column): self.set_mouse_position(widget))
                 self.sudoku_frame.get_field(row, column).bind("<Leave>", lambda args: self.set_mouse_position(None), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-1>", lambda args: self.mousebutton_callback(), add="+")
+                self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field(), add="+")
                 
 
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
@@ -145,6 +146,28 @@ class View(ctk.CTkFrame):
                 self.controller.set_mode("debug")
             else:
                 self.controller.set_mode("normal")
+
+
+    def toggle_field(self):
+        
+        if self.widget_at_mouse != None and self.edit_mode == 1:
+            
+            
+            
+            row, column = self.widget_at_mouse.get_position()
+            
+            print(f"Toggling field at row: {row}, column: {column}")
+            
+            if self.widget_at_mouse.get_state():
+                self.set_field_not_editable(row, column)
+                print(f"Field at row: {row}, column: {column} is now not editable")
+            else:
+                self.set_field_editable(row, column)
+                print(f"Field at row: {row}, column: {column} is now editable")
+                
+            self.reset_fields()
+            self.highlight_fields(self.wid)
+
 
     def highlight_fields(self, widget):
 
