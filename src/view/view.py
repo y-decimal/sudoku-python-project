@@ -76,7 +76,7 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
-        self.bind_class("Entry","<KeyPress>", lambda *args: self.controller.push(), add="+")
+        self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
 
 
     def set_mouse_position (self, widget):
