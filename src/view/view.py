@@ -76,7 +76,7 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
-        self.bind_class("Entry","<KeyPress>", lambda *args: self.controller.push(), add="+")
+        self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
 
 
     def set_mouse_position (self, widget):
@@ -116,7 +116,7 @@ class View(ctk.CTkFrame):
 
     def highlight_fields(self, widget):
 
-        row, column = widget.get_field()        
+        row, column = widget.get_position()        
         self.changed_fields.append((row, column))
         
         self.highlight_cell(widget)
@@ -147,7 +147,7 @@ class View(ctk.CTkFrame):
                 
     def highlight_cell(self, widget):
          
-         row, column = widget.get_field() 
+         row, column = widget.get_position() 
 
          row_offset = row//3*3
          column_offset = column//3*3    
