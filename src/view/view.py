@@ -95,6 +95,8 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
 
+        self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
+
         for row in range(9):
             for column in range(9):
                 self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget = self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
