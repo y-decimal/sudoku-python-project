@@ -93,7 +93,7 @@ class View(ctk.CTkFrame):
                 for column in range(9):
                     self.invalid_field(row, column)
         
-        self.bind_class("Entry", "<KeyPress>", lambda args: on_keypress(), add="+")
+        self.bind_class("Entry", "<Button-1>", lambda args: on_keypress(), add="+")
         
         
 
