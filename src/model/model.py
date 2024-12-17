@@ -2,6 +2,7 @@ from model.IModelInterface import IModelInterface
 from model.FileManager import FileManager
 from model.SudokuLogic import SudokuLogic
 
+
 class Model(IModelInterface):
 
     sudoku_logic = None
@@ -66,6 +67,7 @@ class Model(IModelInterface):
                     self.sudoku_logic.set_field_value(row, column, sudoku[row][column][0])
                     self.sudoku_logic.set_field_state(row, column, sudoku[row][column][1])
 
+        return True
     
 
     def save_sudoku(self, file_name: str) -> bool:
