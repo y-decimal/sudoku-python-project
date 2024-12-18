@@ -98,18 +98,6 @@ class View(ctk.CTkFrame):
 
         self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
 
-
-        def on_keypress():
-            for row in range(9):
-                for column in range(9):
-                    self.invalid_field(row, column)
-
-        # self.bind_class("Entry", "<Button-1>", lambda args: on_keypress(), add="+")
-
-
-
-
-
     def set_mouse_position (self, widget):
         self.widget_at_mouse = widget
         # print(f"Mouse position set to: {self.mouse_position}")
