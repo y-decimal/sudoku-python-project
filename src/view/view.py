@@ -14,7 +14,7 @@ class View(ctk.CTkFrame):
     cell_color = adjacent_colors  # (Enabled color, disabled color)
     invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
 
-    changed_fields = []
+    highlighted_fields = []
     invalid_fields = []
     edit_mode = False
 
@@ -148,9 +148,10 @@ class View(ctk.CTkFrame):
 
     def highlight_fields(self, widget):
         row, column = widget.get_position()
-        self.changed_fields.append((row, column))
+        self.highlighted_fields.append((row, column))
         self.highlight_cell(widget)
         self.highlight_line(widget)
+
         if widget.get_state():
             widget.configure(fg_color=self.highlight_colors[0])
             widget.focus()
@@ -163,7 +164,7 @@ class View(ctk.CTkFrame):
         for i in range(9):
             if i != column:
                 widget = self.sudoku_frame.get_field(row, i)
-                self.changed_fields.append((row, i))
+                self.highlighted_fields.append((row, i))
                 if widget.get_state():
                     widget.configure(fg_color=self.adjacent_colors[0])
                 elif widget.get_invalid_state():
@@ -172,7 +173,7 @@ class View(ctk.CTkFrame):
                     widget.configure(fg_color=self.adjacent_colors[1])
             if i != row:
                 widget = self.sudoku_frame.get_field(i, column)
-                self.changed_fields.append((i, column))
+                self.highlighted_fields.append((i, column))
                 if widget.get_state():
                     widget.configure(fg_color=self.adjacent_colors[0])
                 elif widget.get_invalid_state():
@@ -190,7 +191,7 @@ class View(ctk.CTkFrame):
                 cell_column_offset = cell_column + column_offset
                 widget = self.sudoku_frame.get_field(cell_row_offset, cell_column_offset)
                 if row != cell_row_offset and column != cell_column_offset:
-                    self.changed_fields.append((cell_row_offset, cell_column_offset))
+                    self.highlighted_fields.append((cell_row_offset, cell_column_offset))
                     if widget.get_state():
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[0])
                     elif widget.get_invalid_state():
@@ -199,7 +200,7 @@ class View(ctk.CTkFrame):
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[1])
 
     def reset_highlighted_fields(self):
-        for row, column in self.changed_fields:
+        for row, column in self.highlighted_fields:
             widget = self.sudoku_frame.get_field(row, column)
             if widget.get_state():
                 self.set_field_color(row, column, self.enabled_colors[0])
@@ -213,7 +214,7 @@ class View(ctk.CTkFrame):
                     self.set_field_color(row, column, self.invalid_color[0])
                 else:
                     self.set_field_color(row, column, self.disabled_colors[0])
-        self.changed_fields = []
+        self.highlighted_fields = []
 
     def set_field_not_editable(self, row: int, column: int):
         widget = self.sudoku_frame.get_field(row, column)
