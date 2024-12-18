@@ -309,7 +309,7 @@ class View(ctk.CTkFrame):
         if widget.get_state():
             widget.configure(text_color=self.enabled_colors[1])
         else:
-            widget.configure(fg_color=self.disabled_colors[1])
+            widget.configure(fg_color=self.disabled_colors[0])
         widget.set_invalid_state(False)
 
         
