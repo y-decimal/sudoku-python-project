@@ -278,51 +278,19 @@ class View(ctk.CTkFrame):
 
     def set_field_not_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.sudoku_frame.get_field(row, column).cget("state") == "normal":
+        if self.get_field_state(row, column):
             self.sudoku_frame.get_field(row, column).configure(state="disabled")
             self.set_field_color(row, column, self.disabled_colors[0])
             self.set_field_text_color(row, column, self.disabled_colors[1])
-            self.sudoku_frame.get_field(row, column).set_state(False)
+            self.set_field_state(row, column, False)
 
     def set_field_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.sudoku_frame.get_field(row, column).cget("state") == "disabled":
+        if not self.get_field_state(row, column):
             self.sudoku_frame.get_field(row, column).configure(state="normal")
             self.set_field_color(row, column, self.enabled_colors[0])
             self.set_field_text_color(row, column, self.enabled_colors[1])
-            self.sudoku_frame.get_field(row, column).set_state(True)
-
-
-    def invalid_field(self, row: int, column: int):
-
-        widget = self.sudoku_frame.get_field(row, column)
-        entry_value = widget.get_value()
-
-        if entry_value == '':
-            widget.configure(text_color=self.enabled_colors[1])
-            return
-        else:
-            entry_value = int(entry_value)
-
-        would_value_be_valid = self.controller.model.would_value_be_valid(row, column, entry_value)
-
-        if widget.get_state():
-            if not would_value_be_valid:
-                widget.configure(text_color="red")
-                widget.set_invalid_state(True)
-                self.changed_fields.append((row, column))
-            else:
-                widget.configure(text_color=self.enabled_colors[1])
-                widget.set_invalid_state(False)
-
-        else:
-            if not would_value_be_valid:
-                widget.configure(fg_color="#403823")
-                widget.set_invalid_state(True)
-                self.changed_fields.append((row, column))
-            else:
-                widget.configure(text_color=self.disabled_colors[1])
-                widget.set_invalid_state(False)
+            self.set_field_state(row, column, True)
 
 
     def set_field_invalid(self, row: int, column: int):
