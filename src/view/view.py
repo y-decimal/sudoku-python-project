@@ -5,36 +5,29 @@ from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes import ButtonFrame, CheckboxFrame
 
 
-
 class View(ctk.CTkFrame):
 
-
-
-    disabled_colors = ("#2F2F32", "#86ff7b") # (Background color, Text color)
+    disabled_colors = ("#2F2F32", "#86ff7b")  # (Background color, Text color)
     enabled_colors = ("#343638", "#DDDDDD")  # (Background color, Text color)
-    highlight_colors = ("#5F4648", "#3F2628") # (Enabled color, disabled color)
-    adjacent_colors = ("#445F48", "#243F28") # (Enabled color, disabled color)
-    cell_color = adjacent_colors # (Enabled color, disabled color)
-    invalid_color = ("#403823", "red") # (Disabled background color, Enabled Text color)
-    
+    highlight_colors = ("#5F4648", "#3F2628")  # (Enabled color, disabled color)
+    adjacent_colors = ("#445F48", "#243F28")  # (Enabled color, disabled color)
+    cell_color = adjacent_colors  # (Enabled color, disabled color)
+    invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
+
     changed_fields = []
     invalid_fields = []
     edit_mode = False
 
     def __init__(self, parent):
-
         super().__init__(parent)
 
         self.widget_at_mouse = None
 
         # App Grid Configuration (3x3 Grid)
-        self.grid_columnconfigure((0,2), weight=1)
+        self.grid_columnconfigure((0, 2), weight=1)
         self.grid_columnconfigure(1, weight=3)
         self.grid_rowconfigure(0, weight=3)
-        self.grid_rowconfigure((1,2), weight=1)
-
-
-
+        self.grid_rowconfigure((1, 2), weight=1)
 
         # Frame Grid Configuration
 
@@ -42,32 +35,24 @@ class View(ctk.CTkFrame):
         self.sudoku_frame = SudokuFrame(self, 9)
         self.sudoku_frame.grid(row=0, column=1, padx=10, pady=10)
 
-
         for row in range(9):
             for column in range(9):
-                self.sudoku_frame.get_field(row, column).bind("<Enter> ", lambda args, widget = self.sudoku_frame.get_field(row, column): self.set_mouse_position(widget))
+                self.sudoku_frame.get_field(row, column).bind("<Enter> ", lambda args, widget=self.sudoku_frame.get_field(row, column): self.set_mouse_position(widget))
                 self.sudoku_frame.get_field(row, column).bind("<Leave>", lambda args: self.set_mouse_position(None), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-1>", lambda args: self.mousebutton_callback(), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field(), add="+")
-                self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget = self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
-
-
-
+                self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget=self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
 
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
-
-
 
         self.tool_frame = ctk.CTkFrame(self)
 
         # Button Frame
         self.sudoku_button_frame = ButtonFrame.ButtonFrame(self.tool_frame, 1, 3)
-
-        self.sudoku_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.sudoku_button_frame.buttons[1].configure(text="Save", command = self.savebutton_callback)
-        self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
-
-        self.sudoku_button_frame.grid(row=1, column=0, columnspan = 2, padx=10, pady=10, sticky="nsew")
+        self.sudoku_button_frame.buttons[0].configure(text="Generate", command=self.generatebutton_callback)
+        self.sudoku_button_frame.buttons[1].configure(text="Save", command=self.savebutton_callback)
+        self.sudoku_button_frame.buttons[2].configure(text="Load", command=self.loadbutton_callback)
+        self.sudoku_button_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
         # File name entry
         self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
@@ -75,35 +60,27 @@ class View(ctk.CTkFrame):
 
         # Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.tool_frame, 1, 2)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.debugcheckbox_callback(widget))
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command=lambda *args, widget=self.sudoku_checkbox_frame.checkboxes[0]: self.debugcheckbox_callback(widget))
         self.sudoku_checkbox_frame.checkboxes[0].select()
-        self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
-
+        self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command=self.set_edit_mode)
         self.sudoku_checkbox_frame.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")
 
-
-        self.tool_frame.grid_columnconfigure((0,1), weight=1)
-
+        self.tool_frame.grid_columnconfigure((0, 1), weight=1)
         self.tool_frame.grid(row=0, column=2, padx=10, pady=10, sticky="ew")
-
-
-
-
 
     def set_controller(self, controller):
         '''Sets the controller of the view'''
         self.controller = controller
+        self.bind_class("Entry", "<Button-1>", lambda *args: self.controller.push(), add="+")
 
-        self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
-
-    def set_mouse_position (self, widget):
+    def set_mouse_position(self, widget):
         self.widget_at_mouse = widget
 
     def set_edit_mode(self):
         self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
 
     def mousebutton_callback(self):
-        if self.widget_at_mouse != None:
+        if self.widget_at_mouse is not None:
             self.reset_highlighted_fields()
             self.highlight_fields(self.widget_at_mouse)
         else:
@@ -114,7 +91,7 @@ class View(ctk.CTkFrame):
         if len(entry_value) > 1:
             widget.entry_variable.set(widget.entry_variable.get()[1:])
             entry_value = widget.entry_variable.get()
-        if (not entry_value.isdigit() or entry_value == "0"):
+        if not entry_value.isdigit() or entry_value == "0":
             widget.entry_variable.set("")
             entry_value = ''
         else:
@@ -122,13 +99,16 @@ class View(ctk.CTkFrame):
             self.validate_field(widget)
 
     def fetchbutton_callback(self):
-        if self.controller: self.controller.fetch()
+        if self.controller:
+            self.controller.fetch()
 
     def pushbutton_callback(self):
-        if self.controller: self.controller.push()
+        if self.controller:
+            self.controller.push()
 
     def generatebutton_callback(self):
-        if self.controller: self.controller.generate()
+        if self.controller:
+            self.controller.generate()
 
     def savebutton_callback(self):
         if self.controller:
@@ -155,7 +135,7 @@ class View(ctk.CTkFrame):
                 self.controller.set_mode("normal")
 
     def toggle_field(self):
-        if self.widget_at_mouse != None and self.edit_mode == 1:
+        if self.widget_at_mouse is not None and self.edit_mode == 1:
             row, column = self.widget_at_mouse.get_position()
             if self.widget_at_mouse.get_state():
                 self.set_field_not_editable(row, column)
@@ -255,8 +235,9 @@ class View(ctk.CTkFrame):
         else:
             widget.configure(fg_color=self.invalid_color[0])
         widget.set_invalid_state(True)
-        if (row, column) not in self.invalid_fields: self.invalid_fields.append((row, column))
-        print(f"Invalid value: {self.get_field_value(row, column)} at {row, {column}}")
+        if (row, column) not in self.invalid_fields:
+            self.invalid_fields.append((row, column))
+        print(f"Invalid value: {self.get_field_value(row, column)} at {row}, {column}")
 
     def set_field_valid(self, row: int, column: int):
         widget = self.sudoku_frame.get_field(row, column)
@@ -265,8 +246,9 @@ class View(ctk.CTkFrame):
         else:
             widget.configure(fg_color=self.disabled_colors[0])
         widget.set_invalid_state(False)
-        if (row, column) in self.invalid_fields: self.invalid_fields.remove((row, column))
-        print(f"Valid value: {self.get_field_value(row, column)} at {row, {column}}")
+        if (row, column) in self.invalid_fields:
+            self.invalid_fields.remove((row, column))
+        print(f"Valid value: {self.get_field_value(row, column)} at {row}, {column}")
 
     def validate_field(self, widget):
         if widget.get_value() == "":
@@ -324,9 +306,9 @@ class View(ctk.CTkFrame):
     def get_field_state(self, row: int, column: int) -> bool:
         return self.sudoku_frame.get_field(row, column).get_state()
 
-    def set_mode(self, mode = 'normal'):
+    def set_mode(self, mode='normal'):
         for checkbox in self.sudoku_checkbox_frame.checkboxes:
-            if (mode == 'debug'):
+            if mode == 'debug':
                 checkbox.select()
                 self.debugcheckbox_callback(checkbox)
             else:
