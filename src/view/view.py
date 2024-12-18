@@ -246,6 +246,8 @@ class View(ctk.CTkFrame):
         widget = self.sudoku_frame.get_field(row, column)
         if widget.get_state():
             widget.configure(text_color=self.enabled_colors[1])
+        elif widget.get_position() in self.highlighted_fields:
+            widget.configure(fg_color=self.adjacent_colors[1])
         else:
             widget.configure(fg_color=self.disabled_colors[0])
         widget.set_invalid_state(False)
