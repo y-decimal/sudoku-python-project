@@ -189,28 +189,35 @@ class View(ctk.CTkFrame):
         row, column = widget.get_position()
         self.changed_fields.append((row, column))
         self.highlight_cell(widget)
-        
+        self.highlight_line(widget)
         if widget.get_state():
             widget.configure(fg_color=self.highlight_colors[0])
             widget.focus()
         else:
             widget.configure(fg_color=self.highlight_colors[1])
             widget.focus()
-            
+
+    def highlight_line(self, widget):
+        row, column = widget.get_position()
         for i in range(9):
             if i != column:
+                widget = self.sudoku_frame.get_field(row, i)
                 self.changed_fields.append((row, i))
-                if self.sudoku_frame.get_field(row, i).get_state():
-                    self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_colors[0])
+                if widget.get_state():
+                    widget.configure(fg_color=self.adjacent_colors[0])
+                elif widget.get_invalid_state():
+                    widget.configure(fg_color=self.invalid_color[0])
                 else:
-                    self.sudoku_frame.get_field(row, i).configure(fg_color=self.adjacent_colors[1])
+                    widget.configure(fg_color=self.adjacent_colors[1])
             if i != row:
+                widget = self.sudoku_frame.get_field(i, column)
                 self.changed_fields.append((i, column))
-                if self.sudoku_frame.get_field(i, column).get_state():
-                    self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_colors[0])
+                if widget.get_state():
+                    widget.configure(fg_color=self.adjacent_colors[0])
+                elif widget.get_invalid_state():
+                    widget.configure(fg_color=self.invalid_color[0])
                 else:
-                    self.sudoku_frame.get_field(i, column).configure(fg_color=self.adjacent_colors[1])
-
+                    widget.configure(fg_color=self.adjacent_colors[1])
 
     def highlight_cell(self, widget):
 
@@ -226,13 +233,13 @@ class View(ctk.CTkFrame):
             for cell_column in range(3):
 
                 cell_column_offset = cell_column + column_offset
-
+                widget = self.sudoku_frame.get_field(cell_row_offset, cell_column_offset)
                 if row != cell_row_offset and column != cell_column_offset:
                     self.changed_fields.append((cell_row_offset, cell_column_offset))
-
-                    if self.sudoku_frame.get_field(cell_row_offset, cell_column_offset).get_state():
+                    if widget.get_state():
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[0])
-
+                    elif widget.get_invalid_state():
+                        self.set_field_color(cell_row_offset, cell_column_offset, self.invalid_color[0])
                     else:
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[1])
 
