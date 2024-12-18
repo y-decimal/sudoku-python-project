@@ -140,7 +140,6 @@ class View(ctk.CTkFrame):
             entry_value = int(entry_value)
             self.validate_field(widget)
 
-        # self.invalid_field(widget.position[0], widget.position[1])
 
 
 
@@ -248,49 +247,47 @@ class View(ctk.CTkFrame):
 
 
 
-    def reset_highlighted_fields(self, mode='changed'):
+    def reset_highlighted_fields(self):
         
-        if mode == 'all':
-            self.changed_fields = [(row, column) for row in range(9) for column in range(9)]
-            
         for row, column in self.changed_fields:
             widget = self.sudoku_frame.get_field(row, column)
             
             if widget.get_state():
+                self.set_field_color(row, column, self.enabled_colors[0])
                 if widget.get_invalid_state():
                     self.set_field_text_color(row, column, "red")
                 else:
-                    self.set_field_color(row, column, self.enabled_colors[0])
                     self.set_field_text_color(row, column, self.enabled_colors[1])
                 
             else:
+                self.set_field_text_color(row, column, self.disabled_colors[1])
                 if widget.get_invalid_state():
                     self.set_field_color(row, column, "#403823")
                 else:
                     self.set_field_color(row, column, self.disabled_colors[0])
-                    self.set_field_text_color(row, column, self.disabled_colors[1])
+
                 
-            # if widget.get_invalid_state():
-            #     self.set_field_text_color(row, column, "red")
                 
         self.changed_fields = []
 
 
     def set_field_not_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if self.get_field_state(row, column):
-            self.sudoku_frame.get_field(row, column).configure(state="disabled")
+        widget = self.sudoku_frame.get_field(row, column)
+        if widget.get_state():
+            widget.configure(state="disabled")
             self.set_field_color(row, column, self.disabled_colors[0])
             self.set_field_text_color(row, column, self.disabled_colors[1])
-            self.set_field_state(row, column, False)
+            widget.set_state(False)
 
     def set_field_editable(self, row: int, column: int):
         # Note: the .configure method is very slow, so we need to check if updating is necessary first
-        if not self.get_field_state(row, column):
-            self.sudoku_frame.get_field(row, column).configure(state="normal")
+        widget = self.sudoku_frame.get_field(row, column)
+        if not widget.get_state():
+            widget.configure(state="normal")
             self.set_field_color(row, column, self.enabled_colors[0])
             self.set_field_text_color(row, column, self.enabled_colors[1])
-            self.set_field_state(row, column, True)
+            widget.set_state(True)
 
 
     def set_field_invalid(self, row: int, column: int):
@@ -303,7 +300,7 @@ class View(ctk.CTkFrame):
             widget.configure(fg_color="#403823")
             
         widget.set_invalid_state(True)
-        # self.changed_fields.append((row, column))
+
 
     def set_field_valid(self, row: int, column: int):
         
@@ -314,7 +311,7 @@ class View(ctk.CTkFrame):
         else:
             widget.configure(fg_color=self.disabled_colors[1])
         widget.set_invalid_state(False)
-        # self.changed_fields.append((row, column))
+
         
 
     def validate_field(self, widget):
@@ -326,23 +323,28 @@ class View(ctk.CTkFrame):
         cell_index = row%3 * 3 + column%3
 
         for i in range(9):
+            
+            grid_row = i // 3 + (current_cell // 3) * 3
+            grid_column = i % 3 + (current_cell % 3) * 3
+            
             if i != column and self.get_field_value(row, i) == value:
                 self.set_field_invalid(row, column)
                 self.set_field_invalid(row, i)
             elif i != column:
-                widget.set_invalid_state(False)
+                self.set_field_valid(row, i)
+                
 
             if i != row and self.get_field_value(i, column) == value:
                 self.set_field_invalid(row, column)
                 self.set_field_invalid(i, column)
             elif i != row:
-                widget.set_invalid_state(False)
+                self.set_field_valid(i, column)
 
-            if cell_index != i and self.get_field_value(i // 3 + (current_cell // 3) * 3, i % 3 + (current_cell % 3) * 3) == value:
+            if cell_index != i and self.get_field_value(grid_row, grid_column) == value:
                 self.set_field_invalid(row, column)
-                self.set_field_invalid(i // 3 + (current_cell // 3) * 3, i % 3 + (current_cell % 3) * 3)
+                self.set_field_invalid(grid_row, grid_column)
             elif cell_index != i:
-                widget.set_invalid_state(False)
+                self.set_field_valid(grid_row, grid_column)
                 
 
 
