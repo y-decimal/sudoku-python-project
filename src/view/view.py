@@ -260,21 +260,24 @@ class View(ctk.CTkFrame):
             grid_row = i // 3 + (current_cell // 3) * 3
             grid_column = i % 3 + (current_cell % 3) * 3
             if i != column and self.get_field_value(row, i) == value:
-                self.set_field_invalid(row, column)
                 self.set_field_invalid(row, i)
                 valid = False
             if i != row and self.get_field_value(i, column) == value:
-                self.set_field_invalid(row, column)
                 self.set_field_invalid(i, column)
                 valid = False
             if cell_index != i and self.get_field_value(grid_row, grid_column) == value:
-                self.set_field_invalid(row, column)
                 self.set_field_invalid(grid_row, grid_column)
                 valid = False
-        if valid:
+                
+        if valid: 
             self.set_field_valid(row, column)
             for row, column in self.invalid_fields:
                 self.validate_field(self.sudoku_frame.get_field(row, column))
+        else:
+            self.set_field_invalid(row, column)
+
+     
+            
 
     def set_field_color(self, row: int, column: int, color: str):
         self.sudoku_frame.get_field(row, column).configure(fg_color=color)
