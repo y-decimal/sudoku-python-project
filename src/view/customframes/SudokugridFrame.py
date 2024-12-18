@@ -78,40 +78,40 @@ class SudokuFrame(ctk.CTkFrame):
 
 class SudokuEntryField(ctk.CTkEntry):
 
-            def __init__(self, master, entry_dimensions):      
+    def __init__(self, master, entry_dimensions):      
 
-                self.entry_variable = ctk.StringVar()       
+        self.entry_variable = ctk.StringVar()       
 
-                super().__init__(master, 
-                                 width= entry_dimensions, 
-                                 height = entry_dimensions, 
-                                 font = ("Arial", 0.75*entry_dimensions), 
-                                 textvariable=self.entry_variable, 
-                                 justify="center"
-                                )
+        super().__init__(master, 
+                         width= entry_dimensions, 
+                         height = entry_dimensions, 
+                         font = ("Arial", 0.75*entry_dimensions), 
+                         textvariable=self.entry_variable, 
+                         justify="center"
+                        )
 
-                self.state = 'enabled'
-                self.position = (-1, -1)
+        self.state = True
+        self.position = (-1, -1)
+        
+
+
+    def get_position(self):
+        return self.position
+    
+    def get_row(self):
+        return self.position[0]
+    
+    def get_column(self):
+        return self.position[1]
+    
+    def get_state(self):
+        return self.state
+        
+    def get_value(self):
+        return self.entry_variable.get()      
                 
+    def set_state(self, state: bool):
+        self.state = state
 
-
-            def get_position(self):
-                return self.position
-            
-            def get_row(self):
-                return self.position[0]
-            
-            def get_column(self):
-                return self.position[1]
-            
-            def get_state(self):
-                return self.state
-                
-            def get_value(self):
-                return self.entry_variable.get()      
-                        
-            def set_state(self, state: bool):
-                self.state = state
-
-            def set_value(self, value):
-                self.entry_variable.set(str(value))
+    def set_value(self, value):
+        self.entry_variable.set(str(value))
