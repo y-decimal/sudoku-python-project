@@ -90,7 +90,7 @@ class SudokuEntryField(ctk.CTkEntry):
                                  justify="center"
                                 )
 
-                self.state = True
+                self.state = 'enabled'
                 self.position = (-1, -1)
                 
 
@@ -108,8 +108,7 @@ class SudokuEntryField(ctk.CTkEntry):
                 return self.state
                 
             def get_value(self):
-                return self.entry_variable.get()
-            
+                return self.entry_variable.get()      
                         
             def set_state(self, state: bool):
                 self.state = state
