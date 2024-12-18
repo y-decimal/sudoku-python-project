@@ -315,37 +315,41 @@ class View(ctk.CTkFrame):
         
 
     def validate_field(self, widget):
-
+        
         row, column = widget.get_position()
         value = int(widget.get_value())
-
-        current_cell = row//3 * 3 + column//3
-        cell_index = row%3 * 3 + column%3
+        current_cell = row // 3 * 3 + column // 3
+        cell_index = row % 3 * 3 + column % 3
+        valid = True
 
         for i in range(9):
-            
             grid_row = i // 3 + (current_cell // 3) * 3
             grid_column = i % 3 + (current_cell % 3) * 3
-            
+
             if i != column and self.get_field_value(row, i) == value:
                 self.set_field_invalid(row, column)
                 self.set_field_invalid(row, i)
-            elif i != column:
-                self.set_field_valid(row, i)
-                
+                valid = False
+            # elif i != column:
+            #     self.set_field_valid(row, i)
 
             if i != row and self.get_field_value(i, column) == value:
                 self.set_field_invalid(row, column)
                 self.set_field_invalid(i, column)
-            elif i != row:
-                self.set_field_valid(i, column)
+                valid = False
+            # elif i != row:
+            #     self.set_field_valid(i, column)
 
             if cell_index != i and self.get_field_value(grid_row, grid_column) == value:
                 self.set_field_invalid(row, column)
                 self.set_field_invalid(grid_row, grid_column)
-            elif cell_index != i:
-                self.set_field_valid(grid_row, grid_column)
-                
+                valid = False
+            # elif cell_index != i:
+            #     self.set_field_valid(grid_row, grid_column)
+
+        if valid:
+            self.set_field_valid(row, column)
+
 
 
     def set_field_color(self, row: int, column: int, color: str):
