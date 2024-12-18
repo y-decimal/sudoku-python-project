@@ -52,7 +52,7 @@ class Controller:
         print("Generating")
         
         self.model.generate_random_sudoku()
-        self.view.reset_fields('all')
+        self.view.reset_highlighted_fields('all')
         self.fetch()
 
         

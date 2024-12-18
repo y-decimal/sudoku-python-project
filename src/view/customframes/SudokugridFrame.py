@@ -91,6 +91,7 @@ class SudokuEntryField(ctk.CTkEntry):
                         )
 
         self.state = True
+        self.invalid_state = False
         self.position = (-1, -1)
         
 
@@ -106,12 +107,18 @@ class SudokuEntryField(ctk.CTkEntry):
     
     def get_state(self):
         return self.state
+
+    def get_invalid_state(self):
+        return self.invalid_state
         
     def get_value(self):
         return self.entry_variable.get()      
                 
     def set_state(self, state: bool):
         self.state = state
+
+    def set_invalid_state(self, invalid_state: bool):
+        self.invalid_state = invalid_state
 
     def set_value(self, value):
         self.entry_variable.set(str(value))
