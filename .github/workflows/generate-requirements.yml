@@ -1,7 +1,11 @@
-name: Integration Test
+name: Generate Requirements.txt
 on: 
   push:
     branches: [ "main" ]
+    
+permissions: 
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
