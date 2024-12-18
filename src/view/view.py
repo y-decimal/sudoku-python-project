@@ -18,6 +18,7 @@ class View(ctk.CTkFrame):
     invalid_color = ("#403823", "red") # (Disabled background color, Enabled Text color)
     
     changed_fields = []
+    invalid_fields = []
     edit_mode = False
 
     def __init__(self, parent):
@@ -291,43 +292,37 @@ class View(ctk.CTkFrame):
             self.set_field_text_color(row, column, self.enabled_colors[1])
             widget.set_state(True)
 
-
     def set_field_invalid(self, row: int, column: int):
-
         widget = self.sudoku_frame.get_field(row, column)
-
         if widget.get_state():
-            widget.configure(text_color="red")
+            widget.configure(text_color=self.invalid_color[1])
         else:
-            widget.configure(fg_color="#403823")
-            
+            widget.configure(fg_color=self.invalid_color[0])
         widget.set_invalid_state(True)
-
+        if (row, column) not in self.invalid_fields: self.invalid_fields.append((row, column))
+        print(f"Invalid value: {self.get_field_value(row, column)} at {row, {column}}")
 
     def set_field_valid(self, row: int, column: int):
-        
         widget = self.sudoku_frame.get_field(row, column)
-
         if widget.get_state():
             widget.configure(text_color=self.enabled_colors[1])
         else:
             widget.configure(fg_color=self.disabled_colors[0])
         widget.set_invalid_state(False)
-
-        
+        if (row, column) in self.invalid_fields: self.invalid_fields.remove((row, column))
+        print(f"Valid value: {self.get_field_value(row, column)} at {row, {column}}")
 
     def validate_field(self, widget):
-        
+        if widget.get_value() == "":
+            return
         row, column = widget.get_position()
         value = int(widget.get_value())
         current_cell = row // 3 * 3 + column // 3
         cell_index = row % 3 * 3 + column % 3
         valid = True
-
         for i in range(9):
             grid_row = i // 3 + (current_cell // 3) * 3
             grid_column = i % 3 + (current_cell % 3) * 3
-
             if i != column and self.get_field_value(row, i) == value:
                 self.set_field_invalid(row, column)
                 self.set_field_invalid(row, i)
@@ -351,8 +346,8 @@ class View(ctk.CTkFrame):
 
         if valid:
             self.set_field_valid(row, column)
-
-
+            for row, column in self.invalid_fields:
+                self.validate_field(self.sudoku_frame.get_field(row, column))
 
     def set_field_color(self, row: int, column: int, color: str):
         self.sudoku_frame.get_field(row, column).configure(fg_color=color)
