@@ -73,7 +73,6 @@ class View(ctk.CTkFrame):
     def set_controller(self, controller):
         '''Sets the controller of the view'''
         self.controller = controller
-        # self.bind_class("Entry", "<Button-1>", lambda *args: self.controller.push(), add="+")
 
     def set_mouse_position(self, widget):
         self.widget_at_mouse = widget
@@ -100,12 +99,6 @@ class View(ctk.CTkFrame):
             self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
         else:
             self.push_value(widget.get_position()[0], widget.get_position()[1], int(entry_value))
-            
-        #     self.validate_field(widget)
-        # if self.invalid_fields:
-        #     temp_invalid_fields = self.invalid_fields.copy()
-        #     for row, column in temp_invalid_fields:
-        #         self.validate_field(self.sudoku_frame.get_field(row, column))
 
     def fetchbutton_callback(self):
         if self.controller:
@@ -279,35 +272,6 @@ class View(ctk.CTkFrame):
                     self.set_field_invalid(row, column)
                 else:
                     self.set_field_valid(row, column)
-                    
-    # def validate_field(self, widget):
-    #     if widget.get_value() == "":
-    #         return
-    #     row, column = widget.get_position()
-    #     value = int(widget.get_value())
-    #     current_cell = row // 3 * 3 + column // 3
-    #     cell_index = row % 3 * 3 + column % 3
-    #     valid = True
-    #     for i in range(9):
-    #         grid_row = i // 3 + (current_cell // 3) * 3
-    #         grid_column = i % 3 + (current_cell % 3) * 3
-    #         if i != column and self.get_field_value(row, i) == value:
-    #             self.set_field_invalid(row, i)
-    #             valid = False
-    #         if i != row and self.get_field_value(i, column) == value:
-    #             self.set_field_invalid(i, column)
-    #             valid = False
-    #         if cell_index != i and self.get_field_value(grid_row, grid_column) == value:
-    #             self.set_field_invalid(grid_row, grid_column)
-    #             valid = False
-                
-    #     if valid: 
-    #         self.set_field_valid(row, column)
-    #     else:
-    #         self.set_field_invalid(row, column)
-
-     
-            
 
     def set_field_color(self, row: int, column: int, color: str):
         self.sudoku_frame.get_field(row, column).configure(fg_color=color)
