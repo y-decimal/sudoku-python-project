@@ -13,7 +13,7 @@ class View(ctk.CTkFrame):
     adjacent_colors = ("#445F48", "#243F28")  # (Enabled color, disabled color)
     cell_color = adjacent_colors  # (Enabled color, disabled color)
     invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
-    
+
     controller = None
     highlighted_fields = []
     invalid_fields = []
@@ -92,7 +92,7 @@ class View(ctk.CTkFrame):
         if len(entry_value) > 1:
             widget.entry_variable.set(entry_value[1:])
             entry_value = entry_value[1:]
-            
+
         if not entry_value.isdigit() or entry_value == "0":
             widget.entry_variable.set("")
             self.push_value(widget.get_position()[0], widget.get_position()[1], 0)
@@ -145,7 +145,7 @@ class View(ctk.CTkFrame):
             else:
                 self.set_field_editable(row, column)
             self.reset_highlighted_fields()
-            
+
     def toggle_field_invalid(self):
         widget = self.widget_at_mouse
         if widget is not None and self.edit_mode == 1:
@@ -251,7 +251,6 @@ class View(ctk.CTkFrame):
         else:
             widget.configure(fg_color=self.invalid_color[0])
         widget.set_invalid_state(True)
-        
 
     def set_field_valid(self, row: int, column: int):
         widget = self.sudoku_frame.get_field(row, column)
@@ -264,7 +263,7 @@ class View(ctk.CTkFrame):
         else:
             widget.configure(fg_color=self.disabled_colors[0])
         widget.set_invalid_state(False)
-        
+
     def update_invalid_fields(self):
         for row in range(9):
             for column in range(9):
@@ -309,7 +308,7 @@ class View(ctk.CTkFrame):
             else:
                 checkbox.deselect()
                 self.debugcheckbox_callback(checkbox)
-                
+
     def push_value(self, row, column, value):
         if self.controller:
             self.controller.push_value(row, column, value)
