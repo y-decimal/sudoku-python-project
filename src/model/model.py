@@ -36,6 +36,12 @@ class Model(IModelInterface):
         else:
             return "disabled"
         
+    def get_invalid_fields(self) -> list:
+        '''Returns a list of tuples with the row and column of the invalid fields'''
+
+        return [(row, column) for row in range(9) for column in range(9) if self.sudoku_logic.would_value_be_valid(row, column, self.sudoku_logic.get_field_value(row, column)) == False]
+        # return self.sudoku_logic.get_invalid_fields()
+        
 
     
     
