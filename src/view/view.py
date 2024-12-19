@@ -68,10 +68,13 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
         self.sudoku_button_frame.grid(row=1, column=0, columnspan = 2, padx=10, pady=10, sticky="nsew")
+        
+        self.load_dropdown = ctk.CTkComboBox(self.tool_frame, font=("Arial", 18), values = [""], command=self.get_files)
+        self.load_dropdown.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
          
         # File name entry        
-        self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
-        self.file_entry.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        # self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
+        # self.file_entry.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
     	# Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.tool_frame, 1, 2)
@@ -159,7 +162,7 @@ class View(ctk.CTkFrame):
 
     def savebutton_callback(self):
         if self.controller: 
-            file_name = self.file_entry.get()
+            file_name = self.load_dropdown.get()
             
             
             if file_name != "":
@@ -170,7 +173,7 @@ class View(ctk.CTkFrame):
     def loadbutton_callback(self):
 
         if self.controller: 
-            file_name = self.file_entry.get()
+            file_name = self.load_dropdown.get()
             self.reset_fields()
             if file_name != "":
                 self.controller.load(file_name)
