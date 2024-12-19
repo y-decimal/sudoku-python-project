@@ -15,7 +15,7 @@ class View(ctk.CTkFrame):
     invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
 
     highlighted_fields = []
-    invalid_fields = []
+    # invalid_fields = []
     edit_mode = False
 
     def __init__(self, parent):
@@ -97,11 +97,11 @@ class View(ctk.CTkFrame):
             self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
         else:
             entry_value = int(entry_value)
-            self.validate_field(widget)
-        if self.invalid_fields:
-            temp_invalid_fields = self.invalid_fields.copy()
-            for row, column in temp_invalid_fields:
-                self.validate_field(self.sudoku_frame.get_field(row, column))
+        #     self.validate_field(widget)
+        # if self.invalid_fields:
+        #     temp_invalid_fields = self.invalid_fields.copy()
+        #     for row, column in temp_invalid_fields:
+        #         self.validate_field(self.sudoku_frame.get_field(row, column))
 
     def fetchbutton_callback(self):
         if self.controller:
@@ -235,11 +235,9 @@ class View(ctk.CTkFrame):
             widget.set_state(True)
 
     def set_field_invalid(self, row: int, column: int):
-        if (row, column) not in self.invalid_fields:
-            self.invalid_fields.append((row, column))
-        else:
-            return
         widget = self.sudoku_frame.get_field(row, column)
+        if widget.get_invalid_state():
+            return
         if widget.get_state():
             widget.configure(text_color=self.invalid_color[1])
         else:
@@ -248,11 +246,9 @@ class View(ctk.CTkFrame):
         
 
     def set_field_valid(self, row: int, column: int):
-        if (row, column) in self.invalid_fields:
-            self.invalid_fields.remove((row, column))
-        else:
-            return
         widget = self.sudoku_frame.get_field(row, column)
+        if not widget.get_invalid_state():
+            return
         if widget.get_state():
             widget.configure(text_color=self.enabled_colors[1])
         elif widget.get_position() in self.highlighted_fields:
@@ -262,31 +258,31 @@ class View(ctk.CTkFrame):
         widget.set_invalid_state(False)
         
 
-    def validate_field(self, widget):
-        if widget.get_value() == "":
-            return
-        row, column = widget.get_position()
-        value = int(widget.get_value())
-        current_cell = row // 3 * 3 + column // 3
-        cell_index = row % 3 * 3 + column % 3
-        valid = True
-        for i in range(9):
-            grid_row = i // 3 + (current_cell // 3) * 3
-            grid_column = i % 3 + (current_cell % 3) * 3
-            if i != column and self.get_field_value(row, i) == value:
-                self.set_field_invalid(row, i)
-                valid = False
-            if i != row and self.get_field_value(i, column) == value:
-                self.set_field_invalid(i, column)
-                valid = False
-            if cell_index != i and self.get_field_value(grid_row, grid_column) == value:
-                self.set_field_invalid(grid_row, grid_column)
-                valid = False
+    # def validate_field(self, widget):
+    #     if widget.get_value() == "":
+    #         return
+    #     row, column = widget.get_position()
+    #     value = int(widget.get_value())
+    #     current_cell = row // 3 * 3 + column // 3
+    #     cell_index = row % 3 * 3 + column % 3
+    #     valid = True
+    #     for i in range(9):
+    #         grid_row = i // 3 + (current_cell // 3) * 3
+    #         grid_column = i % 3 + (current_cell % 3) * 3
+    #         if i != column and self.get_field_value(row, i) == value:
+    #             self.set_field_invalid(row, i)
+    #             valid = False
+    #         if i != row and self.get_field_value(i, column) == value:
+    #             self.set_field_invalid(i, column)
+    #             valid = False
+    #         if cell_index != i and self.get_field_value(grid_row, grid_column) == value:
+    #             self.set_field_invalid(grid_row, grid_column)
+    #             valid = False
                 
-        if valid: 
-            self.set_field_valid(row, column)
-        else:
-            self.set_field_invalid(row, column)
+    #     if valid: 
+    #         self.set_field_valid(row, column)
+    #     else:
+    #         self.set_field_invalid(row, column)
 
      
             
