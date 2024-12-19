@@ -18,6 +18,7 @@ class View(ctk.CTkFrame):
     cell_color = adjacent_colors # (Enabled color, disabled color)
     changed_fields = []
     edit_mode = False
+    controller = None
 
     def __init__(self, parent):
         
