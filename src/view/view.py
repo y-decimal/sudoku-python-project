@@ -99,7 +99,8 @@ class View(ctk.CTkFrame):
             entry_value = int(entry_value)
             self.validate_field(widget)
         if self.invalid_fields:
-            for row, column in self.invalid_fields:
+            temp_invalid_fields = self.invalid_fields.copy()
+            for row, column in temp_invalid_fields:
                 self.validate_field(self.sudoku_frame.get_field(row, column))
 
     def fetchbutton_callback(self):
