@@ -70,7 +70,7 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.grid(row=1, column=0, columnspan = 2, padx=10, pady=10, sticky="nsew")
         
         self.load_dropdown = ctk.CTkComboBox(self.tool_frame, font=("Arial", 16), dropdown_font=("Arial", 14), justify="center", values=[""], command=self.dropdown_callback, state="readonly")
-        self.load_dropdown.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        self.load_dropdown.grid(row=2, column=0, padx=10, pady=25, sticky="nsew")
          
         # File name entry        
         # self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
