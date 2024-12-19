@@ -278,7 +278,14 @@ class View(ctk.CTkFrame):
             widget.configure(fg_color=self.disabled_colors[0])
         widget.set_invalid_state(False)
         
-
+    def update_invalid_fields(self):
+        for row in range(9):
+            for column in range(9):
+                if (row, column) in self.invalid_fields:
+                    self.set_field_invalid(row, column)
+                else:
+                    self.set_field_valid(row, column)
+                    
     # def validate_field(self, widget):
     #     if widget.get_value() == "":
     #         return
