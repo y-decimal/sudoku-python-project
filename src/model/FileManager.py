@@ -110,3 +110,23 @@ class FileManager:
             self.absolute_path = self.root_dir + self.sudoku_files_path
 
         return True
+    
+    
+    def get_files(self):
+        '''Returns the list of files in the current directory'''
+        files = os.listdir(self.absolute_path)
+        for index in range(len(files)):
+            files[index] = files[index].split(".")[0]
+        return files
+    
+    def is_writeable(self, file_name):
+        '''Returns true if the file is writeable'''
+        
+        path = self.absolute_path + file_name + ".txt"
+        if os.path.exists(path):
+            print("File exists")
+            print(os.access(path, os.W_OK))
+            return os.access(path, os.W_OK)
+        else:
+            print("File does not exist")
+            return True
