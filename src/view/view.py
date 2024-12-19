@@ -40,7 +40,8 @@ class View(ctk.CTkFrame):
                 self.sudoku_frame.get_field(row, column).bind("<Enter> ", lambda args, widget=self.sudoku_frame.get_field(row, column): self.set_mouse_position(widget))
                 self.sudoku_frame.get_field(row, column).bind("<Leave>", lambda args: self.set_mouse_position(None), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-1>", lambda args: self.mousebutton_callback(), add="+")
-                self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field(), add="+")
+                self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field_editable(), add="+")
+                self.sudoku_frame.get_field(row, column).bind("<Button-2>", lambda args: self.toggle_field_invalid(), add="+")
                 self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget=self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
 
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
@@ -139,13 +140,24 @@ class View(ctk.CTkFrame):
             else:
                 self.controller.set_mode("normal")
 
-    def toggle_field(self):
-        if self.widget_at_mouse is not None and self.edit_mode == 1:
-            row, column = self.widget_at_mouse.get_position()
-            if self.widget_at_mouse.get_state():
+    def toggle_field_editable(self):
+        widget = self.widget_at_mouse
+        if widget is not None and self.edit_mode == 1:
+            row, column = widget.get_position()
+            if widget.get_state():
                 self.set_field_not_editable(row, column)
             else:
                 self.set_field_editable(row, column)
+            self.reset_highlighted_fields()
+            
+    def toggle_field_invalid(self):
+        widget = self.widget_at_mouse
+        if widget is not None and self.edit_mode == 1:
+            row, column = widget.get_position()
+            if widget.get_invalid_state():
+                self.set_field_valid(row, column)
+            else:
+                self.set_field_invalid(row, column)
             self.reset_highlighted_fields()
 
     def highlight_fields(self, widget):
