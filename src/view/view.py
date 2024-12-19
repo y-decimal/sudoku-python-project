@@ -13,9 +13,10 @@ class View(ctk.CTkFrame):
     adjacent_colors = ("#445F48", "#243F28")  # (Enabled color, disabled color)
     cell_color = adjacent_colors  # (Enabled color, disabled color)
     invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
+    
 
     highlighted_fields = []
-    # invalid_fields = []
+    invalid_fields = []
     edit_mode = False
 
     def __init__(self, parent):
@@ -72,7 +73,7 @@ class View(ctk.CTkFrame):
     def set_controller(self, controller):
         '''Sets the controller of the view'''
         self.controller = controller
-        self.bind_class("Entry", "<Button-1>", lambda *args: self.controller.push(), add="+")
+        # self.bind_class("Entry", "<Button-1>", lambda *args: self.controller.push(), add="+")
 
     def set_mouse_position(self, widget):
         self.widget_at_mouse = widget
@@ -95,18 +96,17 @@ class View(ctk.CTkFrame):
         if not entry_value.isdigit() or entry_value == "0":
             widget.entry_variable.set("")
             entry_value = ''
+            self.controller.push_value(widget.get_position()[0], widget.get_position()[1], 0)
             self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
         else:
             entry_value = int(entry_value)
-            if not self.controller.would_value_be_valid(widget.get_position()[0], widget.get_position()[1], entry_value):
-                self.set_field_invalid(widget.get_position()[0], widget.get_position()[1])
-            else:
-                self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
-            
-            invalid_fields = self.controller.get_invalid_fields()
-            for row, column in invalid_fields:
-                self.set_field_invalid(row, column)
-            
+            self.controller.push_value(widget.get_position()[0], widget.get_position()[1], entry_value)
+        for row in range(9):
+            for column in range(9):
+                if (row, column) in self.invalid_fields:
+                    self.set_field_invalid(row, column)
+                else:
+                    self.set_field_valid(row, column)
         #     self.validate_field(widget)
         # if self.invalid_fields:
         #     temp_invalid_fields = self.invalid_fields.copy()

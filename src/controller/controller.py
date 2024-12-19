@@ -45,6 +45,19 @@ class Controller:
                 self.model.set_field_state(row, column, state)
                 
         self.fetch()
+        
+    
+    def fetch_value(self, row, column):
+        '''Fetch updated value from the model'''
+        
+        return self.model.get_field_value(row, column)
+
+    
+    def push_value(self, row, column, value):
+        '''Push updated value to the model'''
+        
+        self.model.set_field_value(row, column, value)
+        self.view.invalid_fields = self.model.get_invalid_fields()
 
     
 
@@ -79,10 +92,6 @@ class Controller:
         
         self.model.set_mode(mode)
         
-    def would_value_be_valid(self, row, column, value):
-        '''Callback for the would_value_be_valid function'''
-        
-        return self.model.would_value_be_valid(row, column, value)
     
     def get_invalid_fields(self):
         '''Callback for the get_invalid_fields function'''
