@@ -109,8 +109,16 @@ class View(ctk.CTkFrame):
         
         self.bind_class("Entry", "<Button-1>", lambda args: on_keypress(), add="+")
         
+        self.get_files()
         
-
+        
+    def get_files(self, *args):
+        files = self.controller.get_files()
+        self.load_dropdown.configure(values=files)
+        if not self.controller.is_file_writeable(self.load_dropdown.get()):
+            self.sudoku_button_frame.buttons[1].configure(state="disabled")
+        else:
+            self.sudoku_button_frame.buttons[1].configure(state="normal")
 
 
     def set_mouse_position (self, widget):

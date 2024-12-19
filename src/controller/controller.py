@@ -76,3 +76,15 @@ class Controller:
         '''Callback for the mode button'''
         
         self.model.set_mode(mode)
+        self.view.get_files()
+        
+
+    def get_files(self):
+        '''Callback for the get files method'''
+        
+        return self.model.get_files()
+    
+    def is_file_writeable(self, file_name):
+        '''Checks if the file is writeable'''
+        
+        return self.model.is_file_writeable(file_name)
