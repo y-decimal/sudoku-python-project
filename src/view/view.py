@@ -351,3 +351,8 @@ class View(ctk.CTkFrame):
             else:
                 checkbox.deselect()
                 self.debugcheckbox_callback(checkbox)
+                
+    def push_value(self, row, column, value):
+        if self.controller:
+            self.controller.push_value(row, column, value)
+            self.update_invalid_fields()
