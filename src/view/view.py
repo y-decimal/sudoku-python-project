@@ -306,11 +306,13 @@ class View(ctk.CTkFrame):
         else:
             return int(value)
 
-    def set_field_state(self, row: int, column: int, state: bool):
-        if state:
+    def set_field_state(self, row: int, column: int, state: str):
+        if state == "normal":
             self.set_field_editable(row, column)
-        else:
+        elif state == "disabled":
             self.set_field_not_editable(row, column)
+        elif state == "invalid":
+            self.set_field_invalid(row, column)
 
     def get_field_state(self, row: int, column: int) -> bool:
         return self.sudoku_frame.get_field(row, column).get_state()

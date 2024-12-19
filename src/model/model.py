@@ -28,10 +28,15 @@ class Model(IModelInterface):
         return self.sudoku_logic.set_field_value(row, column, value)
     
 
-    def get_field_state(self, row: int, column: int) -> bool:
+    def get_field_state(self, row: int, column: int) -> str:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
+        state = self.sudoku_logic.is_field_editable(row, column)
+        if state == True:
+            return "normal"
+        else:
+            return "disabled"
+        
 
-        return self.sudoku_logic.is_field_editable(row, column)
     
     
     def set_field_state(self, row: int, column: int, state: bool):
