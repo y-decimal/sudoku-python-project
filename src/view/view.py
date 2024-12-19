@@ -98,6 +98,15 @@ class View(ctk.CTkFrame):
             self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
         else:
             entry_value = int(entry_value)
+            if not self.controller.would_value_be_valid(widget.get_position()[0], widget.get_position()[1], entry_value):
+                self.set_field_invalid(widget.get_position()[0], widget.get_position()[1])
+            else:
+                self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
+            
+            invalid_fields = self.controller.get_invalid_fields()
+            for row, column in invalid_fields:
+                self.set_field_invalid(row, column)
+            
         #     self.validate_field(widget)
         # if self.invalid_fields:
         #     temp_invalid_fields = self.invalid_fields.copy()
@@ -319,12 +328,10 @@ class View(ctk.CTkFrame):
             return int(value)
 
     def set_field_state(self, row: int, column: int, state: str):
-        if state == "normal":
+        if state:
             self.set_field_editable(row, column)
-        elif state == "disabled":
+        else:
             self.set_field_not_editable(row, column)
-        elif state == "invalid":
-            self.set_field_invalid(row, column)
 
     def get_field_state(self, row: int, column: int) -> bool:
         return self.sudoku_frame.get_field(row, column).get_state()

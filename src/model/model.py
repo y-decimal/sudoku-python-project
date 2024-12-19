@@ -30,11 +30,7 @@ class Model(IModelInterface):
 
     def get_field_state(self, row: int, column: int) -> str:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
-        state = self.sudoku_logic.is_field_editable(row, column)
-        if state == True:
-            return "normal"
-        else:
-            return "disabled"
+        return self.sudoku_logic.is_field_editable(row, column)
         
     def get_invalid_fields(self) -> list:
         '''Returns a list of tuples with the row and column of the invalid fields'''
@@ -42,7 +38,10 @@ class Model(IModelInterface):
         return [(row, column) for row in range(9) for column in range(9) if self.sudoku_logic.would_value_be_valid(row, column, self.sudoku_logic.get_field_value(row, column)) == False]
         # return self.sudoku_logic.get_invalid_fields()
         
+    def would_value_be_valid(self, row: int, column: int, value) -> bool:
+        '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
 
+        return self.sudoku_logic.would_value_be_valid(row, column, value)
     
     
     def set_field_state(self, row: int, column: int, state: bool):

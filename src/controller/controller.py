@@ -23,15 +23,12 @@ class Controller:
                 
                 self.view.set_field_value(row, column, value)
                 self.view.set_field_state(row, column, state)
+                self.view.set_field_valid(row, column)
  
         invalid_fields = self.model.get_invalid_fields()
         for row, column in invalid_fields:
-            self.view.set_field_state(row, column, "invalid")
+            self.view.set_field_invalid(row, column)
                 
-
-                
-                
-        
         
     def push(self):
         '''Push updated values to the model | To be replaced'''
@@ -47,7 +44,7 @@ class Controller:
                 self.model.set_field_value(row, column, value)
                 self.model.set_field_state(row, column, state)
                 
-
+        self.fetch()
 
     
 
@@ -81,3 +78,13 @@ class Controller:
         '''Callback for the mode button'''
         
         self.model.set_mode(mode)
+        
+    def would_value_be_valid(self, row, column, value):
+        '''Callback for the would_value_be_valid function'''
+        
+        return self.model.would_value_be_valid(row, column, value)
+    
+    def get_invalid_fields(self):
+        '''Callback for the get_invalid_fields function'''
+        
+        return self.model.get_invalid_fields()
