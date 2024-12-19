@@ -8,6 +8,8 @@ class FileManager:
     sudoku_testfiles_path = "/assets/TestFiles/"
     sudoku_files_path = "/assets/SudokuFiles/"
     root_dir = None
+    read_only_files = ["sudoku_easy", "sudoku_medium", "sudoku_hard"]
+    mode = "normal"
     
     def __init__(self):
         '''Initializes the FileManager with a path relative to the root directory'''
@@ -38,7 +40,7 @@ class FileManager:
     def save_sudoku(self, sudoku: list, file_name):
         '''Saves a sudoku to the file in format "(Value, Writeable) /n"'''
         
-        if file_name == "" or file_name == None:
+        if file_name == "" or file_name == None or not self.is_writeable(file_name):
             return False
         
         path = self.absolute_path + file_name  + ".txt"
@@ -103,7 +105,7 @@ class FileManager:
 
     def set_file_mode(self, mode):
         '''Sets the mode to the file'''
-        
+        self.mode = mode
         if mode == 'debug':
             self.absolute_path = self.root_dir + self.sudoku_testfiles_path
         elif mode == 'normal':
@@ -121,12 +123,13 @@ class FileManager:
     
     def is_writeable(self, file_name):
         '''Returns true if the file is writeable'''
+    
+        if file_name in self.read_only_files and self.mode != 'debug':
+            return False
         
         path = self.absolute_path + file_name + ".txt"
+        
         if os.path.exists(path):
-            print("File exists")
-            print(os.access(path, os.W_OK))
             return os.access(path, os.W_OK)
-        else:
-            print("File does not exist")
-            return True
+
+        return True
