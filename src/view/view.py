@@ -94,12 +94,13 @@ class View(ctk.CTkFrame):
         if not entry_value.isdigit() or entry_value == "0":
             widget.entry_variable.set("")
             entry_value = ''
+            self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
         else:
             entry_value = int(entry_value)
             self.validate_field(widget)
-            if self.invalid_fields:
-                for row, column in self.invalid_fields:
-                    self.validate_field(self.sudoku_frame.get_field(row, column))
+        if self.invalid_fields:
+            for row, column in self.invalid_fields:
+                self.validate_field(self.sudoku_frame.get_field(row, column))
 
     def fetchbutton_callback(self):
         if self.controller:
