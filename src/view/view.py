@@ -91,22 +91,16 @@ class View(ctk.CTkFrame):
     def entry_callback(self, widget):
         entry_value = widget.entry_variable.get()
         if len(entry_value) > 1:
-            widget.entry_variable.set(widget.entry_variable.get()[1:])
-            entry_value = widget.entry_variable.get()
+            widget.entry_variable.set(entry_value[1:])
+            entry_value = entry_value[1:]
+            
         if not entry_value.isdigit() or entry_value == "0":
             widget.entry_variable.set("")
-            entry_value = ''
-            self.controller.push_value(widget.get_position()[0], widget.get_position()[1], 0)
+            self.push_value(widget.get_position()[0], widget.get_position()[1], 0)
             self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
         else:
-            entry_value = int(entry_value)
-            self.controller.push_value(widget.get_position()[0], widget.get_position()[1], entry_value)
-        for row in range(9):
-            for column in range(9):
-                if (row, column) in self.invalid_fields:
-                    self.set_field_invalid(row, column)
-                else:
-                    self.set_field_valid(row, column)
+            self.push_value(widget.get_position()[0], widget.get_position()[1], int(entry_value))
+            
         #     self.validate_field(widget)
         # if self.invalid_fields:
         #     temp_invalid_fields = self.invalid_fields.copy()
