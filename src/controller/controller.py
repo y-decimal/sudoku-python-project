@@ -23,6 +23,11 @@ class Controller:
                 
                 self.view.set_field_value(row, column, value)
                 self.view.set_field_state(row, column, state)
+ 
+        invalid_fields = self.model.get_invalid_fields()
+        for row, column in invalid_fields:
+            self.view.set_field_state(row, column, "invalid")
+                
 
                 
                 
