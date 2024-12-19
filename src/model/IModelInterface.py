@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 class IModelInterface(ABC):
-
+    '''Interface for methods required by the controller'''
 
     @abstractmethod
     def get_field_value(self, row: int, column: int) -> int:
