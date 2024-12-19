@@ -14,7 +14,7 @@ class View(ctk.CTkFrame):
     cell_color = adjacent_colors  # (Enabled color, disabled color)
     invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
     
-
+    controller = None
     highlighted_fields = []
     invalid_fields = []
     edit_mode = False
