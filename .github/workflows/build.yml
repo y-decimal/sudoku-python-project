@@ -20,7 +20,7 @@ jobs:
         run: ./build.bat
 
       - name: Upload package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Sudoku App
           path: dist/Sudoku App
