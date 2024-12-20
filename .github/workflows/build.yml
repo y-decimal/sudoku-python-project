@@ -18,8 +18,6 @@ jobs:
           xcopy "assets\images\sudoku.ico" "build\" /Y
           pyinstaller "src/App.py" --name "Sudoku App" --clean --noconfirm --add-data "../assets:assets" --windowed --icon "sudoku.ico" --specpath "build"
           xcopy "dist\Sudoku App\_internal\assets" "dist\Sudoku App\assets" /E /I /Y
-          rmdir /s /q "dist\Sudoku App\_internal\assets"
-          del /q "build\sudoku.ico"
           exit /b 0
 
       - name: Upload package
