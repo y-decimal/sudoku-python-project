@@ -13,7 +13,6 @@ jobs:
       
       - name: Build package
         run: |
-          @echo off
           pip install pyinstaller
           pip install -r requirements.txt
           REM Copy sudoku.ico to the build directory
