@@ -1,5 +1,8 @@
 @echo off
 
+REM Change to the parent directory
+cd ..
+
 REM Check if the virtual environment directory exists
 if not exist .venv (
     echo Error: Virtual environment directory '.venv' does not exist.
