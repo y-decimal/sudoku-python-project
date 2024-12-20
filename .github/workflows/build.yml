@@ -1,0 +1,29 @@
+name: Build
+on: 
+  push:
+    branches: [ "main" ]
+    
+permissions: 
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout/@main
+
+      - name: Automatic requirements.txt for Python Projects
+        uses: ryan-rozario/pipreqs-action@v3.0.0
+        with:
+          PROJECT_NAME: python-learning-project
+
+      - name: Build package
+        run: ./build.bat
+
+      - name: Upload package
+        uses: actions/upload-artifact@v2
+        with:
+          name: Sudoku App
+          path: dist/Sudoku App
+
+    
