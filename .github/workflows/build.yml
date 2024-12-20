@@ -1,5 +1,7 @@
 name: Build
-on: push
+on: 
+  push:
+    branches: [ "main" ]
 
     
 permissions: 
@@ -18,7 +20,7 @@ jobs:
           xcopy "assets\images\sudoku.ico" "build\" /Y
           pyinstaller "src/App.py" --name "Sudoku App" --clean --noconfirm --add-data "../assets:assets" --windowed --icon "sudoku.ico" --specpath "build"
           xcopy "dist\Sudoku App\_internal\assets" "dist\Sudoku App\assets" /E /I /Y
-          
+
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
