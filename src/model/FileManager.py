@@ -7,6 +7,7 @@ class FileManager:
     
     sudoku_testfiles_path = "/assets/TestFiles/"
     sudoku_files_path = "/assets/SudokuFiles/"
+    absolute_path = None
     root_dir = None
     read_only_files = ["sudoku_easy", "sudoku_medium", "sudoku_hard"]
     mode = "normal"
@@ -16,9 +17,11 @@ class FileManager:
         
         # Get the root directory of the project
         self.root_dir = str(Path(__file__).parent.parent.parent)
-
+        
         # Set the absolute path using the root directory and the relative path
         self.set_file_mode('normal')
+        
+
 
 
     def save(self, content, file_name):
@@ -99,6 +102,8 @@ class FileManager:
         '''Sets the path to the file'''
         
         self.absolute_path = self.root_dir + path
+        if not os.path.exists(self.absolute_path):
+            os.makedirs(self.absolute_path)
 
         return True
     
@@ -110,7 +115,11 @@ class FileManager:
             self.absolute_path = self.root_dir + self.sudoku_testfiles_path
         elif mode == 'normal':
             self.absolute_path = self.root_dir + self.sudoku_files_path
-
+            
+            
+        if not os.path.exists(self.absolute_path):
+            os.makedirs(self.absolute_path)
+            
         return True
     
     
