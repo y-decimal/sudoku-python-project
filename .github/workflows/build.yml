@@ -18,8 +18,7 @@ jobs:
           xcopy "assets\images\sudoku.ico" "build\" /Y
           pyinstaller "src/App.py" --name "Sudoku App" --clean --noconfirm --add-data "../assets:assets" --windowed --icon "sudoku.ico" --specpath "build"
           xcopy "dist\Sudoku App\_internal\assets" "dist\Sudoku App\assets" /E /I /Y
-          exit /b 0
-
+          
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
