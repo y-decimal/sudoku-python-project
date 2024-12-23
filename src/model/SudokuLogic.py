@@ -143,7 +143,10 @@ class SudokuLogic(ISudokuInterface):
                 
                 if (random.randint(1,9) < 3):
                     
-                    self.fields[self.rc_to_index(row, column)] = random.randint(1,9)
+                    ran = random.randint(1,9)
+                    while not self.would_value_be_valid(row, column, ran):
+                        ran = random.randint(1,9)
+                    self.fields[self.rc_to_index(row, column)] = ran
                     self.starterfield[self.rc_to_index(row, column)] = True
 
 
