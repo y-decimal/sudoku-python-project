@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class ISudokuInterface(ABC):
-    '''Interface for Sudoku fields'''
+    '''Interface for methods required by the Model'''
 
 
     @abstractmethod
