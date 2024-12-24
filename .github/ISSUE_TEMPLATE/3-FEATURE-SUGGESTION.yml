@@ -2,7 +2,7 @@ name: "Feature Suggestion"
 description: Create a new ticket for a new feature suggestion
 title: "[SUGGESTION] - <title>"
 labels: [
-  "feature"
+  "enhancement"
 ]
 body:
   - type: input
