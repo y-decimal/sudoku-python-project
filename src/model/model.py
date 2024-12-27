@@ -83,3 +83,9 @@ class Model(IModelInterface):
 
         self.file_manager.set_file_mode(mode)
 
+
+    def get_files(self):
+        return self.file_manager.get_files()
+    
+    def is_file_writeable(self, file_name):
+        return self.file_manager.is_writeable(file_name)

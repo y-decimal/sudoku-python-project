@@ -18,6 +18,7 @@ class View(ctk.CTkFrame):
     cell_color = adjacent_colors # (Enabled color, disabled color)
     changed_fields = []
     edit_mode = False
+    controller = None
 
     def __init__(self, parent):
         
@@ -67,10 +68,13 @@ class View(ctk.CTkFrame):
         self.sudoku_button_frame.buttons[2].configure(text="Load", command = self.loadbutton_callback)
         
         self.sudoku_button_frame.grid(row=1, column=0, columnspan = 2, padx=10, pady=10, sticky="nsew")
+        
+        self.load_dropdown = ctk.CTkComboBox(self.tool_frame, font=("Arial", 16), dropdown_font=("Arial", 14), justify="center", values=[""], command=self.dropdown_callback, state="readonly")
+        self.load_dropdown.grid(row=2, column=0, padx=10, pady=25, sticky="nsew")
          
         # File name entry        
-        self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
-        self.file_entry.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        # self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
+        # self.file_entry.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
     	# Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.tool_frame, 1, 2)
@@ -105,9 +109,10 @@ class View(ctk.CTkFrame):
         
         self.bind_class("Entry", "<Button-1>", lambda args: on_keypress(), add="+")
         
+        self.dropdown_callback()
         
-
-
+        
+    
 
     def set_mouse_position (self, widget):
         self.widget_at_mouse = widget
@@ -145,6 +150,22 @@ class View(ctk.CTkFrame):
 
         
 
+    def dropdown_callback(self, *args):
+            files = self.controller.get_files()
+            files.append("[ new file ]")
+            self.load_dropdown.configure(values=files)
+            if self.load_dropdown.get() == "[ new file ]":
+                self.sudoku_button_frame.buttons[1].configure(state="normal")
+                self.load_dropdown.set("")
+                self.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
+                self.load_dropdown.focus()
+            else:
+                self.load_dropdown.configure(state="readonly", text_color="#99FF99", dropdown_text_color="#99FF99")
+            
+            if not self.controller.is_file_writeable(self.load_dropdown.get()):
+                self.sudoku_button_frame.buttons[1].configure(state="disabled")
+            else:
+                self.sudoku_button_frame.buttons[1].configure(state="normal")
 
 
     def fetchbutton_callback(self):
@@ -158,18 +179,20 @@ class View(ctk.CTkFrame):
 
     def savebutton_callback(self):
         if self.controller: 
-            file_name = self.file_entry.get()
+            file_name = self.load_dropdown.get()
             
             
             if file_name != "":
                 self.controller.save(file_name)
             else:
                 self.controller.save("test")
+                
+            self.dropdown_callback()
         
     def loadbutton_callback(self):
 
         if self.controller: 
-            file_name = self.file_entry.get()
+            file_name = self.load_dropdown.get()
             self.reset_fields()
             if file_name != "":
                 self.controller.load(file_name)
