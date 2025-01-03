@@ -185,16 +185,17 @@ class View(ctk.CTkFrame):
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
     
-        # Debug Button Frame
-        self.edit_toggle = True
-        self.debug_button_frame = ButtonFrame.ButtonFrame(self.debug_frame, rows = 1, columns = 1, sticky="ew")
-        self.debug_button_frame.buttons[0].configure(text="Toggle all fields", command = self.toggle_all_fields)
-    
-        # Gridding
+        # Debug Context Frame
+        self.debug_context_frame = ctk.CTkFrame(self.debug_frame)
+        self.debug_context_frame.grid_columnconfigure(0, weight=1)
+        # Context Frame Edit Mode
+        self.debug_button = ctk.CTkButton(self.debug_context_frame, text="Toggle all fields", command = self.toggle_all_fields)
+        
+        # Debug Frame Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        self.debug_button_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
-        
+
+
         # Grid weight configuration
         self.debug_frame.grid_columnconfigure(0, weight=1)
         self.debug_frame.grid_rowconfigure((0,1,2), weight=1)
@@ -230,7 +231,13 @@ class View(ctk.CTkFrame):
 
     def set_edit_mode(self):
         self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
-        # print(f"Edit mode set to: {self.edit_mode}")
+        if self.edit_mode == 1:
+            self.debug_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+            self.debug_context_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        else:
+            self.debug_button.grid_forget()
+            self.debug_context_frame.grid_forget()
+        
 
     def mousebutton_callback(self):
         # print(self.mouse_position)
