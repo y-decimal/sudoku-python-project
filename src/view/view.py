@@ -45,7 +45,7 @@ class View(ctk.CTkFrame):
                 self.sudoku_frame.get_field(row, column).bind("<Leave>", lambda args: self.set_mouse_position(None), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-1>", lambda args: self.mousebutton_callback(), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-2>", lambda args: self.toggle_field_invalid(), add="+")
-                self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field(), add="+")
+                self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field_editable(), add="+")
                 self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget = self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
 
 
@@ -129,8 +129,6 @@ class View(ctk.CTkFrame):
     def set_controller(self, controller):
         '''Sets the controller of the view'''
         self.controller = controller
-
-        self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
         
         self.dropdown_callback()
         
