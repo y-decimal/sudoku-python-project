@@ -15,25 +15,11 @@ class CheckboxFrame(ctk.CTkFrame):
 
         self.checkboxes = []
 
-        self.index = 0
+        index = 0
         for i in range(0, self.rows):
 
             for j in range(0, self.columns):
 
                 self.checkboxes.append(ctk.CTkCheckBox(self, text=f"Checkbox {i}-{j}"))
-                self.checkboxes[self.index].grid(row = i, column = j, padx=10, pady=10, sticky="ew")
-                self.index += 1
-
-
-class GridCheckBox(ctk.CTkCheckBox):
-
-    def __init__(self, master, row, column, **kwargs):
-
-        self.check_state = ctk.BooleanVar()
-
-        super().__init__(master, variable = self.check_state, **kwargs)
-
-        self.row = row
-        self.column = column
-
-        # self.grid(row = self.row, column = self.column, padx=10, pady=10, sticky="ew")
+                self.checkboxes[index].grid(row = i, column = j, padx=10, pady=10, sticky="ew")
+                index += 1
