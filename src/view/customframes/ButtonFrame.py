@@ -10,8 +10,8 @@ class ButtonFrame(ctk.CTkFrame):
         self.rows = rows
         self.columns = columns
     
-        self.rowconfigure([i for i in range (0,rows)], weight=1)
-        self.columnconfigure([i for i in range (0,columns)], weight=1)
+        self.rowconfigure([i for i in range (0,self.rows)], weight=1)
+        self.columnconfigure([i for i in range (0,self.columns)], weight=1)
 
         self.buttons = []
 
