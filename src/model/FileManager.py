@@ -155,5 +155,5 @@ class FileManager:
             source_path = os.path.join(source_dir, file_name + ".txt")
             target_path = os.path.join(target_dir, file_name + ".txt")
             if os.path.exists(source_path) and not os.path.exists(target_path):
-                # shutil.copy(source_path, target_path)
-                pass
+                shutil.copy(source_path, target_path)
+                ...
