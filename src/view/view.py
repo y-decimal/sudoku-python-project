@@ -169,7 +169,7 @@ class View(ctk.CTkFrame):
             files.append("[ new file ]")
             self.load_dropdown.configure(values=files)
             if self.load_dropdown.get() == "[ new file ]":
-                self.file_button_frame.buttons[1].configure(state="normal")
+                self.file_button_frame.buttons[0].configure(state="normal")
                 self.load_dropdown.set("")
                 self.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
                 self.load_dropdown.focus()
@@ -177,9 +177,9 @@ class View(ctk.CTkFrame):
                 self.load_dropdown.configure(state="readonly", text_color="#99FF99", dropdown_text_color="#99FF99")
             
             if not self.controller.is_file_writeable(self.load_dropdown.get()):
-                self.file_button_frame.buttons[1].configure(state="disabled")
+                self.file_button_frame.buttons[0].configure(state="disabled")
             else:
-                self.file_button_frame.buttons[1].configure(state="normal")
+                self.file_button_frame.buttons[0].configure(state="normal")
 
 
     def fetchbutton_callback(self):
