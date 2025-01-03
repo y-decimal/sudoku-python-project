@@ -51,7 +51,7 @@ class View(ctk.CTkFrame):
 
         # Sidebar Frame 1x5 Grid
         self.sidebar_frame = ctk.CTkFrame(self)
-        self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")   
+        self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="ew")   
         self.sidebar_frame.grid_columnconfigure(0, weight=1)
         
         # File Load Frame Configuration
