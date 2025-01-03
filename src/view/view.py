@@ -249,22 +249,29 @@ class View(ctk.CTkFrame):
     def toggle_field(self):
         
         if self.widget_at_mouse != None and self.edit_mode == 1:
-            
-            
-            
+                       
             row, column = self.widget_at_mouse.get_position()
-            
-            # print(f"Toggling field at row: {row}, column: {column}")
-            
+                       
             if self.widget_at_mouse.get_state():
                 self.set_field_not_editable(row, column)
-                # print(f"Field at row: {row}, column: {column} is now not editable")
+
             else:
                 self.set_field_editable(row, column)
-                # print(f"Field at row: {row}, column: {column} is now editable")
-                
+               
             self.reset_fields()
-            #self.highlight_fields(self.widget_at_mouse)
+
+            
+    def toggle_all_fields(self):
+        
+        for row in range(9):
+            for column in range(9):
+                if self.get_field_value(row, column) != 0:
+                    self.set_field_not_editable(row, column)
+                else:
+                    self.set_field_editable(row, column)
+        
+        self.reset_fields()
+      
 
 
     def highlight_fields(self, widget):
