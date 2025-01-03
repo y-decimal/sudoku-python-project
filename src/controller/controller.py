@@ -53,7 +53,7 @@ class Controller:
         print("Clearing")
         
         self.model.clear_sudoku()
-        self.view.reset_fields('all')
+        self.view.reset_highlighted_fields()
         self.fetch()
 
         
