@@ -116,13 +116,19 @@ class View(ctk.CTkFrame):
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
     
+        # Debug Button Frame
+        self.edit_toggle = True
+        self.debug_button_frame = ButtonFrame.ButtonFrame(self.debug_frame, rows = 1, columns = 1, sticky="ew")
+        self.debug_button_frame.buttons[0].configure(text="Toggle all fields", command = self.toggle_all_fields)
+    
         # Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_button_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
         
         # Grid weight configuration
         self.debug_frame.grid_columnconfigure(0, weight=1)
-        self.debug_frame.grid_rowconfigure((0,1), weight=1)
+        self.debug_frame.grid_rowconfigure((0,1,2), weight=1)
         
 
 
