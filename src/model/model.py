@@ -50,6 +50,11 @@ class Model(IModelInterface):
         '''Generates a random sudoku'''
 
         self.sudoku_logic.generate_random_sudoku()
+        
+    def clear_sudoku(self):
+        '''Clears the sudoku'''
+
+        self.sudoku_logic.clear()
 
 
     def load_sudoku(self, file_name: str) -> bool:
