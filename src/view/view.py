@@ -181,7 +181,7 @@ class View(ctk.CTkFrame):
         
     	# Debug Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.debug_frame, 2, 1)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.debugcheckbox_callback(widget))
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.localsave_callback(widget))
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
     
@@ -313,7 +313,8 @@ class View(ctk.CTkFrame):
                 self.controller.load("test")
             
     
-    def debugcheckbox_callback(self, widget):
+    def localsave_callback(self, widget):
+        
         if self.controller: 
             if widget.get():
                 self.controller.set_mode("debug")
@@ -569,7 +570,7 @@ class View(ctk.CTkFrame):
         for checkbox in self.sudoku_checkbox_frame.checkboxes:
             if (mode == 'debug'):
                 checkbox.select()
-                self.debugcheckbox_callback(checkbox)
+                self.localsave_callback(checkbox)
             else:
                 checkbox.deselect()
-                self.debugcheckbox_callback(checkbox)
+                self.localsave_callback(checkbox)
