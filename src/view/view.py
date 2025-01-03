@@ -35,8 +35,6 @@ class View(ctk.CTkFrame):
         
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
         
-        self.grid_rowconfigure(1, weight=3)
-        self.grid_rowconfigure((0,2), weight=1)
         
         
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
