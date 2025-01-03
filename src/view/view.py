@@ -131,14 +131,6 @@ class View(ctk.CTkFrame):
         self.controller = controller
 
         self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
-
-
-        def on_keypress():
-            for row in range(9):
-                for column in range(9):
-                    self.invalid_field(row, column)
-        
-        self.bind_class("Entry", "<Button-1>", lambda args: on_keypress(), add="+")
         
         self.dropdown_callback()
         
@@ -166,10 +158,10 @@ class View(ctk.CTkFrame):
 
         if not entry_value.isdigit() or entry_value == "0":
             widget.entry_variable.set("")
-            entry_value = ''
-     
-
-        # self.invalid_field(widget.position[0], widget.position[1])
+            self.push_value(widget.get_position()[0], widget.get_position()[1], 0)
+            self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
+        else:
+            self.push_value(widget.get_position()[0], widget.get_position()[1], int(entry_value))
         
 
         
