@@ -60,11 +60,6 @@ class Model(IModelInterface):
         '''Generates a random sudoku'''
 
         self.sudoku_logic.generate_random_sudoku()
-        
-    def clear_sudoku(self):
-        '''Clears the sudoku'''
-
-        self.sudoku_logic.clear()
 
 
     def load_sudoku(self, file_name: str) -> bool:
@@ -98,9 +93,3 @@ class Model(IModelInterface):
 
         self.file_manager.set_file_mode(mode)
 
-
-    def get_files(self):
-        return self.file_manager.get_files()
-    
-    def is_file_writeable(self, file_name):
-        return self.file_manager.is_writeable(file_name)

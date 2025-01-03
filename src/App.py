@@ -1,15 +1,15 @@
-from pathlib import Path
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 import customtkinter as ctk
 from model.model import Model
 from view.view import View
 from controller.controller import Controller
 
-basedir = str(Path(__file__).parent.parent)
 
-icon_path = "/assets/images/sudoku.ico"
 
-runtime_icon_path = basedir + icon_path
+icon_path = "./assets/images/sudoku.ico"
 
 class App(ctk.CTk):
 
@@ -26,7 +26,7 @@ class App(ctk.CTk):
         self.set_window_parameters()
 
         # set the icon of the window
-        self.iconbitmap(runtime_icon_path)
+        self.iconbitmap(icon_path)
 
 
         self.model = Model()

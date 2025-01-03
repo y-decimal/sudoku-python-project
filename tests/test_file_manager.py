@@ -13,10 +13,6 @@ def file_manager():
 def prepare_test_files(file_manager):
     if os.path.exists(file_manager.root_dir + file_manager.sudoku_testfiles_path + "testCase.txt"):
         os.remove(file_manager.root_dir + file_manager.sudoku_testfiles_path + "testCase.txt")
-    if os.path.exists(file_manager.root_dir + "/new/path"):
-        os.rmdir(file_manager.root_dir + "/new/path")
-        os.rmdir(file_manager.root_dir + "/new")
-        
 
 @pytest.fixture(autouse=True)
 def run_before_and_after_tests(file_manager):

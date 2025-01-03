@@ -57,13 +57,3 @@ class IModelInterface(ABC):
     def set_mode(self, row: int, column: int, state: bool):
         '''Sets the state of the field at the given row and column'''
         pass
-    
-    @abstractmethod
-    def get_files(self) -> list:
-        '''Returns the list of files in the current directory'''
-        pass
-    
-    @abstractmethod
-    def is_file_writeable(self, file_name) -> bool:
-        '''Returns true if the file is writeable, returns false if the file is not writeable'''
-        pass
