@@ -35,6 +35,10 @@ class View(ctk.CTkFrame):
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
         
         
+        
+        self.bind("<Button-1>", lambda args: self.mousebutton_callback())
+        
+        
         # Sudoku Frame
         self.sudoku_frame = SudokuFrame(self, 9)
         self.sudoku_frame.grid(row=1, column=1, padx=10, pady=10) 
@@ -112,18 +116,92 @@ class View(ctk.CTkFrame):
         
     	# Debug Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.debug_frame, 2, 1)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.debugcheckbox_callback(widget))
+        # Sidebar Frame 1x5 Grid
+        self.sidebar_frame = ctk.CTkFrame(self)
+        self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")   
+        # self.sidebar_frame.grid_rowconfigure((0,4), weight=1)
+        # self.sidebar_frame.grid_rowconfigure((1,2,3), weight=5)
+        self.sidebar_frame.grid_columnconfigure(0, weight=1)
+        
+            
+            
+
+        # File Load Frame Configuration
+        self.file_frame = ctk.CTkFrame(self.sidebar_frame)
+        self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        
+        # File Button Frame
+        self.file_button_frame = ButtonFrame.ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")    
+        self.file_button_frame.buttons[0].configure(text="Save", command = self.savebutton_callback)
+        self.file_button_frame.buttons[1].configure(text="Load", command = self.loadbutton_callback)
+           
+        # File Selection Dropdown and Label
+        self.load_label = ctk.CTkLabel(self.file_frame, text="Select File", font=("Arial", 16), justify="center")
+        self.load_dropdown = ctk.CTkComboBox(self.file_frame, font=("Arial", 16), dropdown_font=("Arial", 14), justify="center", values=[""], command=self.dropdown_callback, state="readonly")
+        
+        # Gridding
+        self.load_label.grid(row=0, column=0, padx=25, pady=10, sticky="ew")
+        self.load_dropdown.grid(row=1, column=0, padx=25, pady=25, sticky="ew")
+        self.file_button_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
+        
+        # Grid weight configuration
+        self.file_frame.grid_columnconfigure(0, weight=1)
+        
+        
+        
+        # Sudoku Generation Frame
+        self.generate_frame = ctk.CTkFrame(self.sidebar_frame)
+        self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        
+        # Generate Title
+        self.generate_frame_title = ctk.CTkLabel(self.generate_frame, text="Sudoku Generation", font=("Arial", 16), justify="center")
+        
+        # Generate Button Frame
+        self.generate_button_frame = ButtonFrame.ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
+        self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
+        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)  
+        
+        # Gridding
+        self.generate_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.generate_button_frame.grid(row=1, column=0, padx=25, pady=10, sticky="nsew")
+
+        # Grid weight configuration
+        self.generate_frame.grid_columnconfigure(0, weight=1)
+           
+
+
+        # Debug Frame Configuration
+        self.debug_frame = ctk.CTkFrame(self)
+        self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        
+        # Frame Title
+        self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
+        
+    	# Debug Checkbox Frame
+        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.debug_frame, 2, 1)
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.localsave_callback(widget))
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
     
-        # Gridding
+        # Debug Context Frame
+        self.debug_context_frame = ctk.CTkFrame(self.debug_frame)
+        self.debug_context_frame.grid_columnconfigure(0, weight=1)
+        # Context Frame Edit Mode
+        self.debug_button = ctk.CTkButton(self.debug_context_frame, text="Toggle all fields", command = self.toggle_all_fields)
+        
+        # Debug Frame Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        
+
+
         # Grid weight configuration
         self.debug_frame.grid_columnconfigure(0, weight=1)
-        self.debug_frame.grid_rowconfigure((0,1), weight=1)
+        self.debug_frame.grid_rowconfigure((0,1,2), weight=1)
         
+
+
+
+
 
 
     def set_controller(self, controller):
@@ -140,6 +218,13 @@ class View(ctk.CTkFrame):
 
     def set_edit_mode(self):
         self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
+        if self.edit_mode == 1:
+            self.debug_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+            self.debug_context_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        else:
+            self.debug_button.grid_forget()
+            self.debug_context_frame.grid_forget()
+        
 
     def mousebutton_callback(self):
         if self.widget_at_mouse is not None:
@@ -216,9 +301,11 @@ class View(ctk.CTkFrame):
                 self.controller.load(file_name)
             else:
                 self.controller.load("test")
-
-    def debugcheckbox_callback(self, widget):
-        if self.controller:
+            
+    
+    def localsave_callback(self, widget):
+        
+        if self.controller: 
             if widget.get():
                 self.controller.set_mode("debug")
             else:
@@ -232,6 +319,7 @@ class View(ctk.CTkFrame):
                 self.set_field_not_editable(row, column)
             else:
                 self.set_field_editable(row, column)
+               
             self.reset_highlighted_fields()
 
     def toggle_field_invalid(self):
@@ -244,6 +332,48 @@ class View(ctk.CTkFrame):
                 self.set_field_invalid(row, column)
             self.reset_highlighted_fields()
 
+            
+    def set_all_fields_readonly(self):
+        
+        for row in range(9):
+            for column in range(9):
+                if self.get_field_value(row, column) != 0:
+                    self.set_field_not_editable(row, column)
+                else:
+                    self.set_field_editable(row, column)
+        
+        self.reset_highlighted_fields()
+        
+        
+    def set_all_fields_editable(self):
+        
+        for row in range(9):
+            for column in range(9):
+                self.set_field_editable(row, column)
+        
+        self.reset_highlighted_fields()
+      
+           
+    def toggle_all_fields(self):
+        
+        editable_fields = 0
+        readonly_fields = 0
+        
+        for row in range(9):
+            for column in range(9):
+                if self.get_field_state(row, column) and self.get_field_value(row, column) != 0:
+                    editable_fields += 1
+                elif self.get_field_value(row, column) != 0:
+                    readonly_fields += 1
+                    
+        if editable_fields > readonly_fields:
+            self.set_all_fields_readonly()
+        else:
+            self.set_all_fields_editable()
+        
+        self.reset_highlighted_fields() 
+        
+    
     def highlight_fields(self, widget):
         row, column = widget.get_position()
         self.highlighted_fields.append((row, column))
@@ -386,16 +516,17 @@ class View(ctk.CTkFrame):
             self.set_field_not_editable(row, column)
 
     def get_field_state(self, row: int, column: int) -> bool:
+        '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field'''
         return self.sudoku_frame.get_field(row, column).get_state()
 
     def set_mode(self, mode='normal'):
         for checkbox in self.sudoku_checkbox_frame.checkboxes:
             if mode == 'debug':
                 checkbox.select()
-                self.debugcheckbox_callback(checkbox)
+                self.localsave_callback(checkbox)
             else:
                 checkbox.deselect()
-                self.debugcheckbox_callback(checkbox)
+                self.localsave_callback(checkbox)
 
     def push_value(self, row, column, value):
         if self.controller:
