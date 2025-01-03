@@ -35,10 +35,6 @@ class View(ctk.CTkFrame):
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
         
         
-        
-        self.bind("<Button-1>", lambda args: self.mousebutton_callback())
-        
-        
         # Sudoku Frame
         self.sudoku_frame = SudokuFrame(self, 9)
         self.sudoku_frame.grid(row=1, column=1, padx=10, pady=10) 
@@ -56,13 +52,8 @@ class View(ctk.CTkFrame):
         # Sidebar Frame 1x5 Grid
         self.sidebar_frame = ctk.CTkFrame(self)
         self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")   
-        # self.sidebar_frame.grid_rowconfigure((0,4), weight=1)
-        # self.sidebar_frame.grid_rowconfigure((1,2,3), weight=5)
         self.sidebar_frame.grid_columnconfigure(0, weight=1)
         
-            
-            
-
         # File Load Frame Configuration
         self.file_frame = ctk.CTkFrame(self.sidebar_frame)
         self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
@@ -84,8 +75,6 @@ class View(ctk.CTkFrame):
         # Grid weight configuration
         self.file_frame.grid_columnconfigure(0, weight=1)
         
-        
-        
         # Sudoku Generation Frame
         self.generate_frame = ctk.CTkFrame(self.sidebar_frame)
         self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
@@ -105,71 +94,6 @@ class View(ctk.CTkFrame):
         # Grid weight configuration
         self.generate_frame.grid_columnconfigure(0, weight=1)
            
-
-
-        # Debug Frame Configuration
-        self.debug_frame = ctk.CTkFrame(self)
-        self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        
-        # Frame Title
-        self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
-        
-    	# Debug Checkbox Frame
-        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.debug_frame, 2, 1)
-        # Sidebar Frame 1x5 Grid
-        self.sidebar_frame = ctk.CTkFrame(self)
-        self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")   
-        # self.sidebar_frame.grid_rowconfigure((0,4), weight=1)
-        # self.sidebar_frame.grid_rowconfigure((1,2,3), weight=5)
-        self.sidebar_frame.grid_columnconfigure(0, weight=1)
-        
-            
-            
-
-        # File Load Frame Configuration
-        self.file_frame = ctk.CTkFrame(self.sidebar_frame)
-        self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        
-        # File Button Frame
-        self.file_button_frame = ButtonFrame.ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")    
-        self.file_button_frame.buttons[0].configure(text="Save", command = self.savebutton_callback)
-        self.file_button_frame.buttons[1].configure(text="Load", command = self.loadbutton_callback)
-           
-        # File Selection Dropdown and Label
-        self.load_label = ctk.CTkLabel(self.file_frame, text="Select File", font=("Arial", 16), justify="center")
-        self.load_dropdown = ctk.CTkComboBox(self.file_frame, font=("Arial", 16), dropdown_font=("Arial", 14), justify="center", values=[""], command=self.dropdown_callback, state="readonly")
-        
-        # Gridding
-        self.load_label.grid(row=0, column=0, padx=25, pady=10, sticky="ew")
-        self.load_dropdown.grid(row=1, column=0, padx=25, pady=25, sticky="ew")
-        self.file_button_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
-        
-        # Grid weight configuration
-        self.file_frame.grid_columnconfigure(0, weight=1)
-        
-        
-        
-        # Sudoku Generation Frame
-        self.generate_frame = ctk.CTkFrame(self.sidebar_frame)
-        self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
-        
-        # Generate Title
-        self.generate_frame_title = ctk.CTkLabel(self.generate_frame, text="Sudoku Generation", font=("Arial", 16), justify="center")
-        
-        # Generate Button Frame
-        self.generate_button_frame = ButtonFrame.ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
-        self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)  
-        
-        # Gridding
-        self.generate_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
-        self.generate_button_frame.grid(row=1, column=0, padx=25, pady=10, sticky="nsew")
-
-        # Grid weight configuration
-        self.generate_frame.grid_columnconfigure(0, weight=1)
-           
-
-
         # Debug Frame Configuration
         self.debug_frame = ctk.CTkFrame(self)
         self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
@@ -187,7 +111,7 @@ class View(ctk.CTkFrame):
         self.debug_context_frame = ctk.CTkFrame(self.debug_frame)
         self.debug_context_frame.grid_columnconfigure(0, weight=1)
         # Context Frame Edit Mode
-        self.debug_button = ctk.CTkButton(self.debug_context_frame, text="Toggle all fields", command = self.toggle_all_fields)
+        self.debug_button = ctk.CTkButton(self.debug_context_frame, text="Toggle fields", command = self.toggle_all_fields)
         
         # Debug Frame Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
@@ -198,10 +122,6 @@ class View(ctk.CTkFrame):
         self.debug_frame.grid_columnconfigure(0, weight=1)
         self.debug_frame.grid_rowconfigure((0,1,2), weight=1)
         
-
-
-
-
 
 
     def set_controller(self, controller):
