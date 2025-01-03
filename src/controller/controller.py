@@ -54,6 +54,16 @@ class Controller:
         self.model.generate_random_sudoku()
         self.view.reset_fields('all')
         self.fetch()
+        
+    
+    def clear(self):
+        '''Callback for the clear button'''
+        
+        print("Clearing")
+        
+        self.model.clear_sudoku()
+        self.view.reset_fields('all')
+        self.fetch()
 
         
     
