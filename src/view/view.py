@@ -386,10 +386,8 @@ class View(ctk.CTkFrame):
                     
         if editable_fields > readonly_fields:
             self.set_all_fields_readonly()
-            print("Readonly")
         else:
             self.set_all_fields_editable()
-            print("Editable")
         
         self.reset_fields() 
         
