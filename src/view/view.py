@@ -267,7 +267,7 @@ class View(ctk.CTkFrame):
             self.reset_fields()
 
             
-    def toggle_all_fields(self):
+    def set_all_fields_readonly(self):
         
         for row in range(9):
             for column in range(9):
@@ -277,9 +277,48 @@ class View(ctk.CTkFrame):
                     self.set_field_editable(row, column)
         
         self.reset_fields()
+        
+        
+    def set_all_fields_editable(self):
+        
+        for row in range(9):
+            for column in range(9):
+                self.set_field_editable(row, column)
+        
+        self.reset_fields()
       
-
-
+    # def toggle_all_fields(self):
+    #     self.edit_toggle = not self.edit_toggle
+    #     if self.edit_toggle == True:
+    #         self.set_all_fields_editable()
+    #     else:
+    #         self.set_all_fields_readonly()
+        
+    #     self.reset_fields()
+        
+    
+    def toggle_all_fields(self):
+        
+        editable_fields = 0
+        readonly_fields = 0
+        
+        for row in range(9):
+            for column in range(9):
+                if self.get_field_state(row, column) and self.get_field_value(row, column) != 0:
+                    editable_fields += 1
+                elif self.get_field_value(row, column) != 0:
+                    readonly_fields += 1
+                    
+        if editable_fields > readonly_fields:
+            self.set_all_fields_readonly()
+            print("Readonly")
+        else:
+            self.set_all_fields_editable()
+            print("Editable")
+        
+        self.reset_fields() 
+        
+    
     def highlight_fields(self, widget):
 
         row, column = widget.get_position()        
