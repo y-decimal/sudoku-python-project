@@ -447,6 +447,7 @@ class View(ctk.CTkFrame):
             
             
     def get_field_state(self, row: int, column: int) -> bool:
+        '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field'''
         return self.sudoku_frame.get_field(row, column).get_state()
 
 
