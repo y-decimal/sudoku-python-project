@@ -18,6 +18,7 @@ class View(ctk.CTkFrame):
     highlighted_fields = []
     invalid_fields = []
     edit_mode = False
+    controller = None
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -27,52 +28,122 @@ class View(ctk.CTkFrame):
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0, 2), weight=1)
         self.grid_columnconfigure(1, weight=3)
-        self.grid_rowconfigure(0, weight=3)
-        self.grid_rowconfigure((1, 2), weight=1)
-
-        # Frame Grid Configuration
-
+        self.grid_rowconfigure(1, weight=3)
+        self.grid_rowconfigure((0,2), weight=1)
+        
+        
+        self.bind("<Button-1>", lambda args: self.mousebutton_callback())
+        
+        
         # Sudoku Frame
         self.sudoku_frame = SudokuFrame(self, 9)
-        self.sudoku_frame.grid(row=0, column=1, padx=10, pady=10)
-
+        self.sudoku_frame.grid(row=1, column=1, padx=10, pady=10) 
+        
         for row in range(9):
             for column in range(9):
                 self.sudoku_frame.get_field(row, column).bind("<Enter> ", lambda args, widget=self.sudoku_frame.get_field(row, column): self.set_mouse_position(widget))
                 self.sudoku_frame.get_field(row, column).bind("<Leave>", lambda args: self.set_mouse_position(None), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-1>", lambda args: self.mousebutton_callback(), add="+")
-                self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field_editable(), add="+")
                 self.sudoku_frame.get_field(row, column).bind("<Button-2>", lambda args: self.toggle_field_invalid(), add="+")
-                self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget=self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
+                self.sudoku_frame.get_field(row, column).bind("<Button-3>", lambda args: self.toggle_field(), add="+")
+                self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget = self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
 
-        self.bind("<Button-1>", lambda args: self.mousebutton_callback())
 
-        self.tool_frame = ctk.CTkFrame(self)
+        # Sidebar Frame 1x5 Grid
+        self.sidebar_frame = ctk.CTkFrame(self)
+        self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")   
+        # self.sidebar_frame.grid_rowconfigure((0,4), weight=1)
+        # self.sidebar_frame.grid_rowconfigure((1,2,3), weight=5)
+        self.sidebar_frame.grid_columnconfigure(0, weight=1)
+        
+            
+            
 
-        # Button Frame
-        self.sudoku_button_frame = ButtonFrame.ButtonFrame(self.tool_frame, 1, 3)
-        self.sudoku_button_frame.buttons[0].configure(text="Generate", command=self.generatebutton_callback)
-        self.sudoku_button_frame.buttons[1].configure(text="Save", command=self.savebutton_callback)
-        self.sudoku_button_frame.buttons[2].configure(text="Load", command=self.loadbutton_callback)
-        self.sudoku_button_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+        # File Load Frame Configuration
+        self.file_frame = ctk.CTkFrame(self.sidebar_frame)
+        self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        
+        # File Button Frame
+        self.file_button_frame = ButtonFrame.ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")    
+        self.file_button_frame.buttons[0].configure(text="Save", command = self.savebutton_callback)
+        self.file_button_frame.buttons[1].configure(text="Load", command = self.loadbutton_callback)
+           
+        # File Selection Dropdown and Label
+        self.load_label = ctk.CTkLabel(self.file_frame, text="Select File", font=("Arial", 16), justify="center")
+        self.load_dropdown = ctk.CTkComboBox(self.file_frame, font=("Arial", 16), dropdown_font=("Arial", 14), justify="center", values=[""], command=self.dropdown_callback, state="readonly")
+        
+        # Gridding
+        self.load_label.grid(row=0, column=0, padx=25, pady=10, sticky="ew")
+        self.load_dropdown.grid(row=1, column=0, padx=25, pady=25, sticky="ew")
+        self.file_button_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
+        
+        # Grid weight configuration
+        self.file_frame.grid_columnconfigure(0, weight=1)
+        
+        
+        
+        # Sudoku Generation Frame
+        self.generate_frame = ctk.CTkFrame(self.sidebar_frame)
+        self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        
+        # Generate Title
+        self.generate_frame_title = ctk.CTkLabel(self.generate_frame, text="Sudoku Generation", font=("Arial", 16), justify="center")
+        
+        # Generate Button Frame
+        self.generate_button_frame = ButtonFrame.ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
+        self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
+        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)  
+        
+        # Gridding
+        self.generate_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.generate_button_frame.grid(row=1, column=0, padx=25, pady=10, sticky="nsew")
 
-        # File name entry
-        self.file_entry = ctk.CTkEntry(self.tool_frame, width=200, placeholder_text="Enter filename", font=("Arial", 18))
-        self.file_entry.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        # Grid weight configuration
+        self.generate_frame.grid_columnconfigure(0, weight=1)
+           
 
-        # Checkbox Frame
-        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.tool_frame, 1, 2)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command=lambda *args, widget=self.sudoku_checkbox_frame.checkboxes[0]: self.debugcheckbox_callback(widget))
-        self.sudoku_checkbox_frame.checkboxes[0].select()
-        self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command=self.set_edit_mode)
-        self.sudoku_checkbox_frame.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")
 
-        self.tool_frame.grid_columnconfigure((0, 1), weight=1)
-        self.tool_frame.grid(row=0, column=2, padx=10, pady=10, sticky="ew")
+        # Debug Frame Configuration
+        self.debug_frame = ctk.CTkFrame(self)
+        self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        
+        # Frame Title
+        self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
+        
+    	# Debug Checkbox Frame
+        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.debug_frame, 2, 1)
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.debugcheckbox_callback(widget))
+        self.sudoku_checkbox_frame.checkboxes[0].select()   
+        self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
+    
+        # Gridding
+        self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        
+        # Grid weight configuration
+        self.debug_frame.grid_columnconfigure(0, weight=1)
+        self.debug_frame.grid_rowconfigure((0,1), weight=1)
+        
+
 
     def set_controller(self, controller):
         '''Sets the controller of the view'''
         self.controller = controller
+
+        self.bind_class("Entry","<Button-1>", lambda *args: self.controller.push(), add="+")
+
+
+        def on_keypress():
+            for row in range(9):
+                for column in range(9):
+                    self.invalid_field(row, column)
+        
+        self.bind_class("Entry", "<Button-1>", lambda args: on_keypress(), add="+")
+        
+        self.dropdown_callback()
+        
+        
+    
 
     def set_mouse_position(self, widget):
         self.widget_at_mouse = widget
@@ -95,10 +166,31 @@ class View(ctk.CTkFrame):
 
         if not entry_value.isdigit() or entry_value == "0":
             widget.entry_variable.set("")
-            self.push_value(widget.get_position()[0], widget.get_position()[1], 0)
-            self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
-        else:
-            self.push_value(widget.get_position()[0], widget.get_position()[1], int(entry_value))
+            entry_value = ''
+     
+
+        # self.invalid_field(widget.position[0], widget.position[1])
+        
+
+        
+
+    def dropdown_callback(self, *args):
+            files = self.controller.get_files()
+            files.append("[ new file ]")
+            self.load_dropdown.configure(values=files)
+            if self.load_dropdown.get() == "[ new file ]":
+                self.file_button_frame.buttons[1].configure(state="normal")
+                self.load_dropdown.set("")
+                self.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
+                self.load_dropdown.focus()
+            else:
+                self.load_dropdown.configure(state="readonly", text_color="#99FF99", dropdown_text_color="#99FF99")
+            
+            if not self.controller.is_file_writeable(self.load_dropdown.get()):
+                self.file_button_frame.buttons[1].configure(state="disabled")
+            else:
+                self.file_button_frame.buttons[1].configure(state="normal")
+
 
     def fetchbutton_callback(self):
         if self.controller:
@@ -109,20 +201,26 @@ class View(ctk.CTkFrame):
             self.controller.push()
 
     def generatebutton_callback(self):
-        if self.controller:
-            self.controller.generate()
+        if self.controller: self.controller.generate()
+        
+    def clearbutton_callback(self):
+        if self.controller: self.controller.clear()
 
     def savebutton_callback(self):
-        if self.controller:
-            file_name = self.file_entry.get()
+        if self.controller: 
+            file_name = self.load_dropdown.get()
+            
+            
             if file_name != "":
                 self.controller.save(file_name)
             else:
                 self.controller.save("test")
-
+                
+            self.dropdown_callback()
+        
     def loadbutton_callback(self):
         if self.controller:
-            file_name = self.file_entry.get()
+            file_name = self.load_dropdown.get()
             self.reset_highlighted_fields()
             if file_name != "":
                 self.controller.load(file_name)
