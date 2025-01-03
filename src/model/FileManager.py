@@ -151,9 +151,11 @@ class FileManager:
         '''Copies default sudoku files to the current directory if they exist'''
         source_dir = self.root_dir + self.sudoku_files_path
         target_dir = self.root_dir + self.sudoku_testfiles_path
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
         for file_name in self.read_only_files:
             source_path = os.path.join(source_dir, file_name + ".txt")
             target_path = os.path.join(target_dir, file_name + ".txt")
             if os.path.exists(source_path) and not os.path.exists(target_path):
                 shutil.copy(source_path, target_path)
-                ...
+                
