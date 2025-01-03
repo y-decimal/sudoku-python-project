@@ -154,5 +154,5 @@ class FileManager:
         for file_name in self.read_only_files:
             source_path = os.path.join(source_dir, file_name + ".txt")
             target_path = os.path.join(target_dir, file_name + ".txt")
-            if os.path.exists(source_path):
+            if os.path.exists(source_path) and not os.path.exists(target_path):
                 shutil.copy(source_path, target_path)
