@@ -22,8 +22,6 @@ class FileManager:
         # Set the absolute path using the root directory and the relative path
         self.set_file_mode('normal')
         
-        # Copy default files to the Test directory
-        self.copy_default_files()
         
 
 
@@ -119,10 +117,12 @@ class FileManager:
             self.absolute_path = self.root_dir + self.sudoku_testfiles_path
         elif mode == 'normal':
             self.absolute_path = self.root_dir + self.sudoku_files_path
-            
-            
+             
         if not os.path.exists(self.absolute_path):
             os.makedirs(self.absolute_path)
+            
+        if mode == 'debug':
+            self.copy_default_files()
             
         return True
     
@@ -151,8 +151,7 @@ class FileManager:
         '''Copies default sudoku files to the current directory if they exist'''
         source_dir = self.root_dir + self.sudoku_files_path
         target_dir = self.root_dir + self.sudoku_testfiles_path
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
+
         for file_name in self.read_only_files:
             source_path = os.path.join(source_dir, file_name + ".txt")
             target_path = os.path.join(target_dir, file_name + ".txt")
