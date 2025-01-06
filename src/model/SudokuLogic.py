@@ -150,7 +150,6 @@ class SudokuLogic(ISudokuInterface):
                         ran = random.randint(1,9)
                     self.fields[self.rc_to_index(row, column)] = ran
 
-
         
 
 
