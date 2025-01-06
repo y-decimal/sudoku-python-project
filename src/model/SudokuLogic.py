@@ -128,8 +128,30 @@ class SudokuLogic(ISudokuInterface):
                 invalid.update({self.rc_to_index(r,column):sudoku[r*9+column]})
         return invalid
 
+    def would_anyvalue_be_valid(self,row,column):
+        answer = False
+        for number in range(1,9):
+            if self.would_value_be_valid(row,column,number):
+                answer = True
+        return answer
+
+    def generate_random_sudoku_complete(self):
+        consistent = False
+        while consistent == False:
+            consistent = True
+            self.clear()
+            for row in range (9):
+                for column in range(9):
+                    if not self.would_anyvalue_be_valid(row,column):
+                        consistent = False
+                        break
+                    ran = random.randint(1,9)
+                    while not self.would_value_be_valid(row, column, ran):
+                        ran = random.randint(1,9)
+                    self.fields[self.rc_to_index(row, column)] = ran
 
 
+        
 
 
     def generate_random_sudoku(self):
