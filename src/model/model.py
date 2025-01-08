@@ -28,10 +28,20 @@ class Model(IModelInterface):
         return self.sudoku_logic.set_field_value(row, column, value)
     
 
-    def get_field_state(self, row: int, column: int) -> bool:
+    def get_field_state(self, row: int, column: int) -> str:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
-
         return self.sudoku_logic.is_field_editable(row, column)
+        
+    def get_invalid_fields(self) -> list:
+        '''Returns a list of tuples with the row and column of the invalid fields'''
+
+        return [(row, column) for row in range(9) for column in range(9) if self.sudoku_logic.would_value_be_valid(row, column, self.sudoku_logic.get_field_value(row, column)) == False]
+        # return self.sudoku_logic.get_invalid_fields()
+        
+    def would_value_be_valid(self, row: int, column: int, value) -> bool:
+        '''Returns true if value would be valid in the field, returns false if value would not be valid (e.g. because it is already in the row, column or block)'''
+
+        return self.sudoku_logic.would_value_be_valid(row, column, value)
     
     
     def set_field_state(self, row: int, column: int, state: bool):
@@ -50,6 +60,11 @@ class Model(IModelInterface):
         '''Generates a random sudoku'''
 
         self.sudoku_logic.generate_random_sudoku_complete()
+        
+    def clear_sudoku(self):
+        '''Clears the sudoku'''
+
+        self.sudoku_logic.clear()
 
 
     def load_sudoku(self, file_name: str) -> bool:
@@ -83,3 +98,9 @@ class Model(IModelInterface):
 
         self.file_manager.set_file_mode(mode)
 
+
+    def get_files(self):
+        return self.file_manager.get_files()
+    
+    def is_file_writeable(self, file_name):
+        return self.file_manager.is_writeable(file_name)
