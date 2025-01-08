@@ -49,7 +49,7 @@ class Model(IModelInterface):
     def generate_random_sudoku(self):
         '''Generates a random sudoku'''
 
-        self.sudoku_logic.generate_random_sudoku()
+        self.sudoku_logic.generate_random_sudoku_complete()
 
 
     def load_sudoku(self, file_name: str) -> bool:
