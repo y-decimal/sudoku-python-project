@@ -142,12 +142,11 @@ class SudokuLogic(ISudokuInterface):
             self.clear()
             for row in range (9):
                 for column in range(9):
-                    if not self.would_anyvalue_be_valid(row,column):
+                    possible_values = self.would_any_value_be_valid(row,column)
+                    if not possible_values:
                         consistent = False
                         break
-                    ran = random.randint(1,9)
-                    while not self.would_value_be_valid(row, column, ran):
-                        ran = random.randint(1,9)
+                    ran = random.choice(possible_values)
                     self.fields[self.rc_to_index(row, column)] = ran
 
         
