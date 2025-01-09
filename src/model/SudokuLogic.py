@@ -129,10 +129,10 @@ class SudokuLogic(ISudokuInterface):
         return invalid
 
     def would_any_value_be_valid(self,row,column):
-        answer = False
+        answer = []
         for number in range(1,10):
             if self.would_value_be_valid(row,column,number):
-                answer = True
+                answer.append(number)
         return answer
 
     def generate_random_sudoku_complete(self):
