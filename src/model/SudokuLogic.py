@@ -128,9 +128,9 @@ class SudokuLogic(ISudokuInterface):
                 invalid.update({self.rc_to_index(r,column):sudoku[r*9+column]})
         return invalid
 
-    def would_anyvalue_be_valid(self,row,column):
+    def would_any_value_be_valid(self,row,column):
         answer = False
-        for number in range(1,9):
+        for number in range(1,10):
             if self.would_value_be_valid(row,column,number):
                 answer = True
         return answer
