@@ -132,7 +132,7 @@ class SudokuLogic(ISudokuInterface):
 
 
 
-    def generate_random_sudoku(self):
+    def generate_random_sudoku(self, difficulty = 0.5):
         '''Sets random values for some fields in the game field'''   
         self.clear()
         for row in range (9):
