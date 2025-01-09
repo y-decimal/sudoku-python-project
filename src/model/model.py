@@ -7,11 +7,13 @@ class Model(IModelInterface):
 
     sudoku_logic = None
     file_manager = None
+    difficulty = None
 
     def __init__(self):
 
         self.file_manager = FileManager()
         self.sudoku_logic = SudokuLogic()
+        self.difficulty = 0.5
 
 
 
@@ -57,9 +59,10 @@ class Model(IModelInterface):
     
 
     def generate_random_sudoku(self):
-        '''Generates a random sudoku'''
-
-        self.sudoku_logic.generate_random_sudoku()
+        '''Generates a random sudoku with the current difficulty'''
+        
+        self.sudoku_logic.generate_random_sudoku(self.difficulty)
+        
         
     def clear_sudoku(self):
         '''Clears the sudoku'''
