@@ -141,7 +141,7 @@ class SudokuLogic(ISudokuInterface):
                 self.fields[self.rc_to_index(row, column)] = 0
                 self.starterfield[self.rc_to_index(row, column)] = False
                 
-                if (random.randint(1,9) < 3):
+                if (random.random() < difficulty):
                     
                     self.fields[self.rc_to_index(row, column)] = random.randint(1,9)
                     self.starterfield[self.rc_to_index(row, column)] = True
