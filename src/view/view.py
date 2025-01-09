@@ -92,7 +92,7 @@ class View(ctk.CTkFrame):
         # Generate Slider
         self.generate_slider_frame = ctk.CTkFrame(self.generate_frame)
         self.generate_slider_label = ctk.CTkLabel(self.generate_slider_frame, text="Difficulty = Medium", font=("Arial", 16), justify="center")
-        self.generate_slider = ctk.CTkSlider(self.generate_slider_frame, from_=0, to=1, orientation="horizontal", number_of_steps=10, command=self.generateslider_callback)  
+        self.generate_slider = ctk.CTkSlider(self.generate_slider_frame, from_=0.1, to=0.9, orientation="horizontal", number_of_steps=8, command=self.generateslider_callback)  
         self.generate_slider_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.generate_slider.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         self.generate_slider_frame.grid_columnconfigure(0, weight=1)
