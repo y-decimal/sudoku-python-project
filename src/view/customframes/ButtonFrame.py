@@ -2,6 +2,8 @@ import customtkinter as ctk
 
 class ButtonFrame(ctk.CTkFrame): 
 
+    font = ("Helvectia", 12)
+
     def __init__(self, master, rows, columns, sticky = "", **kwargs):
 
         super().__init__(master, **kwargs)
@@ -22,7 +24,7 @@ class ButtonFrame(ctk.CTkFrame):
 
                 # self.buttons.append(GridButton(self, i, j))
 
-                self.buttons.append(ctk.CTkButton(self, text=f"Button {i}-{j}", command=lambda: print("Button not implemented yet")))
+                self.buttons.append(ctk.CTkButton(self, text=f"Button {i}-{j}", font=self.font, command=lambda: print("Button not implemented yet")))
                 self.buttons[index].grid(row = i, column = j, padx=10, pady=10, sticky=sticky)
                 index += 1
                 
