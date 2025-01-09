@@ -358,10 +358,7 @@ class View(ctk.CTkFrame):
                     self.set_field_text_color(row, column, self.enabled_colors[1])
             else:
                 self.set_field_text_color(row, column, self.disabled_colors[1])
-                if widget.get_invalid_state():
-                    self.set_field_color(row, column, self.invalid_color[0])
-                else:
-                    self.set_field_color(row, column, self.disabled_colors[0])
+                self.set_field_color(row, column, self.disabled_colors[0])
         self.highlighted_fields = []
 
     def set_field_not_editable(self, row: int, column: int):
@@ -386,7 +383,7 @@ class View(ctk.CTkFrame):
             return
         if widget.get_state():
             widget.configure(text_color=self.invalid_color[1])
-        else:
+        elif widget.get_position() in self.highlighted_fields:
             widget.configure(fg_color=self.invalid_color[0])
         widget.set_invalid_state(True)
 
