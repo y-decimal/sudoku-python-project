@@ -10,7 +10,7 @@ class FileManager:
     sudoku_files_path = "/assets/SudokuFiles/"
     absolute_path = None
     root_dir = None
-    read_only_files = ["sudoku_easy", "sudoku_medium", "sudoku_hard"]
+    read_only_files = ["sudoku_easy", "sudoku_medium", "sudoku_hard", "sudoku_easy_possible_solution"]
     mode = "normal"
     
     def __init__(self):
