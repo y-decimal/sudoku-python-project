@@ -87,11 +87,21 @@ class View(ctk.CTkFrame):
         # Generate Button Frame
         self.generate_button_frame = ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
         self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)  
+        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)
+        
+        # Generate Slider
+        self.generate_slider_frame = ctk.CTkFrame(self.generate_frame)
+        self.generate_slider_label = ctk.CTkLabel(self.generate_slider_frame, text="Difficulty = Medium", font=("Arial", 16), justify="center")
+        self.generate_slider = ctk.CTkSlider(self.generate_slider_frame, from_=0.1, to=0.9, orientation="horizontal", number_of_steps=8, command=self.generateslider_callback)  
+        self.generate_slider_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.generate_slider.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.generate_slider_frame.grid_columnconfigure(0, weight=1)
+        
         
         # Gridding
         self.generate_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.generate_button_frame.grid(row=1, column=0, padx=25, pady=10, sticky="nsew")
+        self.generate_slider_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
 
         # Grid weight configuration
         self.generate_frame.grid_columnconfigure(0, weight=1)
@@ -199,6 +209,16 @@ class View(ctk.CTkFrame):
 
     def generatebutton_callback(self):
         if self.controller: self.controller.generate()
+        
+    def generateslider_callback(self, value):
+        if self.controller: self.controller.set_difficulty(value)
+        if value < 0.2:
+            self.generate_slider_label.configure(text="Difficulty = Easy")
+        elif value < 0.8:
+            self.generate_slider_label.configure(text="Difficulty = Medium")
+        else:
+            self.generate_slider_label.configure(text="Difficulty = Hard")
+            
         
     def clearbutton_callback(self):
         if self.controller: self.controller.clear()

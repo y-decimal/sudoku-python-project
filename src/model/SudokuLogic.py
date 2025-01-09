@@ -132,7 +132,7 @@ class SudokuLogic(ISudokuInterface):
 
 
 
-    def generate_random_sudoku(self):
+    def generate_random_sudoku(self, difficulty = 0.5):
         '''Sets random values for some fields in the game field'''   
         self.clear()
         for row in range (9):
@@ -141,7 +141,7 @@ class SudokuLogic(ISudokuInterface):
                 self.fields[self.rc_to_index(row, column)] = 0
                 self.starterfield[self.rc_to_index(row, column)] = False
                 
-                if (random.randint(1,9) < 3):
+                if (random.random() > difficulty):
                     
                     self.fields[self.rc_to_index(row, column)] = random.randint(1,9)
                     self.starterfield[self.rc_to_index(row, column)] = True
