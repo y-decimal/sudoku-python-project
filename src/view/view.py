@@ -24,6 +24,7 @@ class View(ctk.CTkFrame):
         super().__init__(parent)
 
         self.widget_at_mouse = None
+        button_font = ctk.CTkFont(family="Arial", size=14, weight="normal")
 
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0, 2), weight=1)
@@ -60,8 +61,8 @@ class View(ctk.CTkFrame):
         
         # File Button Frame
         self.file_button_frame = ButtonFrame.ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")    
-        self.file_button_frame.buttons[0].configure(text="Save", command = self.savebutton_callback)
-        self.file_button_frame.buttons[1].configure(text="Load", command = self.loadbutton_callback)
+        self.file_button_frame.buttons[0].configure(text="Save", font=button_font, command = self.savebutton_callback)
+        self.file_button_frame.buttons[1].configure(text="Load", font=button_font, command = self.loadbutton_callback)
            
         # File Selection Dropdown and Label
         self.load_label = ctk.CTkLabel(self.file_frame, text="Select File", font=("Arial", 16), justify="center")
@@ -84,8 +85,8 @@ class View(ctk.CTkFrame):
         
         # Generate Button Frame
         self.generate_button_frame = ButtonFrame.ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
-        self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)  
+        self.generate_button_frame.buttons[0].configure(text="Generate", font=button_font, command = self.generatebutton_callback)
+        self.generate_button_frame.buttons[1].configure(text="Clear", font=button_font, command = self.clearbutton_callback)  
         
         # Gridding
         self.generate_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
