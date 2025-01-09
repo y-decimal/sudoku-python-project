@@ -2,7 +2,8 @@ import tkinter as tk
 import customtkinter as ctk
 
 from view.customframes.SudokugridFrame import SudokuFrame
-from view.customframes import ButtonFrame, CheckboxFrame
+from view.customframes.ButtonFrame import ButtonFrame
+from view.customframes.CheckboxFrame import CheckboxFrame
 
 
 class View(ctk.CTkFrame):
@@ -24,6 +25,7 @@ class View(ctk.CTkFrame):
         super().__init__(parent)
 
         self.widget_at_mouse = None
+        ButtonFrame.font = ctk.CTkFont(family="Helvectia", size=14, weight="normal")
 
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0, 2), weight=1)
@@ -59,7 +61,7 @@ class View(ctk.CTkFrame):
         self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         # File Button Frame
-        self.file_button_frame = ButtonFrame.ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")    
+        self.file_button_frame = ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")   
         self.file_button_frame.buttons[0].configure(text="Save", command = self.savebutton_callback)
         self.file_button_frame.buttons[1].configure(text="Load", command = self.loadbutton_callback)
            
@@ -83,7 +85,7 @@ class View(ctk.CTkFrame):
         self.generate_frame_title = ctk.CTkLabel(self.generate_frame, text="Sudoku Generation", font=("Arial", 16), justify="center")
         
         # Generate Button Frame
-        self.generate_button_frame = ButtonFrame.ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
+        self.generate_button_frame = ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
         self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
         self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)  
         
@@ -102,7 +104,7 @@ class View(ctk.CTkFrame):
         self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
         
     	# Debug Checkbox Frame
-        self.sudoku_checkbox_frame = CheckboxFrame.CheckboxFrame(self.debug_frame, 2, 1)
+        self.sudoku_checkbox_frame = CheckboxFrame(self.debug_frame, 2, 1)
         self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.localsave_callback(widget))
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
