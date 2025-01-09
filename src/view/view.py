@@ -211,7 +211,7 @@ class View(ctk.CTkFrame):
         if self.controller: self.controller.generate()
         
     def generateslider_callback(self, value):
-        # if self.controller: self.controller.set_difficulty(value)
+        if self.controller: self.controller.set_difficulty(value)
         if value < 0.2:
             self.generate_slider_label.configure(text="Difficulty = Easy")
         elif value < 0.8:

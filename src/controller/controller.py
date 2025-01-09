@@ -87,4 +87,4 @@ class Controller:
     
     def set_difficulty(self, difficulty):
         '''Callback for the set_difficulty function'''
-        self.model.set_difficulty(difficulty)
+        self.model.difficulty = difficulty
