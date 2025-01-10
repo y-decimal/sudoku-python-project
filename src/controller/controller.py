@@ -45,7 +45,6 @@ class Controller:
         self.model.generate_random_sudoku()
         self.view.reset_highlighted_fields()
         self.fetch()
-        
     
     def clear(self):
         '''Callback for the clear button'''
@@ -56,7 +55,6 @@ class Controller:
         self.view.reset_highlighted_fields()
         self.fetch()
 
-        
     
     def save(self, file_name):
         '''Callback for the save button'''
@@ -72,7 +70,6 @@ class Controller:
         '''Callback for the mode button'''
         self.model.set_mode(mode)
         self.view.dropdown_callback()
-        
 
     def get_files(self):
         '''Callback for the get files method'''
@@ -87,3 +84,7 @@ class Controller:
     def get_invalid_fields(self):
         '''Callback for the get_invalid_fields function'''
         return self.model.get_invalid_fields()
+    
+    def set_difficulty(self, difficulty):
+        '''Callback for the set_difficulty function'''
+        self.model.difficulty = difficulty
