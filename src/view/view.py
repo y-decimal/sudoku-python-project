@@ -5,6 +5,8 @@ from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes.ButtonFrame import ButtonFrame
 from view.customframes.CheckboxFrame import CheckboxFrame
 
+from view.helperclasses.SidebarFrame import SidebarFrame
+
 
 class View(ctk.CTkFrame):
 
@@ -51,60 +53,10 @@ class View(ctk.CTkFrame):
                 self.sudoku_frame.get_field(row, column).entry_variable.trace_add("write", lambda *args, widget = self.sudoku_frame.get_field(row, column): self.entry_callback(widget))
 
 
-        # Sidebar Frame 1x5 Grid
-        self.sidebar_frame = ctk.CTkFrame(self)
-        self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="ew")   
-        self.sidebar_frame.grid_columnconfigure(0, weight=1)
+        # Sidebar Frame
+        self.sidebar_frame = SidebarFrame(self)
+        self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
         
-        # File Load Frame Configuration
-        self.file_frame = ctk.CTkFrame(self.sidebar_frame)
-        self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        
-        # File Button Frame
-        self.file_button_frame = ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")   
-        self.file_button_frame.buttons[0].configure(text="Save", command = self.savebutton_callback)
-        self.file_button_frame.buttons[1].configure(text="Load", command = self.loadbutton_callback)
-           
-        # File Selection Dropdown and Label
-        self.load_label = ctk.CTkLabel(self.file_frame, text="Select File", font=("Arial", 16), justify="center")
-        self.load_dropdown = ctk.CTkComboBox(self.file_frame, font=("Arial", 16), dropdown_font=("Arial", 14), justify="center", values=[""], command=self.dropdown_callback, state="readonly")
-        
-        # Gridding
-        self.load_label.grid(row=0, column=0, padx=25, pady=10, sticky="ew")
-        self.load_dropdown.grid(row=1, column=0, padx=25, pady=25, sticky="ew")
-        self.file_button_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
-        
-        # Grid weight configuration
-        self.file_frame.grid_columnconfigure(0, weight=1)
-        
-        # Sudoku Generation Frame
-        self.generate_frame = ctk.CTkFrame(self.sidebar_frame)
-        self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
-        
-        # Generate Title
-        self.generate_frame_title = ctk.CTkLabel(self.generate_frame, text="Sudoku Generation", font=("Arial", 16), justify="center")
-        
-        # Generate Button Frame
-        self.generate_button_frame = ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
-        self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)
-        
-        # Generate Slider
-        self.generate_slider_frame = ctk.CTkFrame(self.generate_frame)
-        self.generate_slider_label = ctk.CTkLabel(self.generate_slider_frame, text="Difficulty = Medium", font=("Arial", 16), justify="center")
-        self.generate_slider = ctk.CTkSlider(self.generate_slider_frame, from_=0.3, to=0.7, orientation="horizontal", number_of_steps=8, command=self.generateslider_callback)  
-        self.generate_slider_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
-        self.generate_slider.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        self.generate_slider_frame.grid_columnconfigure(0, weight=1)
-        
-        
-        # Gridding
-        self.generate_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
-        self.generate_button_frame.grid(row=1, column=0, padx=25, pady=10, sticky="nsew")
-        self.generate_slider_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
-
-        # Grid weight configuration
-        self.generate_frame.grid_columnconfigure(0, weight=1)
            
         # Debug Frame Configuration
         self.debug_frame = ctk.CTkFrame(self)
@@ -142,8 +94,6 @@ class View(ctk.CTkFrame):
         
         self.dropdown_callback()
         
-        
-    
 
     def set_mouse_position(self, widget):
         self.widget_at_mouse = widget
@@ -184,19 +134,19 @@ class View(ctk.CTkFrame):
     def dropdown_callback(self, *args):
             files = self.controller.get_files()
             files.append("[ new file ]")
-            self.load_dropdown.configure(values=files)
-            if self.load_dropdown.get() == "[ new file ]":
-                self.file_button_frame.buttons[0].configure(state="normal")
-                self.load_dropdown.set("")
-                self.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
-                self.load_dropdown.focus()
+            self.sidebar_frame.load_dropdown.configure(values=files)
+            if self.sidebar_frame.load_dropdown.get() == "[ new file ]":
+                self.sidebar_frame.file_button_frame.buttons[0].configure(state="normal")
+                self.sidebar_frame.load_dropdown.set("")
+                self.sidebar_frame.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
+                self.sidebar_frame.load_dropdown.focus()
             else:
-                self.load_dropdown.configure(state="readonly", text_color="#99FF99", dropdown_text_color="#99FF99")
+                self.sidebar_frame.load_dropdown.configure(state="readonly", text_color="#99FF99", dropdown_text_color="#99FF99")
             
-            if not self.controller.is_file_writeable(self.load_dropdown.get()):
-                self.file_button_frame.buttons[0].configure(state="disabled")
+            if not self.controller.is_file_writeable(self.sidebar_frame.load_dropdown.get()):
+                self.sidebar_frame.file_button_frame.buttons[0].configure(state="disabled")
             else:
-                self.file_button_frame.buttons[0].configure(state="normal")
+                self.sidebar_frame.file_button_frame.buttons[0].configure(state="normal")
 
 
     def fetchbutton_callback(self):
@@ -225,7 +175,7 @@ class View(ctk.CTkFrame):
 
     def savebutton_callback(self):
         if self.controller: 
-            file_name = self.load_dropdown.get()
+            file_name = self.sidebar_frame.load_dropdown.get()
             
             
             if file_name != "":
@@ -237,7 +187,7 @@ class View(ctk.CTkFrame):
         
     def loadbutton_callback(self):
         if self.controller:
-            file_name = self.load_dropdown.get()
+            file_name = self.sidebar_frame.load_dropdown.get()
             self.reset_highlighted_fields()
             if file_name != "":
                 self.controller.load(file_name)
