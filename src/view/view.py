@@ -168,6 +168,7 @@ class View(ctk.CTkFrame):
             self.edit_mode_frame.grid_forget()
             self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
             self.sudoku_checkbox_frame.checkboxes[1].deselect()
+            self.savebutton_callback()
         
 
     def mousebutton_callback(self):
@@ -244,12 +245,10 @@ class View(ctk.CTkFrame):
     def savebutton_callback(self):
         if self.controller: 
             file_name = self.load_dropdown.get()
-            
-            
             if file_name != "":
                 self.controller.save(file_name)
             else:
-                self.controller.save("test")
+                self.controller.save("temp")
                 
             self.dropdown_callback()
         
