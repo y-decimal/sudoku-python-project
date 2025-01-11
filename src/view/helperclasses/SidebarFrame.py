@@ -2,13 +2,11 @@ import tkinter as tk
 import customtkinter as ctk
 
 from view.customframes.ButtonFrame import ButtonFrame
-from view.customframes.CheckboxFrame import CheckboxFrame
         
 class SidebarFrame(ctk.CTkFrame):
     
     def __init__(self, parent):
                 
-        # Sidebar Frame 1x5 Grid
         super().__init__(parent)
         
         self.parent = parent
@@ -24,7 +22,7 @@ class SidebarFrame(ctk.CTkFrame):
     
     def init_file_frame(self):
         
-         # File Load Frame Configuration
+         # File Load Frame
         file_frame = ctk.CTkFrame(self)
         
         # File Button Frame
