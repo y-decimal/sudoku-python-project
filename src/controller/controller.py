@@ -55,6 +55,12 @@ class Controller:
         self.view.reset_highlighted_fields()
         self.fetch()
 
+    def reset(self):
+        '''Callback for the reset button'''
+        print("Resetting")
+        self.model.reset_sudoku()
+        self.view.reset_highlighted_fields()
+        self.fetch()
     
     def save(self, file_name):
         '''Callback for the save button'''
