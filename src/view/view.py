@@ -6,6 +6,7 @@ from view.customframes.ButtonFrame import ButtonFrame
 from view.customframes.CheckboxFrame import CheckboxFrame
 
 from view.helperclasses.SidebarFrame import SidebarFrame
+from view.helperclasses.DebugFrame import DebugFrame
 
 
 class View(ctk.CTkFrame):
@@ -56,35 +57,10 @@ class View(ctk.CTkFrame):
         # Sidebar Frame
         self.sidebar_frame = SidebarFrame(self)
         self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
-        
            
-        # Debug Frame Configuration
-        self.debug_frame = ctk.CTkFrame(self)
+        # Debug Frame 
+        self.debug_frame = DebugFrame(self)
         self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        
-        # Frame Title
-        self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
-        
-    	# Debug Checkbox Frame
-        self.sudoku_checkbox_frame = CheckboxFrame(self.debug_frame, 2, 1)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.localsave_callback(widget))
-        self.sudoku_checkbox_frame.checkboxes[0].select()   
-        self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
-    
-        # Debug Context Frame
-        self.debug_context_frame = ctk.CTkFrame(self.debug_frame)
-        self.debug_context_frame.grid_columnconfigure(0, weight=1)
-        # Context Frame Edit Mode
-        self.debug_button = ctk.CTkButton(self.debug_context_frame, text="Toggle fields", command = self.toggle_all_fields)
-        
-        # Debug Frame Gridding
-        self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
-        self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-
-
-        # Grid weight configuration
-        self.debug_frame.grid_columnconfigure(0, weight=1)
-        self.debug_frame.grid_rowconfigure((0,1,2), weight=1)
         
 
 
@@ -99,13 +75,13 @@ class View(ctk.CTkFrame):
         self.widget_at_mouse = widget
 
     def set_edit_mode(self):
-        self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
+        self.edit_mode = self.debug_frame.checkbox_frame.checkboxes[1].get()
         if self.edit_mode == 1:
-            self.debug_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
-            self.debug_context_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+            self.debug_frame.debug_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+            self.debug_frame.debug_context_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
         else:
-            self.debug_button.grid_forget()
-            self.debug_context_frame.grid_forget()
+            self.debug_frame.debug_button.grid_forget()
+            self.debug_frame.debug_context_frame.grid_forget()
         
 
     def mousebutton_callback(self):
@@ -409,7 +385,7 @@ class View(ctk.CTkFrame):
         return self.sudoku_frame.get_field(row, column).get_state()
 
     def set_mode(self, mode='normal'):
-        for checkbox in self.sudoku_checkbox_frame.checkboxes:
+        for checkbox in self.debug_frame.checkbox_frame.checkboxes:
             if mode == 'debug':
                 checkbox.select()
                 self.localsave_callback(checkbox)
