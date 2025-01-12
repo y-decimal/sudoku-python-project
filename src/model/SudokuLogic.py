@@ -149,20 +149,27 @@ class SudokuLogic(ISudokuInterface):
                     ran = random.choice(possible_values)
                     self.fields[self.rc_to_index(row, column)] = ran
 
-        
-
+    def generate_difficulty(self, difficulty = 0.5):
+        self.generate_random_sudoku_complete()
+        available = [i for i in range(81)] 
+        for _ in range(round(81 * difficulty)):
+            ran = random.choice(available)
+            self.fields[ran] = 0
+            available.remove(ran)
+        for i in available:
+            self.starterfield[i] = True    
 
     def generate_random_sudoku(self, difficulty = 0.5):
-        '''Sets random values for some fields in the game field'''   
+        '''Sets random values for some fields in the game field'''
         self.clear()
         for row in range (9):
             for column in range(9):
-                
+
                 self.fields[self.rc_to_index(row, column)] = 0
                 self.starterfield[self.rc_to_index(row, column)] = False
-                
+
                 if (random.random() > difficulty):
-                    
+
                     self.fields[self.rc_to_index(row, column)] = random.randint(1,9)
                     self.starterfield[self.rc_to_index(row, column)] = True
 
