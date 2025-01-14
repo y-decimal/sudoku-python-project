@@ -63,14 +63,13 @@ class SudokuFrame(ctk.CTkFrame):
                 ctk.CTkFrame(self, width=4, fg_color="#505070", corner_radius=2).grid(row=0, column=col, rowspan=self.gridsize, sticky="ns", padx=3)
                
                 
-    def update_entries(self):
+    def update_entries(self, window_height=200):
            
-        self.game_entry_dimension = int(self.master.master.window_height // self.game_gridsize * 0.75)
- 
+        self.game_entry_dimension = int(window_height // self.game_gridsize * 0.75)
         for row in range(9):
             for column in range(9):
-                self.get_field(row, column).configure( width=self.game_entry_dimension, height=self.game_entry_dimension )
-                self.get_field(row, column).configure( font = ("Arial", 0.75*self.game_entry_dimension) )
+                self.get_field(row, column).update_size(self.game_entry_dimension)
+        
         
       
           
@@ -122,3 +121,7 @@ class SudokuEntryField(ctk.CTkEntry):
 
     def set_value(self, value):
         self.entry_variable.set(str(value))
+        
+    def update_size(self, entry_dimensions):
+        self.configure(width=entry_dimensions, height=entry_dimensions)
+        self.configure(font = ("Arial", 0.75*entry_dimensions))
