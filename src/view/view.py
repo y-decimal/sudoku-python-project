@@ -471,3 +471,19 @@ class View(ctk.CTkFrame):
         if self.controller:
             self.controller.push_value(row, column, value)
             self.update_invalid_fields()
+            
+    def update_field_size(self, window_size):
+        grid_info = self.sudoku_frame.grid_info()
+        row = grid_info.get("row")
+        column = grid_info.get("column")
+        sticky = grid_info.get("sticky")
+        load_frame = ctk.CTkFrame(self, width=window_size*0.75, height=window_size*0.75)
+        self.sudoku_frame.grid_forget()
+        load_frame.grid(row=row, column=column, sticky=sticky)
+        self.sudoku_frame.configure(width=window_size*0.75, height=window_size*0.75)
+        self.sudoku_frame.update_entries(window_size)
+        load_frame.grid_forget()
+        self.sudoku_frame.grid(row=row, column=column, sticky=sticky)
+
+        
+        
