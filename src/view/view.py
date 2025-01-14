@@ -87,7 +87,7 @@ class View(ctk.CTkFrame):
         # Generate Button Frame
         self.generate_button_frame = ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
         self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.resetbutton_callback)
+        self.generate_button_frame.buttons[1].configure(text="Reset", command = self.resetbutton_callback)
         
         # Generate Slider
         self.generate_slider_frame = ctk.CTkFrame(self.generate_frame)
