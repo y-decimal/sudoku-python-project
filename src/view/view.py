@@ -508,6 +508,12 @@ class View(ctk.CTkFrame):
                 self.controller.set_mode("debug")
             else:
                 self.controller.set_mode("normal")
+                
+        elif setting == "appearance":
+            if value == 1:
+                ctk.set_appearance_mode("light")
+            else:
+                ctk.set_appearance_mode("dark")
             
     def set_scale(self, scale):
         self.sudoku_frame.set_scale(scale)
