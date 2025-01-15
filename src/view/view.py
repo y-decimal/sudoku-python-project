@@ -107,6 +107,11 @@ class View(ctk.CTkFrame):
 
         # Grid weight configuration
         self.generate_frame.grid_columnconfigure(0, weight=1)
+        
+        
+        # Settings Button
+        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda: SettingsWindow(self))
+        self.settings_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
            
         # Debug Frame Configuration
         self.debug_frame = ctk.CTkFrame(self)
