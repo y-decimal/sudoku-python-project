@@ -9,12 +9,23 @@ from view.customframes.SettingsWindow import SettingsWindow
 
 class View(ctk.CTkFrame):
 
-    disabled_colors = ("#2F2F32", "#86ff7b")  # (Background color, Text color)
-    enabled_colors = ("#343638", "#DDDDDD")  # (Background color, Text color)
-    highlight_colors = ("#5F4648", "#3F2628")  # (Enabled color, disabled color)
-    adjacent_colors = ("#445F48", "#243F28")  # (Enabled color, disabled color)
-    cell_color = adjacent_colors  # (Enabled color, disabled color)
-    invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
+    disabled_colors = ( ("#d0d0cd", "#2F2F32"),    # (Background LightMode, DarkMode)
+                        ("#002d37","#86ff7b") )    # (Text LightMode, DarkMode)
+    
+    enabled_colors = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)
+                        ("#222222","#DDDDDD") )    # (Text LightMode, DarkMode)
+    
+    highlight_colors = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)
+                        ("#d32c2c","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)
+    
+    adjacent_colors = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)
+                        ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)
+    
+    cell_color = adjacent_colors
+    
+    invalid_color = (   ("red","red"),         # (Enabled LightMode, Enabled DarkMode)
+                        ("#403823","#403823"))     # (Disabled LightMode, Disabled DarkMode)
+
 
     controller = None
     highlighted_fields = []
@@ -351,7 +362,7 @@ class View(ctk.CTkFrame):
                 if widget.get_state():
                     widget.configure(fg_color=self.adjacent_colors[0])
                 elif widget.get_invalid_state():
-                    widget.configure(fg_color=self.invalid_color[0])
+                    widget.configure(fg_color=self.invalid_color[1])
                 else:
                     widget.configure(fg_color=self.adjacent_colors[1])
             if i != row:
@@ -360,7 +371,7 @@ class View(ctk.CTkFrame):
                 if widget.get_state():
                     widget.configure(fg_color=self.adjacent_colors[0])
                 elif widget.get_invalid_state():
-                    widget.configure(fg_color=self.invalid_color[0])
+                    widget.configure(fg_color=self.invalid_color[1])
                 else:
                     widget.configure(fg_color=self.adjacent_colors[1])
 
@@ -379,7 +390,7 @@ class View(ctk.CTkFrame):
                     if widget.get_state():
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[0])
                     elif widget.get_invalid_state():
-                        self.set_field_color(cell_row_offset, cell_column_offset, self.invalid_color[0])
+                        self.set_field_color(cell_row_offset, cell_column_offset, self.invalid_color[1])
                     else:
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[1])
 
@@ -390,7 +401,7 @@ class View(ctk.CTkFrame):
             if widget.get_state():
                 self.set_field_color(row, column, self.enabled_colors[0])
                 if widget.get_invalid_state():
-                    self.set_field_text_color(row, column, self.invalid_color[1])
+                    self.set_field_text_color(row, column, self.invalid_color[0])
                 else:
                     self.set_field_text_color(row, column, self.enabled_colors[1])
             else:
@@ -422,9 +433,9 @@ class View(ctk.CTkFrame):
         if widget.get_invalid_state():
             return
         if widget.get_state():
-            widget.configure(text_color=self.invalid_color[1])
+            widget.configure(text_color=self.invalid_color[0])
         elif widget.get_position() in self.highlighted_fields:
-            widget.configure(fg_color=self.invalid_color[0])
+            widget.configure(fg_color=self.invalid_color[1])
         widget.set_invalid_state(True)
 
 
