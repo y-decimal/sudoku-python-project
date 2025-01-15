@@ -9,6 +9,7 @@ class Controller:
     def fetch(self):
         '''Fetch updated values from the model'''
         print("Fetching")
+        self.view.supress_entry_callback = True
         for row in range(9):
             for column in range(9):
                 value = self.model.get_field_value(row, column)
@@ -19,6 +20,7 @@ class Controller:
         invalid_fields = self.model.get_invalid_fields()
         for row, column in invalid_fields:
             self.view.set_field_invalid(row, column)
+        self.view.supress_entry_callback = False
 
     def push(self):
         '''Push updated values to the model | To be replaced'''

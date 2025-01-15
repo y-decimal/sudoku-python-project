@@ -36,6 +36,7 @@ class View(ctk.CTkFrame):
     highlighted_numbers = []
     edit_mode = False
     controller = None
+    supress_entry_callback = False
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -205,6 +206,8 @@ class View(ctk.CTkFrame):
 
 
     def entry_callback(self, widget):
+        if self.supress_entry_callback:
+            return
         entry_value = widget.entry_variable.get()
         if len(entry_value) > 1:
             widget.entry_variable.set(entry_value[1:])
@@ -284,6 +287,7 @@ class View(ctk.CTkFrame):
         
     def loadbutton_callback(self):
         if self.controller:
+            self.supress_entry_callback = True
             file_name = self.load_dropdown.get()
             self.reset_highlighted_fields()
             if file_name != "":
@@ -291,6 +295,7 @@ class View(ctk.CTkFrame):
             else:
                 self.controller.load("temp")
             self.reset_highlighted_numbers()
+            self.supress_entry_callback = False
             
     
     def localsave_callback(self, widget):
