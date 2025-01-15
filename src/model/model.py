@@ -61,7 +61,7 @@ class Model:
     def generate_random_sudoku(self):
         '''Generates a random sudoku with the current difficulty'''
         
-        self.sudoku_logic.generate_random_sudoku(self.difficulty)
+        self.sudoku_logic.generate_difficulty(self.difficulty)
         
         
     def clear_sudoku(self):
