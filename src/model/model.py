@@ -1,9 +1,9 @@
-from model.IModelInterface import IModelInterface
+
 from model.FileManager import FileManager
 from model.SudokuLogic import SudokuLogic
 
 
-class Model(IModelInterface):
+class Model:
 
     sudoku_logic = None
     file_manager = None
