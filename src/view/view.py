@@ -260,7 +260,7 @@ class View(ctk.CTkFrame):
             if file_name != "":
                 self.controller.load(file_name)
             else:
-                self.controller.load("test")
+                self.controller.load("temp")
             
     
     def localsave_callback(self, widget):
