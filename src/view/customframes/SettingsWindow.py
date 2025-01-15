@@ -11,6 +11,7 @@ class SettingsWindow(ctk.CTkToplevel):
         self.geometry("400x300")
         self.resizable(False, False)
         self.focus_set()
+        self.protocol("WM_DELETE_WINDOW", self.on_exit)
         
         self.parent = parent
         
@@ -63,3 +64,6 @@ class SettingsWindow(ctk.CTkToplevel):
     def set_appearance(self, *args):
         self.parent.set_appearance(self.appearance_setting.get())
         print(self.appearance_setting.get())
+    
+    def on_exit(self):
+        self.withdraw()

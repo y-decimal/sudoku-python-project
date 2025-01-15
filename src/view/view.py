@@ -39,6 +39,9 @@ class View(ctk.CTkFrame):
 
         self.widget_at_mouse = None
         ButtonFrame.font = ctk.CTkFont(family="Helvectia", size=14, weight="normal")
+        
+        self.setting_window = SettingsWindow(self) 
+        self.setting_window.withdraw()
 
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0, 2), weight=1)
@@ -113,7 +116,7 @@ class View(ctk.CTkFrame):
         
         
         # Settings Button
-        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda: SettingsWindow(self))
+        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.deiconify())
         self.settings_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
            
         # Edit Mode Frame
