@@ -5,6 +5,8 @@ from threading import Thread
 class SudokuFrame(ctk.CTkFrame):
 
     game_field = [[0 for _ in range(9)] for _ in range(9)]
+    scale = 1.0
+    window_size = 200
 
     def __init__(self, master, game_gridsize):
         
@@ -21,11 +23,20 @@ class SudokuFrame(ctk.CTkFrame):
         self.add_vertical_separators()
 
 
+           
+    def set_scale(self, scale):
+        self.scale = scale
+        
+    def set_window_size(self, window_size):
+        self.window_size = window_size
+
+    def get_field(self, row, column):
+        return self.game_field[row][column]
+
 
     def configure_grid(self):
         self.grid_columnconfigure([i for i in range(self.gridsize)], weight=1)
         self.grid_rowconfigure([i for i in range(self.gridsize)], weight=1)
-
 
 
     def initialize_fields(self):
@@ -38,23 +49,18 @@ class SudokuFrame(ctk.CTkFrame):
                 self.sudoku_column = 0
                 for column in range(self.gridsize):
                     if column % 2 == 0:
-                        self.game_field[self.sudoku_row][self.sudoku_column] = SudokuEntryField(self, self.game_entry_dimension)
-                        self.game_field[self.sudoku_row][self.sudoku_column].position = (self.sudoku_row, self.sudoku_column)
+                        self.game_field[self.sudoku_row][self.sudoku_column] = SudokuEntryField(self, self.game_entry_dimension, (self.sudoku_row, self.sudoku_column))
                         self.game_field[self.sudoku_row][self.sudoku_column].grid(row=row, column=column, padx=2, pady=2)
                         self.sudoku_column += 1
                 self.sudoku_row += 1
 
-        self.update_entries()
+        self.update_entries()    
 
-    def get_field(self, row, column):
-        return self.game_field[row][column]
-    
 
     def add_horizontal_separators(self):
         for row in range(self.gridsize):
             if row % 2 != 0 and (row + 1) % 3 == 0:
                 ctk.CTkFrame(self, height=4, fg_color="#505070", corner_radius=2).grid(row=row, column=0, columnspan=self.gridsize, sticky="ew", pady=3)
-
 
 
     def add_vertical_separators(self):
@@ -63,21 +69,22 @@ class SudokuFrame(ctk.CTkFrame):
                 ctk.CTkFrame(self, width=4, fg_color="#505070", corner_radius=2).grid(row=0, column=col, rowspan=self.gridsize, sticky="ns", padx=3)
                
                 
-    def update_entries(self, window_height=200):
+    def update_entries(self):
            
-        self.game_entry_dimension = int(window_height // self.game_gridsize * 0.75)
+        self.game_entry_dimension = int((self.window_size // self.game_gridsize) * 0.75 * self.scale)
         for row in range(9):
             for column in range(9):
-                self.get_field(row, column).update_size(self.game_entry_dimension)
-        
-        
-      
-          
+                self.get_field(row, column).update_size(self.game_entry_dimension)        
+
+
+
+
+
 
 
 class SudokuEntryField(ctk.CTkEntry):
 
-    def __init__(self, master, entry_dimensions):      
+    def __init__(self, master, entry_dimensions, position):      
 
         self.entry_variable = ctk.StringVar()       
 
@@ -91,7 +98,7 @@ class SudokuEntryField(ctk.CTkEntry):
 
         self.state = True
         self.invalid_state = False
-        self.position = (-1, -1)
+        self.position = position
         
 
 

@@ -13,6 +13,10 @@ icon_path = "/assets/images/sudoku.ico"
 runtime_icon_path = basedir + icon_path
 
 class App(ctk.CTk):
+    
+    model = None
+    view = None
+    controller = None
 
     def __init__(self):
 
