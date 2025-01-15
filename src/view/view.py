@@ -10,10 +10,10 @@ from view.customframes.SettingsWindow import SettingsWindow
 class View(ctk.CTkFrame):
 
     disabled_colors = ( ("#d0d0cd", "#2F2F32"),    # (Background LightMode, DarkMode)
-                        ("#002d37","#86ff7b") )    # (Text LightMode, DarkMode)
+                        ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)
     
     enabled_colors = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)
-                        ("#222222","#DDDDDD") )    # (Text LightMode, DarkMode)
+                        ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)
     
     highlight_colors = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)
                         ("#d32c2c","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)
@@ -24,7 +24,7 @@ class View(ctk.CTkFrame):
     cell_color = adjacent_colors
     
     invalid_color = (   ("red","red"),         # (Enabled LightMode, Enabled DarkMode)
-                        ("#403823","#403823"))     # (Disabled LightMode, Disabled DarkMode)
+                        ("#e67e41","#403823"))     # (Disabled LightMode, Disabled DarkMode)
 
 
     controller = None
@@ -553,14 +553,11 @@ class View(ctk.CTkFrame):
                 self.controller.set_mode("debug")
             else:
                 self.controller.set_mode("normal")
-                
-        elif setting == "appearance":
-            if value == 1:
-                ctk.set_appearance_mode("light")
-            else:
-                ctk.set_appearance_mode("dark")
-            
+                            
             
     def set_scale(self, scale):
         self.sudoku_frame.set_scale(scale)
         self.update_field_size()
+        
+    def set_appearance(self, mode):
+        ctk.set_appearance_mode(mode)
