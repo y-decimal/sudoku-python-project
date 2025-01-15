@@ -13,7 +13,7 @@ class Model:
 
         self.file_manager = FileManager()
         self.sudoku_logic = SudokuLogic()
-        self.difficulty = 0.9
+        self.difficulty = 0.5
 
 
 
