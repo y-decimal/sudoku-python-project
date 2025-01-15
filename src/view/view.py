@@ -222,7 +222,7 @@ class View(ctk.CTkFrame):
                 self.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
                 self.load_dropdown.focus()
             else:
-                self.load_dropdown.configure(state="readonly", text_color="#99FF99", dropdown_text_color="#99FF99")
+                self.load_dropdown.configure(state="readonly", text_color=("#111111","#99FF99"), dropdown_text_color=("#111111","#99FF99"))
             
             if not self.controller.is_file_writeable(dropdown_selection):
                 self.file_button_frame.buttons[0].configure(state="disabled")
