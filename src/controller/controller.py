@@ -69,7 +69,7 @@ class Controller:
     def set_mode(self, mode='normal'):
         '''Callback for the mode button'''
         self.model.set_mode(mode)
-        self.view.dropdown_callback()
+        self.view.set_mode(mode)
 
     def get_files(self):
         '''Callback for the get files method'''
