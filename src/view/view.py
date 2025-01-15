@@ -219,7 +219,7 @@ class View(ctk.CTkFrame):
             if dropdown_selection == "[ New file ]" or dropdown_selection == "[ New blank Sudoku ]":
                 self.file_button_frame.buttons[0].configure(state="normal")
                 self.load_dropdown.set("")
-                self.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
+                self.load_dropdown.configure(state="normal", text_color=("#999999","#999999"), dropdown_text_color=("#999999","#999999"))
                 self.load_dropdown.focus()
             else:
                 self.load_dropdown.configure(state="readonly", text_color=("#111111","#99FF99"), dropdown_text_color=("#111111","#99FF99"))
