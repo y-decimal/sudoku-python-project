@@ -6,6 +6,7 @@ class SudokuFrame(ctk.CTkFrame):
 
     game_field = [[0 for _ in range(9)] for _ in range(9)]
     scale = 1.0
+    window_size = 200
 
     def __init__(self, master, game_gridsize):
         
@@ -66,16 +67,16 @@ class SudokuFrame(ctk.CTkFrame):
                 
     def update_entries(self):
            
-        self.game_entry_dimension = int((self.master.master.window_height // self.game_gridsize) * 0.75 * self.scale)
- 
+        self.game_entry_dimension = int((self.window_size // self.game_gridsize) * 0.75 * self.scale)
         for row in range(9):
             for column in range(9):
-                self.get_field(row, column).configure( width=self.game_entry_dimension, height=self.game_entry_dimension )
-                self.get_field(row, column).configure( font = ("Arial", 0.75*self.game_entry_dimension) )
-        
+                self.get_field(row, column).update_size(self.game_entry_dimension)        
+       
     def set_scale(self, scale):
         self.scale = scale
-        self.update_entries()
+        
+    def set_window_size(self, window_size):
+        self.window_size = window_size
           
 
 
@@ -125,3 +126,7 @@ class SudokuEntryField(ctk.CTkEntry):
 
     def set_value(self, value):
         self.entry_variable.set(str(value))
+        
+    def update_size(self, entry_dimensions):
+        self.configure(width=entry_dimensions, height=entry_dimensions)
+        self.configure(font = ("Arial", 0.75*entry_dimensions))
