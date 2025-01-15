@@ -1,9 +1,9 @@
-from model.IModelInterface import IModelInterface
+
 from model.FileManager import FileManager
 from model.SudokuLogic import SudokuLogic
 
 
-class Model(IModelInterface):
+class Model:
 
     sudoku_logic = None
     file_manager = None
@@ -68,6 +68,14 @@ class Model(IModelInterface):
         '''Clears the sudoku'''
 
         self.sudoku_logic.clear()
+        
+    def reset_sudoku(self):
+        '''Resets the sudoku to the original state'''
+
+        for row in range(9):
+            for column in range(9):
+                if self.sudoku_logic.is_field_editable(row, column):
+                    self.sudoku_logic.set_field_value(row, column, 0)
 
 
     def load_sudoku(self, file_name: str) -> bool:
