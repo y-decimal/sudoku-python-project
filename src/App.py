@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import customtkinter as ctk
+from tkinter import ttk
 from model.model import Model
 from view.view import View
 from controller.controller import Controller
@@ -12,6 +13,10 @@ icon_path = "/assets/images/sudoku.ico"
 runtime_icon_path = basedir + icon_path
 
 class App(ctk.CTk):
+    
+    model = None
+    view = None
+    controller = None
 
     def __init__(self):
 
@@ -41,7 +46,8 @@ class App(ctk.CTk):
         self.controller.set_mode("debug")
         
         self.update_window_height()
-
+        
+        self.bind("<Configure>", self.update_window_height)
 
 
     def set_window_parameters(self):
@@ -72,7 +78,7 @@ class App(ctk.CTk):
 
 
 
-    def update_window_height(self):
+    def update_window_height(self, *args):
         '''Updates the window height and width'''
     
         self.prev_window_height = self.window_height
@@ -80,14 +86,10 @@ class App(ctk.CTk):
         
         self.window_height = self.winfo_height()
         self.window_width = self.winfo_width()
-        # print(f"Window Height: {self.window_height}, Window Width: {self.window_width}")
         
         if self.prev_window_height != self.window_height and self.prev_window_width != self.window_width:
-            self.view.sudoku_frame.update_entries()
+            self.view.update_field_size(self.window_height)
 
-        
-        
-        self.after(500, self.update_window_height)
         
 
 

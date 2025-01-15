@@ -61,13 +61,21 @@ class Model:
     def generate_random_sudoku(self):
         '''Generates a random sudoku with the current difficulty'''
         
-        self.sudoku_logic.generate_random_sudoku(self.difficulty)
+        self.sudoku_logic.generate_difficulty(self.difficulty)
         
         
     def clear_sudoku(self):
         '''Clears the sudoku'''
 
         self.sudoku_logic.clear()
+        
+    def reset_sudoku(self):
+        '''Resets the sudoku to the original state'''
+
+        for row in range(9):
+            for column in range(9):
+                if self.sudoku_logic.is_field_editable(row, column):
+                    self.sudoku_logic.set_field_value(row, column, 0)
 
 
     def load_sudoku(self, file_name: str) -> bool:

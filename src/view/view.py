@@ -4,17 +4,31 @@ import customtkinter as ctk
 from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes.ButtonFrame import ButtonFrame
 from view.customframes.CheckboxFrame import CheckboxFrame
+from view.customframes.SettingsWindow import SettingsWindow
 
 
 class View(ctk.CTkFrame):
 
-    disabled_colors = ("#2A2A2A", "#86ff7b")  # (Background color, Text color)
-    enabled_colors = ("#343638", "#DDDDDD")  # (Background color, Text color)
-    highlight_colors = ("#5F4648", "#3F2628")  # (Enabled color, disabled color)
-    adjacent_colors = ("#445F48", "#243F28")  # (Enabled color, disabled color)
-    cell_color = adjacent_colors  # (Enabled color, disabled color)
-    invalid_color = ("#403823", "red")  # (Disabled background color, Enabled Text color)
-    number_highlight_color = ("#FFFF00", "#FFFF00")  # (Disabled Text color, Enabled Text color)
+    disabled_colors = ( ("#d0d0cd", "#2A2A2A"),    # (Background LightMode, DarkMode)
+                        ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)
+    
+    enabled_colors = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)
+                        ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)
+    
+    highlight_colors = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)
+                        ("#c75252","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)
+    
+    adjacent_colors = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)
+                        ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)
+    
+    cell_color = adjacent_colors
+    
+    invalid_color = (   ("red","red"),         # (Enabled LightMode, Enabled DarkMode)
+                        ("#b29626","#403823"))     # (Disabled LightMode, Disabled DarkMode)
+    
+    number_highlight_color = (  ("#bfbf00", "#FFFF00"),  # (Enabled LightMode, Enabled DarkMode)
+                                ("#bfbf00", "#FFFF00") ) # (Disabled LightMode, Disabled DarkMode)
+
 
     controller = None
     highlighted_fields = []
@@ -26,15 +40,19 @@ class View(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
+
         self.widget_at_mouse = None
         ButtonFrame.font = ctk.CTkFont(family="Helvectia", size=14, weight="normal")
+        
+        self.setting_window = SettingsWindow(self) 
+        self.setting_window.withdraw()
 
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0, 2), weight=1)
         self.grid_columnconfigure(1, weight=3)
         self.grid_rowconfigure(1, weight=3)
         self.grid_rowconfigure((0,2), weight=1)
-        
+
         
         self.bind("<Button-1>", lambda args: self.mousebutton_callback())
         
@@ -58,38 +76,33 @@ class View(ctk.CTkFrame):
         self.sidebar_frame.grid(row=1, column=2, padx=10, pady=10, sticky="ew")   
         self.sidebar_frame.grid_columnconfigure(0, weight=1)
         
+        
         # File Load Frame Configuration
         self.file_frame = ctk.CTkFrame(self.sidebar_frame)
-        self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        
+        self.file_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")  
         # File Button Frame
         self.file_button_frame = ButtonFrame(self.file_frame, rows = 1, columns = 2, sticky="ew")   
         self.file_button_frame.buttons[0].configure(text="Save", command = self.savebutton_callback)
         self.file_button_frame.buttons[1].configure(text="Load", command = self.loadbutton_callback)
-           
         # File Selection Dropdown and Label
         self.load_label = ctk.CTkLabel(self.file_frame, text="Select File", font=("Arial", 16), justify="center")
         self.load_dropdown = ctk.CTkComboBox(self.file_frame, font=("Arial", 16), dropdown_font=("Arial", 14), justify="center", values=[""], command=self.dropdown_callback, state="readonly")
-        
-        # Gridding
+        # File Gridding
         self.load_label.grid(row=0, column=0, padx=25, pady=10, sticky="ew")
         self.load_dropdown.grid(row=1, column=0, padx=25, pady=25, sticky="ew")
         self.file_button_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
-        
-        # Grid weight configuration
+        # File Grid weight configuration
         self.file_frame.grid_columnconfigure(0, weight=1)
         
         # Sudoku Generation Frame
         self.generate_frame = ctk.CTkFrame(self.sidebar_frame)
         self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
-        
         # Generate Title
         self.generate_frame_title = ctk.CTkLabel(self.generate_frame, text="Sudoku Generation", font=("Arial", 16), justify="center")
-        
         # Generate Button Frame
         self.generate_button_frame = ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
         self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)
+        self.generate_button_frame.buttons[1].configure(text="Reset", command = self.resetbutton_callback)
         
         # Generate Slider
         self.generate_slider_frame = ctk.CTkFrame(self.generate_frame)
@@ -97,16 +110,34 @@ class View(ctk.CTkFrame):
         self.generate_slider = ctk.CTkSlider(self.generate_slider_frame, from_=0.3, to=0.7, orientation="horizontal", number_of_steps=8, command=self.generateslider_callback)  
         self.generate_slider_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.generate_slider.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        self.generate_slider_frame.grid_columnconfigure(0, weight=1)
-        
-        
-        # Gridding
+        self.generate_slider_frame.grid_columnconfigure(0, weight=1)      
+        # Generate Gridding
         self.generate_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.generate_button_frame.grid(row=1, column=0, padx=25, pady=10, sticky="nsew")
         self.generate_slider_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
-
-        # Grid weight configuration
+        # Generate Grid weight configuration
         self.generate_frame.grid_columnconfigure(0, weight=1)
+        
+        
+        # Settings Button
+        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.deiconify())
+        self.settings_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
+           
+        # Edit Mode Frame
+        self.edit_mode_frame = ctk.CTkFrame(self.sidebar_frame)
+        # Edit Mode Title
+        self.edit_mode_frame_title = ctk.CTkLabel(self.edit_mode_frame, text="Sudoku Editor", font=("Arial", 16), justify="center")
+        # Edit Mode Toggle Button
+        self.edit_mode_toggle_fields = ctk.CTkButton(self.edit_mode_frame, text="Toggle fields", command = self.toggle_all_fields) 
+        # Edit Mode Confirm Button
+        self.edit_mode_confirm_button = ctk.CTkButton(self.edit_mode_frame, text="Confirm", command = lambda *args: self.set_edit_mode(0))
+        # Edit Mode Gridding
+        self.edit_mode_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
+        self.edit_mode_toggle_fields.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.edit_mode_confirm_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+        # Edit Mode Grid weight configuration
+        self.edit_mode_frame.grid_columnconfigure((0,1), weight=1)
+           
            
         # Debug Frame Configuration
         self.debug_frame = ctk.CTkFrame(self)
@@ -145,19 +176,23 @@ class View(ctk.CTkFrame):
         self.dropdown_callback()
         
         
-    
-
     def set_mouse_position(self, widget):
         self.widget_at_mouse = widget
 
-    def set_edit_mode(self):
-        self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
-        if self.edit_mode == 1:
-            self.debug_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
-            self.debug_context_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+    def set_edit_mode(self, mode = None):
+        if mode is not None:
+            self.edit_mode = mode
         else:
-            self.debug_button.grid_forget()
-            self.debug_context_frame.grid_forget()
+            self.edit_mode = self.sudoku_checkbox_frame.checkboxes[1].get()
+        if self.edit_mode == 1:
+            self.generate_frame.grid_forget()
+            self.edit_mode_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+            self.sudoku_checkbox_frame.checkboxes[1].select()
+        else:
+            self.edit_mode_frame.grid_forget()
+            self.generate_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+            self.sudoku_checkbox_frame.checkboxes[1].deselect()
+            self.savebutton_callback()
         
 
     def mousebutton_callback(self):
@@ -167,6 +202,7 @@ class View(ctk.CTkFrame):
             self.highlight_numbers(self.widget_at_mouse)
         else:
             self.reset_highlighted_fields()
+
 
     def entry_callback(self, widget):
         entry_value = widget.entry_variable.get()
@@ -184,36 +220,43 @@ class View(ctk.CTkFrame):
             self.highlight_numbers(widget)
         
 
-        
-
     def dropdown_callback(self, *args):
             files = self.controller.get_files()
-            files.append("[ new file ]")
+            files.append("[ New file ]")
+            files.append("[ New blank Sudoku ]")
             self.load_dropdown.configure(values=files)
-            if self.load_dropdown.get() == "[ new file ]":
+            dropdown_selection = self.load_dropdown.get()
+            if dropdown_selection == "[ New file ]" or dropdown_selection == "[ New blank Sudoku ]":
                 self.file_button_frame.buttons[0].configure(state="normal")
                 self.load_dropdown.set("")
-                self.load_dropdown.configure(state="normal", text_color="#999999", dropdown_text_color="#999999")
+                self.load_dropdown.configure(state="normal", text_color=("#999999","#999999"), dropdown_text_color=("#999999","#999999"))
                 self.load_dropdown.focus()
             else:
-                self.load_dropdown.configure(state="readonly", text_color="#99FF99", dropdown_text_color="#99FF99")
+                self.load_dropdown.configure(state="readonly", text_color=("#111111","#99FF99"), dropdown_text_color=("#111111","#99FF99"))
             
-            if not self.controller.is_file_writeable(self.load_dropdown.get()):
+            if not self.controller.is_file_writeable(dropdown_selection):
                 self.file_button_frame.buttons[0].configure(state="disabled")
             else:
                 self.file_button_frame.buttons[0].configure(state="normal")
+            
+            if dropdown_selection == "[ New blank Sudoku ]":
+                self.controller.clear()
+                self.set_edit_mode(1)
 
 
     def fetchbutton_callback(self):
         if self.controller:
             self.controller.fetch()
 
+
     def pushbutton_callback(self):
         if self.controller:
             self.controller.push()
 
+
     def generatebutton_callback(self):
         if self.controller: self.controller.generate()
+        
         
     def generateslider_callback(self, value):
         if self.controller: self.controller.set_difficulty(value)
@@ -225,20 +268,19 @@ class View(ctk.CTkFrame):
             self.generate_slider_label.configure(text="Difficulty = Hard")
             
         
-    def clearbutton_callback(self):
-        if self.controller: self.controller.clear()
+    def resetbutton_callback(self):
+        if self.controller: self.controller.reset()
 
     def savebutton_callback(self):
         if self.controller: 
             file_name = self.load_dropdown.get()
-            
-            
             if file_name != "":
                 self.controller.save(file_name)
             else:
-                self.controller.save("test")
+                self.controller.save("temp")
                 
             self.dropdown_callback()
+        
         
     def loadbutton_callback(self):
         if self.controller:
@@ -247,7 +289,7 @@ class View(ctk.CTkFrame):
             if file_name != "":
                 self.controller.load(file_name)
             else:
-                self.controller.load("test")
+                self.controller.load("temp")
             self.reset_highlighted_numbers()
             
     
@@ -259,6 +301,7 @@ class View(ctk.CTkFrame):
             else:
                 self.controller.set_mode("normal")
 
+
     def toggle_field_editable(self):
         widget = self.widget_at_mouse
         if widget is not None and self.edit_mode == 1:
@@ -269,6 +312,7 @@ class View(ctk.CTkFrame):
                 self.set_field_editable(row, column)
                
             self.reset_highlighted_fields()
+
 
     def toggle_field_invalid(self):
         widget = self.widget_at_mouse
@@ -338,7 +382,10 @@ class View(ctk.CTkFrame):
                     break
                     
                 if self.get_field_value(row, column) == self.get_field_value(widget_position[0], widget_position[1]) and self.get_field_value(row, column) != 0:
-                    self.set_field_text_color(row, column, self.number_highlight_color[1])
+                    if self.get_field_state(row, column):
+                        self.set_field_text_color(row, column, self.number_highlight_color[0])
+                    else:
+                        self.set_field_text_color(row, column, self.number_highlight_color[1])
                     self.highlighted_numbers.append((row, column))
 
 
@@ -364,6 +411,7 @@ class View(ctk.CTkFrame):
             widget.configure(fg_color=self.highlight_colors[1])
             widget.focus()
 
+
     def highlight_line(self, widget):
         row, column = widget.get_position()
         for i in range(9):
@@ -373,7 +421,7 @@ class View(ctk.CTkFrame):
                 if widget.get_state():
                     widget.configure(fg_color=self.adjacent_colors[0])
                 elif widget.get_invalid_state():
-                    widget.configure(fg_color=self.invalid_color[0])
+                    widget.configure(fg_color=self.invalid_color[1])
                 else:
                     widget.configure(fg_color=self.adjacent_colors[1])
             if i != row:
@@ -382,9 +430,10 @@ class View(ctk.CTkFrame):
                 if widget.get_state():
                     widget.configure(fg_color=self.adjacent_colors[0])
                 elif widget.get_invalid_state():
-                    widget.configure(fg_color=self.invalid_color[0])
+                    widget.configure(fg_color=self.invalid_color[1])
                 else:
                     widget.configure(fg_color=self.adjacent_colors[1])
+
 
     def highlight_cell(self, widget):
         row, column = widget.get_position()
@@ -400,9 +449,10 @@ class View(ctk.CTkFrame):
                     if widget.get_state():
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[0])
                     elif widget.get_invalid_state():
-                        self.set_field_color(cell_row_offset, cell_column_offset, self.invalid_color[0])
+                        self.set_field_color(cell_row_offset, cell_column_offset, self.invalid_color[1])
                     else:
                         self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[1])
+
 
     def reset_field_color(self, widget):
         row, column = widget.get_position()
@@ -411,7 +461,7 @@ class View(ctk.CTkFrame):
         if widget.get_state():
             self.set_field_color(row, column, self.enabled_colors[0])
             if widget.get_invalid_state():
-                self.set_field_text_color(row, column, self.invalid_color[1])
+                self.set_field_text_color(row, column, self.invalid_color[0])
             else:
                 self.set_field_text_color(row, column, self.enabled_colors[1])
         else:
@@ -423,6 +473,7 @@ class View(ctk.CTkFrame):
             self.reset_field_color(self.sudoku_frame.get_field(row, column))
         self.highlighted_fields = []
 
+
     def set_field_not_editable(self, row: int, column: int):
         widget = self.sudoku_frame.get_field(row, column)
         if widget.get_state():
@@ -430,6 +481,7 @@ class View(ctk.CTkFrame):
             self.set_field_color(row, column, self.disabled_colors[0])
             self.set_field_text_color(row, column, self.disabled_colors[1])
             widget.set_state(False)
+
 
     def set_field_editable(self, row: int, column: int):
         widget = self.sudoku_frame.get_field(row, column)
@@ -439,15 +491,17 @@ class View(ctk.CTkFrame):
             self.set_field_text_color(row, column, self.enabled_colors[1])
             widget.set_state(True)
 
+
     def set_field_invalid(self, row: int, column: int):
         widget = self.sudoku_frame.get_field(row, column)
         if widget.get_invalid_state():
             return
         if widget.get_state():
-            widget.configure(text_color=self.invalid_color[1])
+            widget.configure(text_color=self.invalid_color[0])
         elif widget.get_position() in self.highlighted_fields:
-            widget.configure(fg_color=self.invalid_color[0])
+            widget.configure(fg_color=self.invalid_color[1])
         widget.set_invalid_state(True)
+
 
     def set_field_valid(self, row: int, column: int):
         widget = self.sudoku_frame.get_field(row, column)
@@ -461,6 +515,7 @@ class View(ctk.CTkFrame):
             widget.configure(fg_color=self.disabled_colors[0])
         widget.set_invalid_state(False)
 
+
     def update_invalid_fields(self):
         for row in range(9):
             for column in range(9):
@@ -469,17 +524,21 @@ class View(ctk.CTkFrame):
                 else:
                     self.set_field_valid(row, column)
 
+
     def set_field_color(self, row: int, column: int, color: str):
         self.sudoku_frame.get_field(row, column).configure(fg_color=color)
 
+
     def set_field_text_color(self, row: int, column: int, color: str):
         self.sudoku_frame.get_field(row, column).configure(text_color=color)
+
 
     def set_field_value(self, row: int, column: int, value: int):
         if value > 0 and value < 10:
             self.sudoku_frame.get_field(row, column).set_value(value)
         elif value == 0:
             self.sudoku_frame.get_field(row, column).set_value("")
+
 
     def get_field_value(self, row: int, column: int) -> int:
         value = self.sudoku_frame.get_field(row, column).get_value()
@@ -488,11 +547,13 @@ class View(ctk.CTkFrame):
         else:
             return int(value)
 
+
     def set_field_state(self, row: int, column: int, state: str):
         if state:
             self.set_field_editable(row, column)
         else:
             self.set_field_not_editable(row, column)
+
 
     def get_field_state(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field'''
@@ -503,15 +564,51 @@ class View(ctk.CTkFrame):
 
 
     def set_mode(self, mode='normal'):
-        for checkbox in self.sudoku_checkbox_frame.checkboxes:
-            if mode == 'debug':
-                checkbox.select()
-                self.localsave_callback(checkbox)
-            else:
-                checkbox.deselect()
-                self.localsave_callback(checkbox)
+        if mode == 'debug':
+            self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+            self.dropdown_callback()
+        else:
+            self.debug_frame.grid_forget()
+            self.dropdown_callback()
+
 
     def push_value(self, row, column, value):
         if self.controller:
             self.controller.push_value(row, column, value)
             self.update_invalid_fields()
+            
+            
+    def update_field_size(self, window_size = None):
+        if window_size is not None:
+            self.sudoku_frame.set_window_size(window_size)
+        else:
+            window_size = self.sudoku_frame.window_size
+        grid_info = self.sudoku_frame.grid_info()
+        row = grid_info.get("row")
+        column = grid_info.get("column")
+        sticky = grid_info.get("sticky")
+        load_frame = ctk.CTkFrame(self, width=window_size*0.75, height=window_size*0.75)
+        self.sudoku_frame.grid_forget()
+        load_frame.grid(row=row, column=column, sticky=sticky)
+        self.sudoku_frame.configure(width=window_size*0.75, height=window_size*0.75)
+        self.sudoku_frame.update_entries()
+        load_frame.grid_forget()
+        self.sudoku_frame.grid(row=row, column=column, sticky=sticky)
+            
+            
+    def switch_setting(self, setting, value):
+        if not self.controller:
+            return
+        if setting == "debug":
+            if value == 1:
+                self.controller.set_mode("debug")
+            else:
+                self.controller.set_mode("normal")
+                            
+            
+    def set_scale(self, scale):
+        self.sudoku_frame.set_scale(scale)
+        self.update_field_size()
+        
+    def set_appearance(self, mode):
+        ctk.set_appearance_mode(mode)
