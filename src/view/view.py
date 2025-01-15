@@ -481,16 +481,28 @@ class View(ctk.CTkFrame):
 
 
     def set_mode(self, mode='normal'):
-        for checkbox in self.sudoku_checkbox_frame.checkboxes:
-            if mode == 'debug':
-                checkbox.select()
-                self.localsave_callback(checkbox)
-            else:
-                checkbox.deselect()
-                self.localsave_callback(checkbox)
+        if mode == 'debug':
+            self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+            self.dropdown_callback()
+        else:
+            self.debug_frame.grid_forget()
+            self.dropdown_callback()
 
 
     def push_value(self, row, column, value):
         if self.controller:
             self.controller.push_value(row, column, value)
             self.update_invalid_fields()
+            
+            
+    def switch_setting(self, setting, value):
+        if not self.controller:
+            return
+        if setting == "debug":
+            if value == 1:
+                self.controller.set_mode("debug")
+            else:
+                self.controller.set_mode("normal")
+            
+    def set_scale(self, scale):
+        self.sudoku_frame.set_scale(scale)
