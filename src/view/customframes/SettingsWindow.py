@@ -19,7 +19,7 @@ class SettingsWindow(ctk.CTkToplevel):
         self.settings_switch_frame = SwitchFrame(self, rows=3, columns=1)
         
         i = 0
-        setting = [("Debug Mode", "debug"), ("Light Mode", "mode"), ("To be added", "")]
+        setting = [("Debug Mode", "debug"), ("Light Mode", "appearance"), ("To be added", "")]
         for switch in self.settings_switch_frame.switches:
             switch.configure(text=setting[i][0], font=("Arial", 18), command = lambda *args, setting = setting[i][1], widget = switch: self.switch(setting, widget))
             i += 1
