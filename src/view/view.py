@@ -178,9 +178,10 @@ class View(ctk.CTkFrame):
             widget.entry_variable.set("")
             self.push_value(widget.get_position()[0], widget.get_position()[1], 0)
             self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
+            self.reset_highlighted_numbers()
         else:
             self.push_value(widget.get_position()[0], widget.get_position()[1], int(entry_value))
-            # self.highlight_numbers(widget)
+            self.highlight_numbers(widget)
         
 
         
@@ -247,6 +248,7 @@ class View(ctk.CTkFrame):
                 self.controller.load(file_name)
             else:
                 self.controller.load("test")
+            self.reset_highlighted_numbers()
             
     
     def localsave_callback(self, widget):
@@ -319,28 +321,35 @@ class View(ctk.CTkFrame):
         
         self.reset_highlighted_fields() 
         
+        
     def highlight_numbers(self, widget):
+        
+        self.reset_highlighted_numbers()
+        
+        if widget is None:
+            return
+        
+        widget_position = widget.get_position()
+
         for row in range(9):
             for column in range(9):
-                # if (row, column) in self.highlighted_numbers:
-                #     if widget.get_state(): 
-                #         self.set_field_text_color(row, column, self.enabled_colors[1])
-                #     else:
-                #         self.set_field_text_color(row, column, self.disabled_colors[1])
-                #     self.highlighted_numbers.remove((row, column))
+                             
+                if (row, column) in self.invalid_fields or (row, column) == widget_position:
+                    break
                     
-                if self.get_field_value(row, column) == self.get_field_value(widget.get_position()[0], widget.get_position()[1]) and self.get_field_value(row, column) != 0:
-                    self.set_highlighted_number(self.sudoku_frame.get_field(row, column))
-                    self.highlighted_numbers.append((row, column)) 
-                    self.highlighted_fields.append((row, column))
-        
-    def set_highlighted_number (self, widget):
-        if widget.get_position() in self.invalid_fields:
-            return
-        if widget.get_state():
-            self.set_field_text_color(widget.get_position()[0], widget.get_position()[1], self.number_highlight_color[1])
-        else:
-            self.set_field_text_color(widget.get_position()[0], widget.get_position()[1], self.number_highlight_color[0])
+                if self.get_field_value(row, column) == self.get_field_value(widget_position[0], widget_position[1]) and self.get_field_value(row, column) != 0:
+                    self.set_field_text_color(row, column, self.number_highlight_color[1])
+                    self.highlighted_numbers.append((row, column))
+
+
+    def reset_highlighted_numbers(self):
+        for row, column in self.highlighted_numbers:
+            if self.get_field_state(row, column): 
+                self.set_field_text_color(row, column, self.enabled_colors[1])
+            else:
+                self.set_field_text_color(row, column, self.disabled_colors[1])
+        self.highlighted_numbers = []
+    
     
     def highlight_fields(self, widget):
         row, column = widget.get_position()
@@ -488,6 +497,10 @@ class View(ctk.CTkFrame):
     def get_field_state(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field'''
         return self.sudoku_frame.get_field(row, column).get_state()
+
+    def get_field(self, row: int, column: int):
+        return self.sudoku_frame.get_field(row, column)
+
 
     def set_mode(self, mode='normal'):
         for checkbox in self.sudoku_checkbox_frame.checkboxes:
