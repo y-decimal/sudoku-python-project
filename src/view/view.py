@@ -82,7 +82,8 @@ class View(ctk.CTkFrame):
         # Generate Button Frame
         self.generate_button_frame = ButtonFrame(self.generate_frame, rows = 1, columns = 2, sticky="ew")
         self.generate_button_frame.buttons[0].configure(text="Generate", command = self.generatebutton_callback)
-        self.generate_button_frame.buttons[1].configure(text="Clear", command = self.clearbutton_callback)
+        self.generate_button_frame.buttons[1].configure(text="Reset", command = self.resetbutton_callback)
+        
         # Generate Slider
         self.generate_slider_frame = ctk.CTkFrame(self.generate_frame)
         self.generate_slider_label = ctk.CTkLabel(self.generate_slider_frame, text="Difficulty = Medium", font=("Arial", 16), justify="center")
@@ -239,8 +240,8 @@ class View(ctk.CTkFrame):
             self.generate_slider_label.configure(text="Difficulty = Hard")
             
         
-    def clearbutton_callback(self):
-        if self.controller: self.controller.clear()
+    def resetbutton_callback(self):
+        if self.controller: self.controller.reset()
 
     def savebutton_callback(self):
         if self.controller: 
