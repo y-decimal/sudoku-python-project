@@ -15,6 +15,8 @@ class SettingsWindow(ctk.CTkToplevel):
         
         self.parent = parent
         
+        self.settings = None
+        
         self.settings_frame_title = ctk.CTkLabel(self, text="Settings", font=("Arial", 34), justify="right", text_color="lightblue")
         
         self.debug_frame = ctk.CTkFrame(self)
@@ -47,7 +49,7 @@ class SettingsWindow(ctk.CTkToplevel):
         self.appearance_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.scale_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         
-        self.load_settings()
+   
    
     def set_mode(self, *args):
         mode = self.debug_frame.switch.get()
@@ -56,17 +58,22 @@ class SettingsWindow(ctk.CTkToplevel):
         else: 
             self.parent.set_mode("normal")
 
+
     def set_scale(self, *args):
-        scale = self.scale_frame.scale.get()
+        scale = round(self.scale_frame.scale.get(), 2)
         self.parent.set_scale(scale)
         self.scale_frame.scale_value.configure(text=f"{round(scale*100)}%")
 
+
     def set_appearance(self, *args):
         self.parent.set_appearance(self.appearance_frame.setting.get())
-        print(self.appearance_frame.setting.get())
+
+    
     
     def load_settings(self):
-        settings = self.parent.controller.get_settings()
+        settings = self.parent.controller.load_settings()
+        if settings == self.settings:
+            return
         if settings["mode"] == "debug":
             self.debug_frame.switch.select()
         else:
@@ -76,12 +83,26 @@ class SettingsWindow(ctk.CTkToplevel):
         self.appearance_frame.setting.set(settings["appearance"])
         self.set_appearance()
         
-        self.scale_frame.scale.set(settings["scale"])
+        self.scale_frame.scale.set(float(settings["scale"]))
         self.set_scale()
+
+        self.settings = settings    
+    
+    def save_settings(self):
+        settings = {
+            "mode": "debug" if self.debug_frame.switch.get() else "normal",
+            "appearance": self.appearance_frame.setting.get(),
+            "scale": str(round(self.scale_frame.scale.get(), 2))
+        }
+        self.parent.controller.save_settings(settings)
+        
+        self.settings = settings
+    
     
     def hide(self):
         self.withdraw()
-        self.parent.controller.save_settings()
+        self.save_settings()
+        
         
     def show(self):
         self.load_settings()
