@@ -8,6 +8,7 @@ class FileManager:
     
     sudoku_testfiles_path = "/assets/TestFiles/"
     sudoku_files_path = "/assets/SudokuFiles/"
+    settings_path = "/assets/settings.txt"
     absolute_path = None
     root_dir = None
     read_only_files = ["sudoku_easy", "sudoku_medium", "sudoku_hard", "sudoku_easy_possible_solution"]
@@ -21,6 +22,7 @@ class FileManager:
         
         # Set the absolute path using the root directory and the relative path
         self.set_file_mode('normal')
+        self.generate_default_settings()
         
         
 
@@ -134,6 +136,7 @@ class FileManager:
             files[index] = files[index].split(".")[0]
         return files
     
+    
     def is_writeable(self, file_name):
         '''Returns true if the file is writeable'''
     
@@ -147,6 +150,7 @@ class FileManager:
 
         return True
 
+
     def copy_default_files(self):
         '''Copies default sudoku files to the current directory if they exist'''
         source_dir = self.root_dir + self.sudoku_files_path
@@ -158,3 +162,46 @@ class FileManager:
             if os.path.exists(source_path) and not os.path.exists(target_path):
                 shutil.copy(source_path, target_path)
                 
+
+    def save_settings(self, settings: dict):
+        '''Saves the settings to the settings file'''
+        
+        path = self.root_dir + self.settings_path
+        
+        with open(path, 'w') as file:
+            for key, value in settings.items():
+                file.write(f"{key}={value}\n")
+        
+        
+    def generate_default_settings(self, override = False):
+        '''Generates the default settings'''
+        settings = {
+            "appearance": "System",
+            "mode": "debug",
+            "scale": "1.0"
+        }
+        
+        path = self.root_dir + self.settings_path
+        
+        if not os.path.exists(self.root_dir + "/assets"):
+            os.makedirs(self.root_dir + "/assets")
+        if not os.path.exists(path) or override is True:
+            return self.save_settings(settings)
+        else:
+            return False
+        
+    
+    def load_settings(self):
+        '''Loads the settings from the settings file'''
+        
+        path = self.root_dir + self.settings_path
+        
+        if not os.path.exists(path):
+            self.generate_default_settings()
+        
+        with open(path, 'r') as file:
+            settings = {}
+            for line in file:
+                key, value = line.split("=")
+                settings[key] = value.strip()
+            return settings

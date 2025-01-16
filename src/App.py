@@ -43,7 +43,6 @@ class App(ctk.CTk):
         self.controller = Controller(self.model, self.view)
         
         self.view.set_controller(self.controller)
-        self.controller.set_mode("debug")
         
         self.update_window_height()
         
