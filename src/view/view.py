@@ -137,7 +137,6 @@ class View(ctk.CTkFrame):
            
         # Debug Frame Configuration
         self.debug_frame = ctk.CTkFrame(self)
-        self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         # Frame Title
         self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
