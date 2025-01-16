@@ -567,3 +567,11 @@ class View(ctk.CTkFrame):
         
     def set_appearance(self, mode):
         ctk.set_appearance_mode(mode)
+            
+    def debug_print(self, message, level=LOG_LEVEL[2]):
+        if self.current_log_level == LOG_LEVEL[0]:
+            return
+        if self.current_log_level == level or self.current_log_level == LOG_LEVEL[2]:
+            print(message)
+
+            
