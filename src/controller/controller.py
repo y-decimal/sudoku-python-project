@@ -94,3 +94,11 @@ class Controller:
     def set_difficulty(self, difficulty):
         '''Callback for the set_difficulty function'''
         self.model.difficulty = difficulty
+        
+    def load_settings(self):
+        '''Callback for the load_settings function'''
+        return self.model.load_settings()
+
+    def save_settings(self, settings):
+        '''Callback for the save_settings function'''
+        self.model.save_settings(settings)

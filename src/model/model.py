@@ -115,3 +115,10 @@ class Model:
     
     def is_file_writeable(self, file_name):
         return self.file_manager.is_writeable(file_name)
+    
+    
+    def load_settings(self):
+        return self.file_manager.load_settings()
+    
+    def save_settings(self, settings):
+        return self.file_manager.save_settings(settings)
