@@ -116,7 +116,7 @@ class View(ctk.CTkFrame):
         
         
         # Settings Button
-        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.deiconify())
+        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.show())
         self.settings_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
            
         # Edit Mode Frame
