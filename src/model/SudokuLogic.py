@@ -67,39 +67,39 @@ class SudokuLogic(ISudokuInterface):
         return check
 
 
-    def invalid_rows(self, sudoku):
+    def invalid_rows(self):
         invalid= {}
         for r in range(9):
             space = []
             for c in range(9):
-                if sudoku[r*9+c] not in space and sudoku[r*9+c] !=0:
-                    space.append(sudoku[r*9+c]) 
-                elif sudoku[r*9+c] != 0:
-                    invalid.update({r+1:sudoku[r*9+c]})
+                if self.fields[r*9+c] not in space and self.fields[r*9+c] !=0:
+                    space.append(self.fields[r*9+c]) 
+                elif self.fields[r*9+c] != 0:
+                    invalid.update({r+1:self.fields[r*9+c]})
         return invalid
 
-    def invalid_column(self, sudoku):
+    def invalid_column(self):
         invalid= {}
         for c in range(9):
             space = []
             for r in range(9):
-                if sudoku[r*9+c] not in space and sudoku[r*9+c] !=0:
-                    space.append(sudoku[r*9+c]) 
-                elif sudoku[r*9+c] != 0:
-                    invalid.update({r+1:sudoku[r*9+c]})
+                if self.fields[r*9+c] not in space and self.fields[r*9+c] !=0:
+                    space.append(self.fields[r*9+c]) 
+                elif self.fields[r*9+c] != 0:
+                    invalid.update({r+1:self.fields[r*9+c]})
         return invalid
     
     
-    def invalid_blocks(self,sudoku):
+    def invalid_blocks(self):
         invalid= {}
         for b in self.block_index:
             space = []
             for r in range(3):
                 for c in range(3):
-                    if sudoku[b+r*9+c] not in space and sudoku[b+r*9+c] !=0:
-                        space.append(sudoku[b + r*9 + c])
-                    elif sudoku[b + r*9 + c] != 0:
-                        invalid.update({self.block_index.index(b)+1:sudoku[b + r*9 + c]})
+                    if self.fields[b+r*9+c] not in space and self.fields[b+r*9+c] !=0:
+                        space.append(self.fields[b + r*9 + c])
+                    elif self.fields[b + r*9 + c] != 0:
+                        invalid.update({self.block_index.index(b)+1:self.fields[b + r*9 + c]})
         return invalid
 
 
@@ -177,4 +177,11 @@ class SudokuLogic(ISudokuInterface):
     def set_field_state(self, row: int, column: int, state: bool):
         '''Sets the state of a field. True means the field can be edited, False means the field is a given field'''
         self.starterfield[self.rc_to_index(row, column)] = not state
-    
+        
+    def last_check_check24(self):
+        for i in self.fields:
+            if i == 0:
+                return False
+        if self.invalid_column() !={} or self.invalid_blocks() !={} or self.invalid_rows() !={}:
+            return False
+        return True
