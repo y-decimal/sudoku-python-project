@@ -104,14 +104,19 @@ class Model:
         return self.file_manager.save_sudoku(sudoku, file_name)
     
 
-    def set_mode(self, mode = 'normal'):
+    def set_file_mode(self, mode = 'normal'):
         '''Sets the debug mode'''
-
         self.file_manager.set_file_mode(mode)
+        
+        
+    def set_mode(self, mode = 'normal'):
+        '''Sets the mode of the sudoku'''
+        ...
 
 
     def get_files(self):
         return self.file_manager.get_files()
+    
     
     def is_file_writeable(self, file_name):
         return self.file_manager.is_writeable(file_name)
@@ -119,6 +124,7 @@ class Model:
     
     def load_settings(self):
         return self.file_manager.load_settings()
+    
     
     def save_settings(self, settings):
         return self.file_manager.save_settings(settings)

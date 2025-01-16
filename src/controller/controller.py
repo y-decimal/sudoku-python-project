@@ -76,6 +76,11 @@ class Controller:
         '''Callback for the mode button'''
         self.model.set_mode(mode)
         self.view.set_mode(mode)
+        
+    def set_file_mode(self, mode='normal'):
+        '''Callback for the file mode button'''
+        self.model.set_file_mode(mode)
+        self.view.set_file_mode(mode)
 
     def get_files(self):
         '''Callback for the get files method'''
