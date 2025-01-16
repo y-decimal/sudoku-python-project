@@ -178,7 +178,7 @@ class FileManager:
         settings = {
             "appearance": "System",
             "mode": "debug",
-            "scale": 1.0
+            "scale": "1.0"
         }
         
         path = self.root_dir + self.settings_path
