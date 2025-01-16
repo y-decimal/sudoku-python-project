@@ -179,6 +179,7 @@ class SudokuLogic(ISudokuInterface):
         self.starterfield[self.rc_to_index(row, column)] = not state
         
     def last_check_check24(self):
+        print("executing last_check_check24")
         for i in self.fields:
             if i == 0:
                 return False
