@@ -161,9 +161,11 @@ class View(ctk.CTkFrame):
         # Debug Logic Frame
         self.debug_logic_frame = ctk.CTkFrame(self.debug_frame)
         self.debug_logic_frame.grid_columnconfigure(0, weight=1)
+        self.debug_logic_frame.grid_rowconfigure((0,1), weight=1)
+        self.debug_logic_frame.grid_rowconfigure(2, weight=3)
         self.debug_logic_frame.title = ctk.CTkLabel(self.debug_logic_frame, text="Logic Tools", font=("Arial", 16), justify="center")
         self.debug_logic_frame.button = ctk.CTkButton(self.debug_logic_frame, text="Test Method", command = self.testbutton_callback)
-        self.debug_logic_frame.output = ctk.CTkLabel(self.debug_logic_frame, text="Output", font=("Arial", 12), justify="center")
+        self.debug_logic_frame.output = ctk.CTkLabel(self.debug_logic_frame, text="Output", font=("Arial", 14), justify="center")
         self.debug_logic_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.debug_logic_frame.button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         self.debug_logic_frame.output.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
@@ -615,5 +617,5 @@ class View(ctk.CTkFrame):
             print(message)
 
     def logic_test_output(self, output):
-        output = str(output)
+        output = "Output: " + str(output)
         self.debug_logic_frame.output.configure(text=output)
