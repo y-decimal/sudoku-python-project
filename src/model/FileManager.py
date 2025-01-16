@@ -189,3 +189,19 @@ class FileManager:
             return self.save_settings(settings)
         else:
             return False
+        
+    
+    def load_settings(self):
+        '''Loads the settings from the settings file'''
+        
+        path = self.root_dir + self.settings_path
+        
+        if not os.path.exists(path):
+            self.generate_default_settings()
+        
+        with open(path, 'r') as file:
+            settings = {}
+            for line in file:
+                key, value = line.split("=")
+                settings[key] = value.strip()
+            return settings
