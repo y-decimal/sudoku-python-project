@@ -107,3 +107,9 @@ class Controller:
     def save_settings(self, settings):
         '''Callback for the save_settings function'''
         self.model.save_settings(settings)
+        
+    def test_method(self):
+        '''Test method'''
+        print("Testing method")
+        self.model.test_method()
+        self.fetch()

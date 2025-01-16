@@ -159,12 +159,19 @@ class View(ctk.CTkFrame):
         self.debug_log_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.debug_log_frame.toggle.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
-
+        # Debug Logic Frame
+        self.debug_logic_frame = ctk.CTkFrame(self.debug_frame)
+        self.debug_logic_frame.grid_columnconfigure(0, weight=1)
+        self.debug_logic_frame.title = ctk.CTkLabel(self.debug_logic_frame, text="Logic Tools", font=("Arial", 16), justify="center")
+        self.debug_logic_frame.button = ctk.CTkButton(self.debug_logic_frame, text="Test Method", command = self.testbutton_callback)
+        self.debug_logic_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_logic_frame.button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         # Debug Frame Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         self.debug_log_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_logic_frame.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
 
 
         # Grid weight configuration
@@ -310,6 +317,11 @@ class View(ctk.CTkFrame):
 
     def log_level_callback(self):
             self.current_log_level = self.debug_log_frame.toggle.get()
+
+
+    def testbutton_callback(self):
+        if self.controller:
+            self.controller.test_method()
 
 
     def toggle_field_editable(self):
