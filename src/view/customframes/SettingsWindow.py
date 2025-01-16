@@ -10,28 +10,26 @@ class SettingsWindow(ctk.CTkToplevel):
         self.title("Settings")
         self.geometry("400x300")
         self.resizable(False, False)
-        self.focus_set()
-        self.protocol("WM_DELETE_WINDOW", self.on_exit)
+        self.protocol("WM_DELETE_WINDOW", self.hide)
+
         
         self.parent = parent
         
         self.settings_frame_title = ctk.CTkLabel(self, text="Settings", font=("Arial", 34), justify="right", text_color="lightblue")
         
-        self.settings_switch_frame = SwitchFrame(self, rows=1, columns=1)
-        
-        i = 0
-        setting = [("Debug Mode", "debug")]
-        for switch in self.settings_switch_frame.switches:
-            switch.configure(text=setting[i][0], font=("Arial", 18), command = lambda *args, setting = setting[i][1], widget = switch: self.switch(setting, widget))
-            i += 1
-        self.settings_switch_frame.switches[0].select()
+        self.debug_frame = ctk.CTkFrame(self)
+        self.debug_frame.title = ctk.CTkLabel(self.debug_frame, text="Debug Mode", font=("Arial", 18), justify="right")
+        self.debug_frame.switch = ctk.CTkSwitch(self.debug_frame, text="", command=self.set_mode)
+        self.debug_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        self.debug_frame.switch.grid(row=0, column=1, padx=10, pady=10, sticky="e")
+        self.debug_frame.grid_rowconfigure(0, weight=1)
+
         
         self.appearance_frame = ctk.CTkFrame(self)
-        self.appearance_title = ctk.CTkLabel(self.appearance_frame, text="Appearance", font=("Arial", 18), justify="right")
-        self.appearance_setting = ctk.CTkSegmentedButton(self.appearance_frame, values=["System","Dark", "Light"], font=("Arial", 14), command=self.set_appearance)
-        self.appearance_setting.set("System")
-        self.appearance_title.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-        self.appearance_setting.grid(row=0, column=1, padx=10, pady=10, sticky="e")
+        self.appearance_frame.title = ctk.CTkLabel(self.appearance_frame, text="Appearance", font=("Arial", 18), justify="right")
+        self.appearance_frame.setting = ctk.CTkSegmentedButton(self.appearance_frame, values=["System","Dark", "Light"], font=("Arial", 14), command=self.set_appearance)
+        self.appearance_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        self.appearance_frame.setting.grid(row=0, column=1, padx=10, pady=10, sticky="e")
         self.appearance_frame.grid_rowconfigure(0, weight=1)
         
         
@@ -39,22 +37,24 @@ class SettingsWindow(ctk.CTkToplevel):
         self.scale_frame.label = ctk.CTkLabel(self.scale_frame, text=f"Scale", font=("Arial", 18), justify="right")
         self.scale_frame.scale = ctk.CTkSlider(self.scale_frame, from_=0.5, to=2.0, number_of_steps=15, orientation="horizontal", command=self.set_scale)
         self.scale_frame.scale_value = ctk.CTkLabel(self.scale_frame, text="100%", font=("Arial", 18), justify="right")
-        self.scale_frame.scale.set(1.0)
-        
-        self.scale_frame.grid_rowconfigure(0, weight=1)
-
-        
         self.scale_frame.label.grid(row=0, column=0, padx=10, pady=10, sticky="e")
         self.scale_frame.scale_value.grid(row=0, column=2, padx=10, pady=10, sticky="e")
         self.scale_frame.scale.grid(row=0, column=1, padx=10, pady=10, sticky="e")
+        self.scale_frame.grid_rowconfigure(0, weight=1)
         
         self.settings_frame_title.pack(padx=10, pady=10, fill="x", anchor="ne")
-        self.settings_switch_frame.pack(padx=10, pady=10, fill="both", anchor="e")
+        self.debug_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.appearance_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.scale_frame.pack(padx=10, pady=10, fill="both", anchor="e")
+        
+        self.load_settings()
    
-    def switch(self, setting, widget):
-        self.parent.switch_setting(setting, widget.get())
+    def set_mode(self, *args):
+        mode = self.debug_frame.switch.get()
+        if mode:
+            self.parent.set_mode("debug")
+        else: 
+            self.parent.set_mode("normal")
 
     def set_scale(self, *args):
         scale = self.scale_frame.scale.get()
@@ -62,8 +62,27 @@ class SettingsWindow(ctk.CTkToplevel):
         self.scale_frame.scale_value.configure(text=f"{round(scale*100)}%")
 
     def set_appearance(self, *args):
-        self.parent.set_appearance(self.appearance_setting.get())
-        print(self.appearance_setting.get())
+        self.parent.set_appearance(self.appearance_frame.setting.get())
+        print(self.appearance_frame.setting.get())
     
-    def on_exit(self):
+    def load_settings(self):
+        settings = self.parent.controller.get_settings()
+        if settings["mode"] == "debug":
+            self.debug_frame.switch.select()
+        else:
+            self.debug_frame.switch.deselect()
+        self.set_mode()
+        
+        self.appearance_frame.setting.set(settings["appearance"])
+        self.set_appearance()
+        
+        self.scale_frame.scale.set(settings["scale"])
+        self.set_scale()
+    
+    def hide(self):
         self.withdraw()
+        self.parent.controller.save_settings()
+        
+    def show(self):
+        self.load_settings()
+        self.deiconify()
