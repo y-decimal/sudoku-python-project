@@ -111,5 +111,6 @@ class Controller:
     def test_method(self):
         '''Test method'''
         print("Testing method")
-        self.model.test_method()
+        output = self.model.test_method()
+        self.view.logic_test_output(output)
         self.fetch()

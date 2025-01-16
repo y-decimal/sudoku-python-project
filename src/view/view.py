@@ -39,7 +39,6 @@ class View(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
-
         self.widget_at_mouse = None
         ButtonFrame.font = ctk.CTkFont(family="Helvectia", size=14, weight="normal")
         
@@ -164,8 +163,10 @@ class View(ctk.CTkFrame):
         self.debug_logic_frame.grid_columnconfigure(0, weight=1)
         self.debug_logic_frame.title = ctk.CTkLabel(self.debug_logic_frame, text="Logic Tools", font=("Arial", 16), justify="center")
         self.debug_logic_frame.button = ctk.CTkButton(self.debug_logic_frame, text="Test Method", command = self.testbutton_callback)
+        self.debug_logic_frame.output = ctk.CTkLabel(self.debug_logic_frame, text="Output", font=("Arial", 12), justify="center")
         self.debug_logic_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.debug_logic_frame.button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_logic_frame.output.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
         
         # Debug Frame Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
@@ -177,6 +178,7 @@ class View(ctk.CTkFrame):
         # Grid weight configuration
         self.debug_frame.grid_columnconfigure(0, weight=1)
         self.debug_frame.grid_rowconfigure((0,1,2), weight=1)
+        self.debug_frame.grid_rowconfigure(3, weight=3)
         
 
 
@@ -612,3 +614,6 @@ class View(ctk.CTkFrame):
         if self.current_log_level == level or self.current_log_level == LOG_LEVEL[2]:
             print(message)
 
+    def logic_test_output(self, output):
+        output = str(output)
+        self.debug_logic_frame.output.configure(text=output)
