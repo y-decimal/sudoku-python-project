@@ -116,7 +116,7 @@ class View(ctk.CTkFrame):
         
         
         # Settings Button
-        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.deiconify())
+        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.show())
         self.settings_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
            
         # Edit Mode Frame
@@ -137,7 +137,6 @@ class View(ctk.CTkFrame):
            
         # Debug Frame Configuration
         self.debug_frame = ctk.CTkFrame(self)
-        self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         # Frame Title
         self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
@@ -169,7 +168,9 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
         
-        self.dropdown_callback()
+        self.controller.set_file_mode("debug")
+        
+        self.refresh_settings()
         
         
     def set_mouse_position(self, widget):
@@ -289,9 +290,9 @@ class View(ctk.CTkFrame):
         
         if self.controller: 
             if widget.get():
-                self.controller.set_mode("debug")
+                self.controller.set_file_mode("debug")
             else:
-                self.controller.set_mode("normal")
+                self.controller.set_file_mode("normal")
 
 
     def toggle_field_editable(self):
@@ -518,10 +519,16 @@ class View(ctk.CTkFrame):
     def set_mode(self, mode='normal'):
         if mode == 'debug':
             self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-            self.dropdown_callback()
         else:
             self.debug_frame.grid_forget()
-            self.dropdown_callback()
+            
+            
+    def set_file_mode(self, mode='normal'):
+        if mode == 'debug':
+            self.sudoku_checkbox_frame.checkboxes[0].select()
+        else:
+            self.sudoku_checkbox_frame.checkboxes[0].deselect()
+        self.dropdown_callback()
 
 
     def push_value(self, row, column, value):
@@ -562,5 +569,10 @@ class View(ctk.CTkFrame):
         self.sudoku_frame.set_scale(scale)
         self.update_field_size()
         
+        
     def set_appearance(self, mode):
         ctk.set_appearance_mode(mode)
+        
+        
+    def refresh_settings(self):
+        self.setting_window.load_settings()
