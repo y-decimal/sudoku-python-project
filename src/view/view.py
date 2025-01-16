@@ -33,7 +33,7 @@ class View(ctk.CTkFrame):
     invalid_fields = []
     edit_mode = False
 
-    current_log_level = LOG_LEVEL[2]
+    current_log_level = LOG_LEVEL[0]
     controller = None
 
     def __init__(self, parent):
@@ -151,15 +151,21 @@ class View(ctk.CTkFrame):
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
     
-        # Debug Context Frame
-        self.debug_context_frame = ctk.CTkFrame(self.debug_frame)
-        self.debug_context_frame.grid_columnconfigure(0, weight=1)
-        # Context Frame Edit Mode
-        self.debug_button = ctk.CTkButton(self.debug_context_frame, text="Toggle fields", command = self.toggle_all_fields)
+        # Debug Log Frame
+        self.debug_log_frame = ctk.CTkFrame(self.debug_frame)
+        self.debug_log_frame.grid_columnconfigure(0, weight=1)
+        self.debug_log_frame.title = ctk.CTkLabel(self.debug_log_frame, text="Log Level", font=("Arial", 16), justify="center")
+        self.debug_log_frame.toggle = ctk.CTkSegmentedButton(self.debug_log_frame, values=LOG_LEVEL, command = lambda *args: self.log_level_callback())
+        self.debug_log_frame.toggle.set(LOG_LEVEL[0])
+        self.debug_log_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_log_frame.toggle.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        
+
         
         # Debug Frame Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_log_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
 
 
         # Grid weight configuration
@@ -295,6 +301,10 @@ class View(ctk.CTkFrame):
                 self.controller.set_mode("debug")
             else:
                 self.controller.set_mode("normal")
+
+
+    def log_level_callback(self):
+            self.current_log_level = self.debug_log_frame.toggle.get()
 
 
     def toggle_field_editable(self):
