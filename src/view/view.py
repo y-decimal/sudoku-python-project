@@ -7,30 +7,33 @@ from view.customframes.CheckboxFrame import CheckboxFrame
 from view.customframes.SettingsWindow import SettingsWindow
 
 
-class View(ctk.CTkFrame):
+DISABLED_COLORS = ( ("#d0d0cd", "#2F2F32"),    # (Background LightMode, DarkMode)           Background color
+                     ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)                 Text color
+    
+ENABLED_COLORS = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)           Background color
+                    ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)                 Text color
 
-    disabled_colors = ( ("#d0d0cd", "#2F2F32"),    # (Background LightMode, DarkMode)
-                        ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)
-    
-    enabled_colors = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)
-                        ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)
-    
-    highlight_colors = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)
-                        ("#d32c2c","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)
-    
-    adjacent_colors = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)
-                        ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)
-    
-    cell_color = adjacent_colors
-    
-    invalid_color = (   ("red","red"),         # (Enabled LightMode, Enabled DarkMode)
-                        ("#e67e41","#403823"))     # (Disabled LightMode, Disabled DarkMode)
+HIGHLIGHT_COLORS = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)      Background color
+                    ("#d32c2c","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+
+ADJACENT_COLORS = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)      Background color
+                    ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+
+CELL_COLORS = ADJACENT_COLORS
+
+INVALID_COLORS = (   ("red","red"),            # (Enabled LightMode, Enabled DarkMode)     Text color
+                    ("#e67e41","#403823"))     # (Disabled LightMode, Disabled DarkMode)   Background color
+LOG_LEVEL = ["disabled", "normal", "verbose"]
+
+class View(ctk.CTkFrame):
 
 
     controller = None
     highlighted_fields = []
     invalid_fields = []
     edit_mode = False
+
+    current_log_level = LOG_LEVEL[2]
     controller = None
 
     def __init__(self, parent):
