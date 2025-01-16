@@ -171,6 +171,8 @@ class View(ctk.CTkFrame):
         
         self.dropdown_callback()
         
+        self.refresh_settings()
+        
         
     def set_mouse_position(self, widget):
         self.widget_at_mouse = widget
@@ -562,5 +564,10 @@ class View(ctk.CTkFrame):
         self.sudoku_frame.set_scale(scale)
         self.update_field_size()
         
+        
     def set_appearance(self, mode):
         ctk.set_appearance_mode(mode)
+        
+        
+    def refresh_settings(self):
+        self.setting_window.load_settings()
