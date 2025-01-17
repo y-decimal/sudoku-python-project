@@ -7,26 +7,31 @@ class Debug:
     current_log_level = LOG_LEVEL["disabled"]
     
     def log_level1(message):
-        '''Logs message if current log level is minimal or higher'''
+        ''' Logs message if current log level is minimal or higher. \n
+            Should be used for critical errors only'''
         if Debug.current_log_level >= Debug.LOG_LEVEL["minimal"]:
             print(message)
     
     def log_level2(message):
-        '''Logs message if current log level is normal or higher'''
+        ''' Logs message if current log level is normal or higher. \n
+            Should be used for general information that only needs to be logged occasionally'''
         if Debug.current_log_level >= Debug.LOG_LEVEL["normal"]:
             print(message)
     
     def log_level3(message):
-        '''Logs message if current log level is verbose or higher'''
+        ''' Logs message if current log level is verbose or higher \n
+            Should be used for information that needs to be logged frequently'''
         if Debug.current_log_level >= Debug.LOG_LEVEL["verbose"]:
             print(message)
             
     def log_level4(message):
-        '''Logs message if current log level is high or higher'''
+        '''Logs message if current log level is high or higher \n
+            Should be used for information that needs to be logged very frequently'''
         if Debug.current_log_level >= Debug.LOG_LEVEL["high"]:
             print(message)
             
     def log_level5(message):
-        '''Logs message if current log level is debug'''
+        ''' Logs message if current log level is debug \n
+            Should be used for information that needs to be logged many times a second. Will slow down the application'''
         if Debug.current_log_level >= Debug.LOG_LEVEL["debug"]:
             print(message)
