@@ -1,3 +1,5 @@
+from DebugLog import Debug
+
 class Controller:
 
     def __init__(self, model, view):
@@ -8,7 +10,7 @@ class Controller:
 
     def fetch(self):
         '''Fetch updated values from the model'''
-        print("Fetching")
+        Debug.log_level2("Fetching")
         self.view.supress_entry_callback = True
         for row in range(9):
             for column in range(9):
@@ -43,7 +45,7 @@ class Controller:
 
     def generate(self):
         '''Callback for the generate button'''
-        print("Generating")
+        Debug.log_level2("Generating")
         self.model.generate_random_sudoku()
         self.view.reset_highlighted_fields()
         self.fetch()
@@ -51,7 +53,7 @@ class Controller:
     def clear(self):
         '''Callback for the clear button'''
         
-        print("Clearing")
+        Debug.log_level2("Clearing")
         
         self.model.clear_sudoku()
         self.view.reset_highlighted_fields()
@@ -59,7 +61,7 @@ class Controller:
 
     def reset(self):
         '''Callback for the reset button'''
-        print("Resetting")
+        Debug.log_level2("Resetting")
         self.model.reset_sudoku()
         self.view.reset_highlighted_fields()
         self.fetch()
@@ -78,6 +80,11 @@ class Controller:
         '''Callback for the mode button'''
         self.model.set_mode(mode)
         self.view.set_mode(mode)
+        
+    def set_file_mode(self, mode='normal'):
+        '''Callback for the file mode button'''
+        self.model.set_file_mode(mode)
+        self.view.set_file_mode(mode)
 
     def get_files(self):
         '''Callback for the get files method'''
@@ -96,3 +103,11 @@ class Controller:
     def set_difficulty(self, difficulty):
         '''Callback for the set_difficulty function'''
         self.model.difficulty = difficulty
+        
+    def load_settings(self):
+        '''Callback for the load_settings function'''
+        return self.model.load_settings()
+
+    def save_settings(self, settings):
+        '''Callback for the save_settings function'''
+        self.model.save_settings(settings)

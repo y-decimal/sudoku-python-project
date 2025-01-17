@@ -93,7 +93,8 @@ class SudokuEntryField(ctk.CTkEntry):
                          height = entry_dimensions, 
                          font = ("Arial", 0.75*entry_dimensions), 
                          textvariable=self.entry_variable, 
-                         justify="center"
+                         justify="center",
+                         insertontime=0
                         )
 
         self.state = True

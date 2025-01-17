@@ -5,29 +5,32 @@ from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes.ButtonFrame import ButtonFrame
 from view.customframes.CheckboxFrame import CheckboxFrame
 from view.customframes.SettingsWindow import SettingsWindow
+from DebugLog import Debug
 
+
+DISABLED_COLORS = ( ("#d0d0cd", "#2A2A2A"),    # (Background LightMode, DarkMode)           Background color
+                     ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)                 Text color
+    
+ENABLED_COLORS = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)           Background color
+                    ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)                 Text color
+
+HIGHLIGHT_COLORS = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)      Background color
+                    ("#c75252","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+
+ADJACENT_COLORS = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)      Background color
+                    ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+
+CELL_COLORS = ADJACENT_COLORS
+
+INVALID_COLORS = (   ("red","red"),            # (Enabled LightMode, Enabled DarkMode)     Text color
+                    ("#b29626","#403823"))     # (Disabled LightMode, Disabled DarkMode)   Background color
+
+NUMBER_HIGHLIGHT_COLOR = (  ("#bfbf00", "#FFFF00"),  # (Enabled LightMode, Enabled DarkMode)
+                                ("#bfbf00", "#FFFF00") ) # (Disabled LightMode, Disabled DarkMode)
 
 class View(ctk.CTkFrame):
+    
 
-    disabled_colors = ( ("#d0d0cd", "#2A2A2A"),    # (Background LightMode, DarkMode)
-                        ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)
-    
-    enabled_colors = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)
-                        ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)
-    
-    highlight_colors = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)
-                        ("#c75252","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)
-    
-    adjacent_colors = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)
-                        ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)
-    
-    cell_color = adjacent_colors
-    
-    invalid_color = (   ("red","red"),         # (Enabled LightMode, Enabled DarkMode)
-                        ("#b29626","#403823"))     # (Disabled LightMode, Disabled DarkMode)
-    
-    number_highlight_color = (  ("#bfbf00", "#FFFF00"),  # (Enabled LightMode, Enabled DarkMode)
-                                ("#bfbf00", "#FFFF00") ) # (Disabled LightMode, Disabled DarkMode)
 
 
     controller = None
@@ -121,7 +124,7 @@ class View(ctk.CTkFrame):
         
         
         # Settings Button
-        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.deiconify())
+        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.show())
         self.settings_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
            
         # Edit Mode Frame
@@ -142,7 +145,6 @@ class View(ctk.CTkFrame):
            
         # Debug Frame Configuration
         self.debug_frame = ctk.CTkFrame(self)
-        self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         # Frame Title
         self.debug_frame_title = ctk.CTkLabel(self.debug_frame, text="Debugging Tools", font=("Arial", 16), justify="center")
@@ -153,15 +155,22 @@ class View(ctk.CTkFrame):
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
     
-        # Debug Context Frame
-        self.debug_context_frame = ctk.CTkFrame(self.debug_frame)
-        self.debug_context_frame.grid_columnconfigure(0, weight=1)
-        # Context Frame Edit Mode
-        self.debug_button = ctk.CTkButton(self.debug_context_frame, text="Toggle fields", command = self.toggle_all_fields)
+        # Debug Log Frame
+        self.debug_log_frame = ctk.CTkFrame(self.debug_frame)
+        self.debug_log_frame.grid_columnconfigure(0, weight=1)
+        self.debug_log_frame.title = ctk.CTkLabel(self.debug_log_frame, text="Log Level", font=("Arial", 16), justify="center")
+        values = (list(Debug.LOG_LEVEL.keys()))
+        self.debug_log_frame.toggle = ctk.CTkOptionMenu(self.debug_log_frame, values=values, command = lambda *args: self.log_level_callback())
+        self.debug_log_frame.toggle.set(values[1])
+        self.log_level_callback()
+        self.debug_log_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_log_frame.toggle.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+
         
         # Debug Frame Gridding
         self.debug_frame_title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.sudoku_checkbox_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.debug_log_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
 
 
         # Grid weight configuration
@@ -174,7 +183,9 @@ class View(ctk.CTkFrame):
         '''Sets the controller of the view'''
         self.controller = controller
         
-        self.dropdown_callback()
+        self.controller.set_file_mode("debug")
+        
+        self.refresh_settings()
         
         
     def set_mouse_position(self, widget):
@@ -258,7 +269,8 @@ class View(ctk.CTkFrame):
 
 
     def generatebutton_callback(self):
-        if self.controller: self.controller.generate()
+        if self.controller: 
+            self.controller.generate()
         
         
     def generateslider_callback(self, value):
@@ -302,9 +314,13 @@ class View(ctk.CTkFrame):
         
         if self.controller: 
             if widget.get():
-                self.controller.set_mode("debug")
+                self.controller.set_file_mode("debug")
             else:
-                self.controller.set_mode("normal")
+                self.controller.set_file_mode("normal")
+
+
+    def log_level_callback(self):
+            Debug.current_log_level = Debug.LOG_LEVEL[self.debug_log_frame.toggle.get()]
 
 
     def toggle_field_editable(self):
@@ -388,18 +404,18 @@ class View(ctk.CTkFrame):
                     
                 if self.get_field_value(row, column) == self.get_field_value(widget_position[0], widget_position[1]) and self.get_field_value(row, column) != 0:
                     if self.get_field_state(row, column):
-                        self.set_field_text_color(row, column, self.number_highlight_color[0])
+                        self.set_field_text_color(row, column, NUMBER_HIGHLIGHT_COLOR[0])
                     else:
-                        self.set_field_text_color(row, column, self.number_highlight_color[1])
+                        self.set_field_text_color(row, column, NUMBER_HIGHLIGHT_COLOR[1])
                     self.highlighted_numbers.append((row, column))
 
 
     def reset_highlighted_numbers(self):
         for row, column in self.highlighted_numbers:
             if self.get_field_state(row, column): 
-                self.set_field_text_color(row, column, self.enabled_colors[1])
+                self.set_field_text_color(row, column, ENABLED_COLORS[1])
             else:
-                self.set_field_text_color(row, column, self.disabled_colors[1])
+                self.set_field_text_color(row, column, DISABLED_COLORS[1])
         self.highlighted_numbers = []
     
     
@@ -410,10 +426,10 @@ class View(ctk.CTkFrame):
         self.highlight_line(widget)
 
         if widget.get_state():
-            widget.configure(fg_color=self.highlight_colors[0])
+            widget.configure(fg_color=HIGHLIGHT_COLORS[0])
             widget.focus()
         else:
-            widget.configure(fg_color=self.highlight_colors[1])
+            widget.configure(fg_color=HIGHLIGHT_COLORS[1])
             widget.focus()
 
 
@@ -424,20 +440,20 @@ class View(ctk.CTkFrame):
                 widget = self.sudoku_frame.get_field(row, i)
                 self.highlighted_fields.append((row, i))
                 if widget.get_state():
-                    widget.configure(fg_color=self.adjacent_colors[0])
+                    widget.configure(fg_color=ADJACENT_COLORS[0])
                 elif widget.get_invalid_state():
-                    widget.configure(fg_color=self.invalid_color[1])
+                    widget.configure(fg_color=INVALID_COLORS[1])
                 else:
-                    widget.configure(fg_color=self.adjacent_colors[1])
+                    widget.configure(fg_color=ADJACENT_COLORS[1])
             if i != row:
                 widget = self.sudoku_frame.get_field(i, column)
                 self.highlighted_fields.append((i, column))
                 if widget.get_state():
-                    widget.configure(fg_color=self.adjacent_colors[0])
+                    widget.configure(fg_color=ADJACENT_COLORS[0])
                 elif widget.get_invalid_state():
-                    widget.configure(fg_color=self.invalid_color[1])
+                    widget.configure(fg_color=INVALID_COLORS[1])
                 else:
-                    widget.configure(fg_color=self.adjacent_colors[1])
+                    widget.configure(fg_color=ADJACENT_COLORS[1])
 
 
     def highlight_cell(self, widget):
@@ -452,30 +468,25 @@ class View(ctk.CTkFrame):
                 if row != cell_row_offset and column != cell_column_offset:
                     self.highlighted_fields.append((cell_row_offset, cell_column_offset))
                     if widget.get_state():
-                        self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[0])
+                        self.set_field_color(cell_row_offset, cell_column_offset, CELL_COLORS[0])
                     elif widget.get_invalid_state():
-                        self.set_field_color(cell_row_offset, cell_column_offset, self.invalid_color[1])
+                        self.set_field_color(cell_row_offset, cell_column_offset, INVALID_COLORS[1])
                     else:
-                        self.set_field_color(cell_row_offset, cell_column_offset, self.cell_color[1])
+                        self.set_field_color(cell_row_offset, cell_column_offset, CELL_COLORS[1])
 
-
-    def reset_field_color(self, widget):
-        row, column = widget.get_position()
-        if (row, column) not in self.highlighted_fields:
-            return
-        if widget.get_state():
-            self.set_field_color(row, column, self.enabled_colors[0])
-            if widget.get_invalid_state():
-                self.set_field_text_color(row, column, self.invalid_color[0])
-            else:
-                self.set_field_text_color(row, column, self.enabled_colors[1])
-        else:
-            self.set_field_text_color(row, column, self.disabled_colors[1])
-            self.set_field_color(row, column, self.disabled_colors[0])
 
     def reset_highlighted_fields(self):
         for row, column in self.highlighted_fields:
-            self.reset_field_color(self.sudoku_frame.get_field(row, column))
+            widget = self.sudoku_frame.get_field(row, column)
+            if widget.get_state():
+                self.set_field_color(row, column, ENABLED_COLORS[0])
+                if widget.get_invalid_state():
+                    self.set_field_text_color(row, column, INVALID_COLORS[0])
+                else:
+                    self.set_field_text_color(row, column, ENABLED_COLORS[1])
+            else:
+                self.set_field_text_color(row, column, DISABLED_COLORS[1])
+                self.set_field_color(row, column, DISABLED_COLORS[0])
         self.highlighted_fields = []
 
 
@@ -483,8 +494,8 @@ class View(ctk.CTkFrame):
         widget = self.sudoku_frame.get_field(row, column)
         if widget.get_state():
             widget.configure(state="disabled")
-            self.set_field_color(row, column, self.disabled_colors[0])
-            self.set_field_text_color(row, column, self.disabled_colors[1])
+            self.set_field_color(row, column, DISABLED_COLORS[0])
+            self.set_field_text_color(row, column, DISABLED_COLORS[1])
             widget.set_state(False)
 
 
@@ -492,8 +503,8 @@ class View(ctk.CTkFrame):
         widget = self.sudoku_frame.get_field(row, column)
         if not widget.get_state():
             widget.configure(state="normal")
-            self.set_field_color(row, column, self.enabled_colors[0])
-            self.set_field_text_color(row, column, self.enabled_colors[1])
+            self.set_field_color(row, column, ENABLED_COLORS[0])
+            self.set_field_text_color(row, column, ENABLED_COLORS[1])
             widget.set_state(True)
 
 
@@ -502,9 +513,9 @@ class View(ctk.CTkFrame):
         if widget.get_invalid_state():
             return
         if widget.get_state():
-            widget.configure(text_color=self.invalid_color[0])
+            widget.configure(text_color=INVALID_COLORS[0])
         elif widget.get_position() in self.highlighted_fields:
-            widget.configure(fg_color=self.invalid_color[1])
+            widget.configure(fg_color=INVALID_COLORS[1])
         widget.set_invalid_state(True)
 
 
@@ -513,11 +524,11 @@ class View(ctk.CTkFrame):
         if not widget.get_invalid_state():
             return
         if widget.get_state():
-            widget.configure(text_color=self.enabled_colors[1])
+            widget.configure(text_color=ENABLED_COLORS[1])
         elif widget.get_position() in self.highlighted_fields:
-            widget.configure(fg_color=self.adjacent_colors[1])
+            widget.configure(fg_color=ADJACENT_COLORS[1])
         else:
-            widget.configure(fg_color=self.disabled_colors[0])
+            widget.configure(fg_color=DISABLED_COLORS[0])
         widget.set_invalid_state(False)
 
 
@@ -530,11 +541,11 @@ class View(ctk.CTkFrame):
                     self.set_field_valid(row, column)
 
 
-    def set_field_color(self, row: int, column: int, color: str):
+    def set_field_color(self, row: int, column: int, color: tuple):
         self.sudoku_frame.get_field(row, column).configure(fg_color=color)
 
 
-    def set_field_text_color(self, row: int, column: int, color: str):
+    def set_field_text_color(self, row: int, column: int, color: tuple):
         self.sudoku_frame.get_field(row, column).configure(text_color=color)
 
 
@@ -571,10 +582,16 @@ class View(ctk.CTkFrame):
     def set_mode(self, mode='normal'):
         if mode == 'debug':
             self.debug_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-            self.dropdown_callback()
         else:
             self.debug_frame.grid_forget()
-            self.dropdown_callback()
+            
+            
+    def set_file_mode(self, mode='normal'):
+        if mode == 'debug':
+            self.sudoku_checkbox_frame.checkboxes[0].select()
+        else:
+            self.sudoku_checkbox_frame.checkboxes[0].deselect()
+        self.dropdown_callback()
 
 
     def push_value(self, row, column, value):
@@ -615,5 +632,12 @@ class View(ctk.CTkFrame):
         self.sudoku_frame.set_scale(scale)
         self.update_field_size()
         
+        
     def set_appearance(self, mode):
         ctk.set_appearance_mode(mode)
+        
+        
+    def refresh_settings(self):
+        self.setting_window.load_settings()
+            
+
