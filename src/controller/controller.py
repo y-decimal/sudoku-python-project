@@ -1,3 +1,5 @@
+from DebugLog import Debug
+
 class Controller:
 
     def __init__(self, model, view):
@@ -8,7 +10,7 @@ class Controller:
 
     def fetch(self):
         '''Fetch updated values from the model'''
-        print("Fetching")
+        Debug.log_level2("Fetching")
         for row in range(9):
             for column in range(9):
                 value = self.model.get_field_value(row, column)
@@ -41,7 +43,7 @@ class Controller:
 
     def generate(self):
         '''Callback for the generate button'''
-        print("Generating")
+        Debug.log_level2("Generating")
         self.model.generate_random_sudoku()
         self.view.reset_highlighted_fields()
         self.fetch()
@@ -49,7 +51,7 @@ class Controller:
     def clear(self):
         '''Callback for the clear button'''
         
-        print("Clearing")
+        Debug.log_level2("Clearing")
         
         self.model.clear_sudoku()
         self.view.reset_highlighted_fields()
@@ -57,7 +59,7 @@ class Controller:
 
     def reset(self):
         '''Callback for the reset button'''
-        print("Resetting")
+        Debug.log_level2("Resetting")
         self.model.reset_sudoku()
         self.view.reset_highlighted_fields()
         self.fetch()
