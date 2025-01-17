@@ -61,7 +61,7 @@ class SudokuLogic(ISudokuInterface):
             return False
         possible_fields = [field for field in self.fields]
         possible_fields[self.rc_to_index(row,column)] = value
-        check = self.invalid_rows2(possible_fields, row, column, value) == {} and self.invalid_column2(possible_fields, row, column, value) == {} and self.invalid_blocks2(possible_fields, row, column, value) == {}
+        check = self.invalid_rows2(possible_fields, row, column, value) == {} and self.invalid_columns2(possible_fields, row, column, value) == {} and self.invalid_blocks2(possible_fields, row, column, value) == {}
         # if not check:
         #     print(f'{self.rc_to_index(row,column)}:{check}:{value}:{row, column}')
         return check
@@ -78,7 +78,7 @@ class SudokuLogic(ISudokuInterface):
                     invalid.update({r+1:self.fields[r*9+c]})
         return invalid
 
-    def invalid_column(self):
+    def invalid_columns(self):
         invalid= {}
         for c in range(9):
             space = []
@@ -121,7 +121,7 @@ class SudokuLogic(ISudokuInterface):
                 invalid.update({self.rc_to_index(row,c):sudoku[row*9+c]})
         return invalid
 
-    def invalid_column2(self, sudoku,row, column, value):
+    def invalid_columns2(self, sudoku,row, column, value):
         invalid= {}
         for r in range(9):
             if sudoku[r*9+column] ==  value and sudoku[r*9+column] !=0 and r != row:
@@ -182,6 +182,6 @@ class SudokuLogic(ISudokuInterface):
         for i in self.fields:
             if i == 0:
                 return False
-        if self.invalid_column() !={} or self.invalid_blocks() !={} or self.invalid_rows() !={}:
+        if self.invalid_columns() !={} or self.invalid_blocks() !={} or self.invalid_rows() !={}:
             return False
         return True
