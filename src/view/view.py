@@ -5,6 +5,7 @@ from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes.ButtonFrame import ButtonFrame
 from view.customframes.CheckboxFrame import CheckboxFrame
 from view.customframes.SettingsWindow import SettingsWindow
+from DebugLog import Debug
 
 
 DISABLED_COLORS = ( ("#d0d0cd", "#2F2F32"),    # (Background LightMode, DarkMode)           Background color
@@ -23,7 +24,8 @@ CELL_COLORS = ADJACENT_COLORS
 
 INVALID_COLORS = (   ("red","red"),            # (Enabled LightMode, Enabled DarkMode)     Text color
                     ("#e67e41","#403823"))     # (Disabled LightMode, Disabled DarkMode)   Background color
-LOG_LEVEL = ["disabled", "normal", "verbose"]
+
+
 
 class View(ctk.CTkFrame):
 
@@ -32,8 +34,6 @@ class View(ctk.CTkFrame):
     highlighted_fields = []
     invalid_fields = []
     edit_mode = False
-
-    current_log_level = LOG_LEVEL[0]
     controller = None
 
     def __init__(self, parent):
@@ -154,11 +154,12 @@ class View(ctk.CTkFrame):
         self.debug_log_frame = ctk.CTkFrame(self.debug_frame)
         self.debug_log_frame.grid_columnconfigure(0, weight=1)
         self.debug_log_frame.title = ctk.CTkLabel(self.debug_log_frame, text="Log Level", font=("Arial", 16), justify="center")
-        self.debug_log_frame.toggle = ctk.CTkSegmentedButton(self.debug_log_frame, values=LOG_LEVEL, command = lambda *args: self.log_level_callback())
-        self.debug_log_frame.toggle.set(LOG_LEVEL[0])
+        values = (list(Debug.LOG_LEVEL.keys()))
+        self.debug_log_frame.toggle = ctk.CTkOptionMenu(self.debug_log_frame, values=values, command = lambda *args: self.log_level_callback())
+        self.debug_log_frame.toggle.set(values[1])
+        self.log_level_callback()
         self.debug_log_frame.title.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.debug_log_frame.toggle.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        
 
         
         # Debug Frame Gridding
@@ -258,7 +259,8 @@ class View(ctk.CTkFrame):
 
 
     def generatebutton_callback(self):
-        if self.controller: self.controller.generate()
+        if self.controller: 
+            self.controller.generate()
         
         
     def generateslider_callback(self, value):
@@ -305,11 +307,7 @@ class View(ctk.CTkFrame):
 
 
     def log_level_callback(self):
-            self.current_log_level = self.debug_log_frame.toggle.get()
-
-
-    def log_level_callback(self):
-            self.current_log_level = self.debug_log_frame.toggle.get()
+            Debug.current_log_level = Debug.LOG_LEVEL[self.debug_log_frame.toggle.get()]
 
 
     def toggle_field_editable(self):
@@ -594,9 +592,4 @@ class View(ctk.CTkFrame):
     def refresh_settings(self):
         self.setting_window.load_settings()
             
-    def debug_print(self, message, level=LOG_LEVEL[2]):
-        if self.current_log_level == LOG_LEVEL[0]:
-            return
-        if self.current_log_level == level or self.current_log_level == LOG_LEVEL[2]:
-            print(message)
 
