@@ -9,29 +9,29 @@ class Debug:
     def log_level1(message):
         ''' Logs message if current log level is minimal or higher. \n
             Should be used for critical errors only'''
-        if Debug.current_log_level >= Debug.LOG_LEVEL["minimal"]:
+        if Debug.current_log_level >= Debug.LOG_LEVEL["minimal"] and Debug.current_log_level < Debug.LOG_LEVEL["debug"]:
             print(message)
     
     def log_level2(message):
         ''' Logs message if current log level is normal or higher. \n
             Should be used for general information that only needs to be logged occasionally'''
-        if Debug.current_log_level >= Debug.LOG_LEVEL["normal"]:
+        if Debug.current_log_level >= Debug.LOG_LEVEL["normal"] and Debug.current_log_level < Debug.LOG_LEVEL["debug"]:
             print(message)
     
     def log_level3(message):
         ''' Logs message if current log level is verbose or higher \n
             Should be used for information that needs to be logged frequently'''
-        if Debug.current_log_level >= Debug.LOG_LEVEL["verbose"]:
+        if Debug.current_log_level >= Debug.LOG_LEVEL["verbose"] and Debug.current_log_level < Debug.LOG_LEVEL["debug"]:
             print(message)
             
     def log_level4(message):
         '''Logs message if current log level is high or higher \n
             Should be used for information that needs to be logged very frequently'''
-        if Debug.current_log_level >= Debug.LOG_LEVEL["high"]:
+        if Debug.current_log_level >= Debug.LOG_LEVEL["high"] and Debug.current_log_level < Debug.LOG_LEVEL["debug"]:
             print(message)
             
-    def log_level5(message):
+    def log_level_debug(message):
         ''' Logs message if current log level is debug \n
             Should be used for information that needs to be logged many times a second. Will slow down the application'''
-        if Debug.current_log_level >= Debug.LOG_LEVEL["debug"]:
+        if Debug.current_log_level == Debug.LOG_LEVEL["debug"]:
             print(message)

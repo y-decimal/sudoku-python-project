@@ -63,7 +63,7 @@ class SudokuLogic(ISudokuInterface):
         possible_fields[self.rc_to_index(row,column)] = value
         check = self.invalid_rows2(possible_fields, row, column, value) == {} and self.invalid_column2(possible_fields, row, column, value) == {} and self.invalid_blocks2(possible_fields, row, column, value) == {}
         if not check:
-            Debug.log_level5(f'{self.rc_to_index(row,column)}:{check}:{value}:{row, column}')
+            Debug.log_level_debug(f'{self.rc_to_index(row,column)}:{check}:{value}:{row, column}')
         return check
 
 
