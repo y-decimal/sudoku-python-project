@@ -8,22 +8,22 @@ from view.customframes.SettingsWindow import SettingsWindow
 from DebugLog import Debug
 
 
-DISABLED_COLORS = ( ("#d0d0cd", "#2F2F32"),    # (Background LightMode, DarkMode)           Background color
-                     ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)                 Text color
+DISABLED_COLORS = ( ("#d0d0cd","#2F2F32"),     # (Background LightMode, DarkMode)           Background color
+                    ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)                 Text color
     
 ENABLED_COLORS = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)           Background color
                     ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)                 Text color
 
 HIGHLIGHT_COLORS = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)      Background color
-                    ("#d32c2c","#3F3638"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+                    ("#d32c2c","#3F3638") )    # (Disabled LightMode, Disabled DarkMode)    Background color
 
 ADJACENT_COLORS = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)      Background color
-                    ("#75a87d","#344F38"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+                    ("#75a87d","#344F38") )    # (Disabled LightMode, Disabled DarkMode)    Background color
 
 CELL_COLORS = ADJACENT_COLORS
 
-INVALID_COLORS = (   ("red","red"),            # (Enabled LightMode, Enabled DarkMode)     Text color
-                    ("#e67e41","#403823"))     # (Disabled LightMode, Disabled DarkMode)   Background color
+INVALID_COLORS = (  ("red","red"),             # (Enabled LightMode, Enabled DarkMode)     Text color
+                    ("#e67e41","#403823") )    # (Disabled LightMode, Disabled DarkMode)   Background color
 
 
 
