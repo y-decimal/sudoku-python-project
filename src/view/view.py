@@ -8,14 +8,14 @@ from view.customframes.SettingsWindow import SettingsWindow
 from DebugLog import Debug
 
 
-DISABLED_COLORS = ( ("#d0d0cd","#2F2F32"),     # (Background LightMode, DarkMode)           Background color
+DISABLED_COLORS = ( ("#d0d0cd","#2A2A2A"),     # (Background LightMode, DarkMode)           Background color
                     ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)                 Text color
     
 ENABLED_COLORS = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)           Background color
                     ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)                 Text color
 
 HIGHLIGHT_COLORS = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)      Background color
-                    ("#d32c2c","#3F3638") )    # (Disabled LightMode, Disabled DarkMode)    Background color
+                    ("#c75252","#3F3638") )    # (Disabled LightMode, Disabled DarkMode)    Background color
 
 ADJACENT_COLORS = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)      Background color
                     ("#75a87d","#344F38") )    # (Disabled LightMode, Disabled DarkMode)    Background color
@@ -23,19 +23,24 @@ ADJACENT_COLORS = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled Dar
 CELL_COLORS = ADJACENT_COLORS
 
 INVALID_COLORS = (  ("red","red"),             # (Enabled LightMode, Enabled DarkMode)     Text color
-                    ("#e67e41","#403823") )    # (Disabled LightMode, Disabled DarkMode)   Background color
+                    ("#b29626","#403823") )    # (Disabled LightMode, Disabled DarkMode)   Background color
 
-
+NUMBER_HIGHLIGHT_COLOR = (  ("#bfbf00", "#FFFF00"),  # (Enabled LightMode, Enabled DarkMode)
+                                ("#bfbf00", "#FFFF00") ) # (Disabled LightMode, Disabled DarkMode)
 
 class View(ctk.CTkFrame):
+    
+
 
 
     controller = None
     highlighted_fields = []
     previous_focus = None
     invalid_fields = []
+    highlighted_numbers = []
     edit_mode = False
     controller = None
+    supress_entry_callback = False
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -206,11 +211,14 @@ class View(ctk.CTkFrame):
     def mousebutton_callback(self):
         if self.widget_at_mouse is not None:
             self.highlight_fields(self.widget_at_mouse)
+            self.highlight_numbers(self.widget_at_mouse)
         else:
             self.reset_highlighted_fields()
 
 
     def entry_callback(self, widget):
+        if self.supress_entry_callback:
+            return
         entry_value = widget.entry_variable.get()
         if len(entry_value) > 1:
             widget.entry_variable.set(entry_value[1:])
@@ -220,8 +228,10 @@ class View(ctk.CTkFrame):
             widget.entry_variable.set("")
             self.push_value(widget.get_position()[0], widget.get_position()[1], 0)
             self.set_field_valid(widget.get_position()[0], widget.get_position()[1])
+            self.reset_highlighted_numbers()
         else:
             self.push_value(widget.get_position()[0], widget.get_position()[1], int(entry_value))
+            self.highlight_numbers(widget)
         
 
     def dropdown_callback(self, *args):
@@ -289,12 +299,15 @@ class View(ctk.CTkFrame):
         
     def loadbutton_callback(self):
         if self.controller:
+            self.supress_entry_callback = True
             file_name = self.load_dropdown.get()
             self.reset_highlighted_fields()
             if file_name != "":
                 self.controller.load(file_name)
             else:
                 self.controller.load("temp")
+            self.reset_highlighted_numbers()
+            self.supress_entry_callback = False
             
     
     def localsave_callback(self, widget):
@@ -373,6 +386,38 @@ class View(ctk.CTkFrame):
         
         self.reset_highlighted_fields() 
         
+        
+    def highlight_numbers(self, widget):
+        
+        self.reset_highlighted_numbers()
+        
+        if widget is None:
+            return
+        
+        widget_position = widget.get_position()
+
+        for row in range(9):
+            for column in range(9):
+                             
+                if (row, column) in self.invalid_fields or (row, column) == widget_position:
+                    break
+                    
+                if self.get_field_value(row, column) == self.get_field_value(widget_position[0], widget_position[1]) and self.get_field_value(row, column) != 0:
+                    if self.get_field_state(row, column):
+                        self.set_field_text_color(row, column, NUMBER_HIGHLIGHT_COLOR[0])
+                    else:
+                        self.set_field_text_color(row, column, NUMBER_HIGHLIGHT_COLOR[1])
+                    self.highlighted_numbers.append((row, column))
+
+
+    def reset_highlighted_numbers(self):
+        for row, column in self.highlighted_numbers:
+            if self.get_field_state(row, column): 
+                self.set_field_text_color(row, column, ENABLED_COLORS[1])
+            else:
+                self.set_field_text_color(row, column, DISABLED_COLORS[1])
+        self.highlighted_numbers = []
+    
     
     def highlight_fields(self, widget):
         self.current_highlighted_fields = []
@@ -572,6 +617,9 @@ class View(ctk.CTkFrame):
     def get_field_state(self, row: int, column: int) -> bool:
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field'''
         return self.sudoku_frame.get_field(row, column).get_state()
+
+    def get_field(self, row: int, column: int):
+        return self.sudoku_frame.get_field(row, column)
 
 
     def set_mode(self, mode='normal'):
