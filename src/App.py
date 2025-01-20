@@ -2,9 +2,9 @@ from pathlib import Path
 
 import customtkinter as ctk
 from tkinter import ttk
-from model.model import Model
-from view.view import View
-from controller.controller import Controller
+from model.Model import Model
+from view.View import View
+from controller.Controller import Controller
 
 basedir = str(Path(__file__).parent.parent)
 
@@ -43,6 +43,7 @@ class App(ctk.CTk):
         self.controller = Controller(self.model, self.view)
         
         self.view.set_controller(self.controller)
+        self.view.init_sudoku_view()
         
         self.update_window_height()
         
@@ -87,7 +88,7 @@ class App(ctk.CTk):
         self.window_width = self.winfo_width()
         
         if self.prev_window_height != self.window_height and self.prev_window_width != self.window_width:
-            self.view.update_field_size(self.window_height)
+            self.view.sudoku_view.update_field_size(self.window_height)
 
         
 
