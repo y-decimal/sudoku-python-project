@@ -32,6 +32,7 @@ class View(ctk.CTkFrame):
 
     controller = None
     highlighted_fields = []
+    previous_focus = None
     invalid_fields = []
     edit_mode = False
     controller = None
@@ -204,7 +205,6 @@ class View(ctk.CTkFrame):
 
     def mousebutton_callback(self):
         if self.widget_at_mouse is not None:
-            self.reset_highlighted_fields()
             self.highlight_fields(self.widget_at_mouse)
         else:
             self.reset_highlighted_fields()
@@ -375,40 +375,82 @@ class View(ctk.CTkFrame):
         
     
     def highlight_fields(self, widget):
-        row, column = widget.get_position()
-        self.highlighted_fields.append((row, column))
+        self.current_highlighted_fields = []
         self.highlight_cell(widget)
         self.highlight_line(widget)
+        
+        Debug.log_level3(f"Current highlighted fields ({len(self.current_highlighted_fields)}): {self.current_highlighted_fields}")
+        Debug.log_level3(f"Actual highlighted fields ({len(self.highlighted_fields)}): {self.highlighted_fields}\n")
+        # There are 4 fields (corners of the center cell) that occur twice in the list of highlighted fields
+        # This appears to be because the coordinates of those fields are different when read front to back or 
+        # back to front but reference the same field
+        
+        self.reset_previous_highlighted_fields()
+        self.focus_field(widget) 
+        
 
+
+    def focus_field(self, widget):
+        
+        if self.previous_focus is not None:
+
+            previous_widget = self.sudoku_frame.get_field(self.previous_focus[0], self.previous_focus[1])
+            
+            if self.previous_focus not in self.current_highlighted_fields:
+                if previous_widget.get_state():
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], ENABLED_COLORS[0])
+                else:
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], DISABLED_COLORS[0])
+            else:
+                if previous_widget.get_state():
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], ADJACENT_COLORS[0])    
+                else:
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], ADJACENT_COLORS[1])
+        
+        
+        self.previous_focus = widget.get_position()
+        self.set_field_color(widget.get_position()[0], widget.get_position()[1], HIGHLIGHT_COLORS[0])
+
+        widget.focus()
+        Debug.log_level2(f"Focused field: {widget.get_position()}")
+        
+
+
+    def set_field_highlighted(self, row: int, column: int):
+        if (row, column) in self.highlighted_fields:
+            return
+        self.highlighted_fields.append((row, column))
+        widget = self.sudoku_frame.get_field(row, column)
         if widget.get_state():
-            widget.configure(fg_color=HIGHLIGHT_COLORS[0])
-            widget.focus()
+            widget.configure(fg_color=ADJACENT_COLORS[0])
+        elif widget.get_invalid_state():
+            widget.configure(fg_color=INVALID_COLORS[1])
         else:
-            widget.configure(fg_color=HIGHLIGHT_COLORS[1])
-            widget.focus()
+            widget.configure(fg_color=ADJACENT_COLORS[1])
+        Debug.log_level3(f"Field {row}, {column} was highlighted")
+            
+            
+    def set_field_not_highlighted(self, row: int, column: int):
+        if (row, column) not in self.highlighted_fields:
+            return
+        self.highlighted_fields.remove((row, column))
+        widget = self.sudoku_frame.get_field(row, column)
+        if widget.get_state():
+            widget.configure(fg_color=ENABLED_COLORS[0])
+        else:
+            widget.configure(fg_color=DISABLED_COLORS[0])
+        Debug.log_level3(f"Field {row}, {column} was reset")
 
 
     def highlight_line(self, widget):
         row, column = widget.get_position()
         for i in range(9):
-            if i != column:
-                widget = self.sudoku_frame.get_field(row, i)
-                self.highlighted_fields.append((row, i))
-                if widget.get_state():
-                    widget.configure(fg_color=ADJACENT_COLORS[0])
-                elif widget.get_invalid_state():
-                    widget.configure(fg_color=INVALID_COLORS[1])
-                else:
-                    widget.configure(fg_color=ADJACENT_COLORS[1])
-            if i != row:
-                widget = self.sudoku_frame.get_field(i, column)
-                self.highlighted_fields.append((i, column))
-                if widget.get_state():
-                    widget.configure(fg_color=ADJACENT_COLORS[0])
-                elif widget.get_invalid_state():
-                    widget.configure(fg_color=INVALID_COLORS[1])
-                else:
-                    widget.configure(fg_color=ADJACENT_COLORS[1])
+            if i != column and (row, i):
+                self.set_field_highlighted(row, i)
+                self.current_highlighted_fields.append((row, i))
+            if i != row and (i, column):
+                self.set_field_highlighted(i, column)
+                self.current_highlighted_fields.append((i, column))
 
 
     def highlight_cell(self, widget):
@@ -419,30 +461,31 @@ class View(ctk.CTkFrame):
             cell_row_offset = cell_row + row_offset
             for cell_column in range(3):
                 cell_column_offset = cell_column + column_offset
-                widget = self.sudoku_frame.get_field(cell_row_offset, cell_column_offset)
-                if row != cell_row_offset and column != cell_column_offset:
-                    self.highlighted_fields.append((cell_row_offset, cell_column_offset))
-                    if widget.get_state():
-                        self.set_field_color(cell_row_offset, cell_column_offset, CELL_COLORS[0])
-                    elif widget.get_invalid_state():
-                        self.set_field_color(cell_row_offset, cell_column_offset, INVALID_COLORS[1])
-                    else:
-                        self.set_field_color(cell_row_offset, cell_column_offset, CELL_COLORS[1])
+                if (cell_row_offset, cell_column_offset) != (row, column):
+                    self.set_field_highlighted(cell_row_offset, cell_column_offset)
+                    self.current_highlighted_fields.append((cell_row_offset, cell_column_offset))
+  
 
+
+    def reset_previous_highlighted_fields(self):
+        highlighted_fields = self.highlighted_fields.copy()
+        for (row, column) in highlighted_fields: 
+            if (row, column) not in self.current_highlighted_fields:
+                self.set_field_not_highlighted(row, column)
 
     def reset_highlighted_fields(self):
-        for row, column in self.highlighted_fields:
-            widget = self.sudoku_frame.get_field(row, column)
-            if widget.get_state():
-                self.set_field_color(row, column, ENABLED_COLORS[0])
-                if widget.get_invalid_state():
-                    self.set_field_text_color(row, column, INVALID_COLORS[0])
-                else:
-                    self.set_field_text_color(row, column, ENABLED_COLORS[1])
-            else:
-                self.set_field_text_color(row, column, DISABLED_COLORS[1])
-                self.set_field_color(row, column, DISABLED_COLORS[0])
-        self.highlighted_fields = []
+        Debug.log_level3(f"Resetting fields: {self.highlighted_fields}")
+        fields = self.highlighted_fields.copy()
+        for (row, column) in fields:
+            Debug.log_level3(f"Resetting field: {row}, {column}")
+            self.set_field_not_highlighted(row, column)
+            Debug.log_level3(f"Current fields: {self.highlighted_fields}")
+        self.highlighted_fields.clear()
+        if self.previous_focus is not None:
+            self.highlighted_fields.append(self.previous_focus)
+            self.set_field_not_highlighted(self.previous_focus[0], self.previous_focus[1])
+            self.highlighted_fields.clear()
+            self.previous_focus = None
 
 
     def set_field_not_editable(self, row: int, column: int):
