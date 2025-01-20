@@ -15,10 +15,10 @@ ENABLED_COLORS = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode
                     ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)                 Text color
 
 HIGHLIGHT_COLORS = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)      Background color
-                    ("#d32c2c","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+                    ("#d32c2c","#3F3638"))     # (Disabled LightMode, Disabled DarkMode)    Background color
 
 ADJACENT_COLORS = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)      Background color
-                    ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)    Background color
+                    ("#75a87d","#344F38"))     # (Disabled LightMode, Disabled DarkMode)    Background color
 
 CELL_COLORS = ADJACENT_COLORS
 
