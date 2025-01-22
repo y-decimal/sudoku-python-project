@@ -4,7 +4,6 @@ import customtkinter as ctk
 from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes.ButtonFrame import ButtonFrame
 from view.customframes.CheckboxFrame import CheckboxFrame
-from view.customframes.SettingsWindow import SettingsWindow
 from DebugLog import Debug
 
 
@@ -46,8 +45,6 @@ class SudokuView(ctk.CTkFrame):
         self.widget_at_mouse = None
         ButtonFrame.font = ctk.CTkFont(family="Helvectia", size=14, weight="normal")
         
-        self.setting_window = SettingsWindow(self) 
-        self.setting_window.withdraw()
 
         # App Grid Configuration (3x3 Grid)
         self.grid_columnconfigure((0, 2), weight=1)
@@ -120,11 +117,7 @@ class SudokuView(ctk.CTkFrame):
         # Generate Grid weight configuration
         self.generate_frame.grid_columnconfigure(0, weight=1)
         
-        
-        # Settings Button
-        self.settings_button = ctk.CTkButton(self.sidebar_frame, text="Settings", command = lambda *args: self.setting_window.show())
-        self.settings_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
-           
+
         # Edit Mode Frame
         self.edit_mode_frame = ctk.CTkFrame(self.sidebar_frame)
         # Edit Mode Title
@@ -183,7 +176,6 @@ class SudokuView(ctk.CTkFrame):
         
         self.controller.set_file_mode("debug")
         
-        self.refresh_settings()
         
         
     def set_mouse_position(self, widget):
@@ -676,8 +668,5 @@ class SudokuView(ctk.CTkFrame):
     def set_appearance(self, mode):
         ctk.set_appearance_mode(mode)
         
-        
-    def refresh_settings(self):
-        self.setting_window.load_settings()
-            
+
 
