@@ -74,11 +74,6 @@ class Controller:
         '''Callback for the load button'''
         self.model.load_sudoku(file_name)
         self.fetch()
-
-    def set_mode(self, mode='normal'):
-        '''Callback for the mode button'''
-        self.model.set_mode(mode)
-        self.view.sudoku_view.set_mode(mode)
         
     def set_file_mode(self, mode='normal'):
         '''Callback for the file mode button'''
@@ -110,3 +105,16 @@ class Controller:
     def save_settings(self, settings):
         '''Callback for the save_settings function'''
         self.model.save_settings(settings)
+        
+    def set_mode(self, mode='normal'):
+        '''Callback for the mode button'''
+        self.model.set_mode(mode)
+        self.view.sudoku_view.set_mode(mode)    
+        
+    def set_appearance(self, appearance):
+        '''Callback for the set_appearance function'''
+        self.view.sudoku_view.set_appearance(appearance)
+        
+    def set_scale(self, scale):
+        '''Callback for the set_scale function'''
+        self.view.sudoku_view.set_scale(scale)
