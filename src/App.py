@@ -2,9 +2,9 @@ from pathlib import Path
 
 import customtkinter as ctk
 from tkinter import ttk
-from model.Model import Model
-from view.View import View
-from controller.Controller import Controller
+from model.model import Model
+from view.view import View
+from controller.controller import Controller
 
 basedir = str(Path(__file__).parent.parent)
 
@@ -43,7 +43,6 @@ class App(ctk.CTk):
         self.controller = Controller(self.model, self.view)
         
         self.view.set_controller(self.controller)
-        self.view.init_sudoku_view()
         
         self.update_window_height()
         
