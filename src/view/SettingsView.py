@@ -2,7 +2,8 @@ import customtkinter as ctk
 from view.customframes.SwitchFrame import SwitchFrame
 from view.Settings import Settings
 from view.Settings import Colors
-from view.customframes.ColorPicker import *
+from view.customframes.ColorPicker import ColorPicker
+from view.customframes.ButtonFrame import ButtonFrame
 
 
 class SettingsView(ctk.CTkFrame):
@@ -127,7 +128,13 @@ class SudokuColorSettings(ctk.CTkFrame):
         self.current_mode = ctk.get_appearance_mode()
         self.pickers = []
         
-        self.title = ctk.CTkLabel(self, text="Colors", font=("Arial", 18), justify="left")
+        self.top_frame = ctk.CTkFrame(self)
+        self.title = ctk.CTkLabel(self.top_frame, text="Colors", font=("Arial", 18), justify="left")
+        self.confirm_button = ctk.CTkButton(self.top_frame, text="Confirm all", width=30, command=self.confirm)
+        self.reset_button = ctk.CTkButton(self.top_frame, text="Reset all", width=30, command=self.reset)
+        self.title.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        self.confirm_button.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
+        self.reset_button.grid(row=0, column=2, padx=10, pady=10, sticky="ew")
         
         self.enabled_color = ColorPicker(self, "Editable", Colors.enabled_bg_color[1], Colors.enabled_text_color[1])
         self.pickers.append(self.enabled_color)
@@ -145,20 +152,18 @@ class SudokuColorSettings(ctk.CTkFrame):
         self.pickers.append(self.adjacent_color)
         self.number_highlight_color = ColorPicker(self, "Number Highlight", Colors.number_highlight_color_enabled[1], Colors.number_highlight_color_disabled[1])
         self.pickers.append(self.number_highlight_color)
+
         
-        self.button = ctk.CTkButton(self, text="Confirm", command=self.confirm)
-        
-        self.title.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-        self.button.grid(row=0, column=5, padx=10, pady=10, sticky="e")
+        self.top_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=6)
         self.enabled_color.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
         self.disabled_color.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
         self.invalid_color.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")
         self.highlight_color.grid(row=1, column=3, padx=10, pady=10, sticky="nsew")
         self.adjacent_color.grid(row=1, column=4, padx=10, pady=10, sticky="nsew")
         self.number_highlight_color.grid(row=1, column=5, padx=10, pady=10, sticky="nsew")
+        self.grid_rowconfigure(0, weight=3)
         self.grid_rowconfigure(1, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure((1,2,3,4,5), weight=1)
+        self.grid_columnconfigure((0,1,2,3,4,5), weight=1)
         
         
     def set_appearance_mode(self, mode_string):
@@ -219,3 +224,7 @@ class SudokuColorSettings(ctk.CTkFrame):
 
         self.parent.save_settings()
         self.parent.controller.update_colors()
+        
+    def reset(self):
+        for picker in self.pickers:
+            picker.reset_both_colors()

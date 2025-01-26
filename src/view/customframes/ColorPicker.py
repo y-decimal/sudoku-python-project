@@ -108,3 +108,7 @@ class ColorPicker(ctk.CTkFrame):
             
         self.toggle_color()
 
+    def reset_both_colors(self):
+        self.color_var1 = self.original_values[0]
+        self.color_var2 = self.original_values[1]
+        self.reset_color()
