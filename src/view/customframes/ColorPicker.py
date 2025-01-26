@@ -112,3 +112,10 @@ class ColorPicker(ctk.CTkFrame):
         self.color_var1 = self.original_values[0]
         self.color_var2 = self.original_values[1]
         self.reset_color()
+        
+    
+    def load_new_colors(self, color1, color2):
+        self.color_var1 = color1
+        self.color_var2 = color2
+        self.original_values = [color1, color2]
+        self.reset_color()
