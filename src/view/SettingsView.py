@@ -1,10 +1,11 @@
 import customtkinter as ctk
 from view.customframes.SwitchFrame import SwitchFrame
+from view.Settings import Settings
 
 class SettingsView(ctk.CTkFrame):
     
     parent = None
-    settings = None
+
     controller = None
     
     def __init__(self, parent):
@@ -13,7 +14,6 @@ class SettingsView(ctk.CTkFrame):
         
         self.parent = parent
         
-        self.settings = None
         
         
         self.debug_frame = ctk.CTkFrame(self)
@@ -41,9 +41,12 @@ class SettingsView(ctk.CTkFrame):
         self.scale_frame.scale.grid(row=0, column=1, padx=10, pady=10, sticky="e")
         self.scale_frame.grid_rowconfigure(0, weight=1)
         
+        self.reset_button = ctk.CTkButton(self, text="Reset to defaults", command=self.reset_settings)
+        
         self.debug_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.appearance_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.scale_frame.pack(padx=10, pady=10, fill="both", anchor="e")
+        self.reset_button.pack(padx=10, pady=10, fill="both", anchor="e")
         
    
    
@@ -56,8 +59,10 @@ class SettingsView(ctk.CTkFrame):
         mode = self.debug_frame.switch.get()
         if mode:
             self.controller.set_mode("debug")
+            Settings.set_mode("debug")
         else: 
             self.controller.set_mode("normal")
+            Settings.set_mode("normal")
         self.save_settings()
 
 
@@ -65,19 +70,20 @@ class SettingsView(ctk.CTkFrame):
         scale = round(self.scale_frame.scale.get(), 2)
         self.controller.set_scale(scale)
         self.scale_frame.scale_value.configure(text=f"{round(scale*100)}%")
+        Settings.set_scale(scale)
         self.save_settings()
 
 
     def set_appearance(self, *args):
         self.controller.set_appearance(self.appearance_frame.setting.get())
+        Settings.set_appearance(self.appearance_frame.setting.get())
         self.save_settings()
 
     
     
     def load_settings(self):
-        settings = self.controller.load_settings()
-        if settings == self.settings:
-            return
+        self.controller.load_settings()
+        settings = Settings.get_settings()
         if settings["mode"] == "debug":
             self.debug_frame.switch.select()
         else:
@@ -89,17 +95,16 @@ class SettingsView(ctk.CTkFrame):
         
         self.scale_frame.scale.set(float(settings["scale"]))
         self.set_scale()
-
-        self.settings = settings    
+  
     
     def save_settings(self):
-        settings = {
-            "mode": "debug" if self.debug_frame.switch.get() else "normal",
-            "appearance": self.appearance_frame.setting.get(),
-            "scale": str(round(self.scale_frame.scale.get(), 2))
-        }
-        self.controller.save_settings(settings)
+        self.controller.save_settings(Settings.get_settings())
         
-        self.settings = settings
+        
+    def reset_settings(self):
+        Settings.set_settings(Settings.get_default_settings())
+        self.save_settings()
+        self.load_settings()
+        
     
     

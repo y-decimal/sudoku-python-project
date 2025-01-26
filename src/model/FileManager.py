@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 import shutil
-
+from view.Settings import Settings
 
 class FileManager:
     '''Dummy File Manager to use for testing or reference'''
@@ -166,6 +166,8 @@ class FileManager:
     def save_settings(self, settings: dict):
         '''Saves the settings to the settings file'''
         
+        Settings.set_settings(settings)
+        
         path = self.root_dir + self.settings_path
         
         with open(path, 'w') as file:
@@ -175,18 +177,13 @@ class FileManager:
         
     def generate_default_settings(self, override = False):
         '''Generates the default settings'''
-        settings = {
-            "appearance": "System",
-            "mode": "debug",
-            "scale": "1.0"
-        }
         
         path = self.root_dir + self.settings_path
         
         if not os.path.exists(self.root_dir + "/assets"):
             os.makedirs(self.root_dir + "/assets")
         if not os.path.exists(path) or override is True:
-            return self.save_settings(settings)
+            return self.save_settings(Settings.get_settings())
         else:
             return False
         
@@ -204,4 +201,5 @@ class FileManager:
             for line in file:
                 key, value = line.split("=")
                 settings[key] = value.strip()
+            Settings.set_settings(settings)
             return settings
