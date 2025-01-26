@@ -4,28 +4,9 @@ import customtkinter as ctk
 from view.customframes.SudokugridFrame import SudokuFrame
 from view.customframes.ButtonFrame import ButtonFrame
 from view.customframes.CheckboxFrame import CheckboxFrame
+from view.Settings import Colors
 from DebugLog import Debug
 
-
-DISABLED_COLORS = ( ("#d0d0cd", "#2A2A2A"),    # (Background LightMode, DarkMode)           Background color
-                     ("#545454","#86ff7b") )    # (Text LightMode, DarkMode)                 Text color
-    
-ENABLED_COLORS = (  ("#FFFFFF","#343638"),     # (Background LightMode, DarkMode)           Background color
-                    ("#000000","#DDDDDD") )    # (Text LightMode, DarkMode)                 Text color
-
-HIGHLIGHT_COLORS = (("#ca7f7f","#5F4648"),     # (Enabled LightMode, Enabled DarkMode)      Background color
-                    ("#c75252","#3F2628"))     # (Disabled LightMode, Disabled DarkMode)    Background color
-
-ADJACENT_COLORS = ( ("#baeac1","#445F48"),     # (Enabled LightMode, Enabled DarkMode)      Background color
-                    ("#75a87d","#243F28"))     # (Disabled LightMode, Disabled DarkMode)    Background color
-
-CELL_COLORS = ADJACENT_COLORS
-
-INVALID_COLORS = (   ("red","red"),            # (Enabled LightMode, Enabled DarkMode)     Text color
-                    ("#b29626","#403823"))     # (Disabled LightMode, Disabled DarkMode)   Background color
-
-NUMBER_HIGHLIGHT_COLOR = (  ("#bfbf00", "#FFFF00"),  # (Enabled LightMode, Enabled DarkMode)
-                                ("#bfbf00", "#FFFF00") ) # (Disabled LightMode, Disabled DarkMode)
 
 class SudokuView(ctk.CTkFrame):
     '''The main view of the Sudoku application'''
@@ -393,18 +374,18 @@ class SudokuView(ctk.CTkFrame):
                     
                 if self.get_field_value(row, column) == self.get_field_value(widget_position[0], widget_position[1]) and self.get_field_value(row, column) != 0:
                     if self.get_field_state(row, column):
-                        self.set_field_text_color(row, column, NUMBER_HIGHLIGHT_COLOR[0])
+                        self.set_field_text_color(row, column, Colors.number_highlight_colors[0])
                     else:
-                        self.set_field_text_color(row, column, NUMBER_HIGHLIGHT_COLOR[1])
+                        self.set_field_text_color(row, column, Colors.number_highlight_colors[1])
                     self.highlighted_numbers.append((row, column))
 
 
     def reset_highlighted_numbers(self):
         for row, column in self.highlighted_numbers:
             if self.get_field_state(row, column): 
-                self.set_field_text_color(row, column, ENABLED_COLORS[1])
+                self.set_field_text_color(row, column, Colors.enabled_colors[1])
             else:
-                self.set_field_text_color(row, column, DISABLED_COLORS[1])
+                self.set_field_text_color(row, column, Colors.disabled_colors[1])
         self.highlighted_numbers = []
     
     
@@ -432,18 +413,18 @@ class SudokuView(ctk.CTkFrame):
             
             if self.previous_focus not in self.current_highlighted_fields:
                 if previous_widget.get_state():
-                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], ENABLED_COLORS[0])
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], Colors.enabled_colors[0])
                 else:
-                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], DISABLED_COLORS[0])
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], Colors.disabled_colors[0])
             else:
                 if previous_widget.get_state():
-                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], ADJACENT_COLORS[0])    
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], Colors.adjacent_colors[0])    
                 else:
-                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], ADJACENT_COLORS[1])
+                    self.set_field_color(self.previous_focus[0], self.previous_focus[1], Colors.adjacent_colors[1])
         
         
         self.previous_focus = widget.get_position()
-        self.set_field_color(widget.get_position()[0], widget.get_position()[1], HIGHLIGHT_COLORS[0])
+        self.set_field_color(widget.get_position()[0], widget.get_position()[1], Colors.highlight_colors[0])
 
         widget.focus()
         Debug.log_level2(f"Focused field: {widget.get_position()}")
@@ -456,11 +437,11 @@ class SudokuView(ctk.CTkFrame):
         self.highlighted_fields.append((row, column))
         widget = self.sudoku_frame.get_field(row, column)
         if widget.get_state():
-            widget.configure(fg_color=ADJACENT_COLORS[0])
+            widget.configure(fg_color=Colors.adjacent_colors[0])
         elif widget.get_invalid_state():
-            widget.configure(fg_color=INVALID_COLORS[1])
+            widget.configure(fg_color=Colors.invalid_colors[1])
         else:
-            widget.configure(fg_color=ADJACENT_COLORS[1])
+            widget.configure(fg_color=Colors.adjacent_colors[1])
         Debug.log_level3(f"Field {row}, {column} was highlighted")
             
             
@@ -470,9 +451,9 @@ class SudokuView(ctk.CTkFrame):
         self.highlighted_fields.remove((row, column))
         widget = self.sudoku_frame.get_field(row, column)
         if widget.get_state():
-            widget.configure(fg_color=ENABLED_COLORS[0])
+            widget.configure(fg_color=Colors.enabled_colors[0])
         else:
-            widget.configure(fg_color=DISABLED_COLORS[0])
+            widget.configure(fg_color=Colors.disabled_colors[0])
         Debug.log_level3(f"Field {row}, {column} was reset")
 
 
@@ -526,8 +507,8 @@ class SudokuView(ctk.CTkFrame):
         widget = self.sudoku_frame.get_field(row, column)
         if widget.get_state():
             widget.configure(state="disabled")
-            self.set_field_color(row, column, DISABLED_COLORS[0])
-            self.set_field_text_color(row, column, DISABLED_COLORS[1])
+            self.set_field_color(row, column, Colors.disabled_colors[0])
+            self.set_field_text_color(row, column, Colors.disabled_colors[1])
             widget.set_state(False)
 
 
@@ -535,8 +516,8 @@ class SudokuView(ctk.CTkFrame):
         widget = self.sudoku_frame.get_field(row, column)
         if not widget.get_state():
             widget.configure(state="normal")
-            self.set_field_color(row, column, ENABLED_COLORS[0])
-            self.set_field_text_color(row, column, ENABLED_COLORS[1])
+            self.set_field_color(row, column, Colors.enabled_colors[0])
+            self.set_field_text_color(row, column, Colors.enabled_colors[1])
             widget.set_state(True)
 
 
@@ -545,9 +526,9 @@ class SudokuView(ctk.CTkFrame):
         if widget.get_invalid_state():
             return
         if widget.get_state():
-            widget.configure(text_color=INVALID_COLORS[0])
+            widget.configure(text_color=Colors.invalid_colors[0])
         elif widget.get_position() in self.highlighted_fields:
-            widget.configure(fg_color=INVALID_COLORS[1])
+            widget.configure(fg_color=Colors.invalid_colors[1])
         widget.set_invalid_state(True)
 
 
@@ -556,11 +537,11 @@ class SudokuView(ctk.CTkFrame):
         if not widget.get_invalid_state():
             return
         if widget.get_state():
-            widget.configure(text_color=ENABLED_COLORS[1])
+            widget.configure(text_color=Colors.enabled_colors[1])
         elif widget.get_position() in self.highlighted_fields:
-            widget.configure(fg_color=ADJACENT_COLORS[1])
+            widget.configure(fg_color=Colors.adjacent_colors[1])
         else:
-            widget.configure(fg_color=DISABLED_COLORS[0])
+            widget.configure(fg_color=Colors.disabled_colors[0])
         widget.set_invalid_state(False)
 
 
@@ -668,5 +649,13 @@ class SudokuView(ctk.CTkFrame):
     def set_appearance(self, mode):
         ctk.set_appearance_mode(mode)
         
-
+    def update_colors(self):
+        self.reset_highlighted_fields()
+        self.reset_highlighted_numbers()
+        for row in range(9):
+            for column in range(9):
+                if (row, column) in self.invalid_fields:
+                    self.set_field_invalid(row, column)
+                else:
+                    self.set_field_valid(row, column)
 

@@ -118,3 +118,7 @@ class Controller:
     def set_scale(self, scale):
         '''Callback for the set_scale function'''
         self.view.sudoku_view.set_scale(scale)
+        
+    def update_colors(self):
+        '''Callback for the update_colors function'''
+        self.view.sudoku_view.update_colors()
