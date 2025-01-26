@@ -1,68 +1,101 @@
 class Colors:
+    disabled_bg_color = ("#d0d0cd", "#2A2A2A")
+    disabled_text_color = ("#545454", "#86ff7b")
+    enabled_bg_color = ("#FFFFFF", "#343638")
+    enabled_text_color = ("#000000", "#DDDDDD")
+    highlight_color_enabled = ("#ca7f7f", "#5F4648")
+    highlight_color_disabled = ("#c75252", "#3F2628")
+    adjacent_color_enabled = ("#baeac1", "#445F48")
+    adjacent_color_disabled = ("#75a87d", "#243F28")
+    invalid_text_color = ("#FF0000", "#FF0000")
+    invalid_bg_color = ("#b29626", "#403823")
+    number_highlight_color_enabled = ("#bfbf00", "#FFFF00")
+    number_highlight_color_disabled = ("#bfbf00", "#FFFF00")
     
-    disabled_colors = ( ("#d0d0cd", "#2A2A2A"),     # (Background LightMode, DarkMode)           Background color
-                        ("#545454","#86ff7b") )     # (Text LightMode, DarkMode)                 Text color
+    @staticmethod
+    def reset_disabled_bg_color():
+        Colors.disabled_bg_color = ("#d0d0cd", "#2A2A2A")
     
-    enabled_colors = (  ("#FFFFFF","#343638"),      # (Background LightMode, DarkMode)           Background color
-                        ("#000000","#DDDDDD") )     # (Text LightMode, DarkMode)                 Text color
-
-    highlight_colors = (("#ca7f7f","#5F4648"),      # (Enabled LightMode, Enabled DarkMode)      Background color
-                        ("#c75252","#3F2628"))      # (Disabled LightMode, Disabled DarkMode)    Background color
-
-    adjacent_colors = ( ("#baeac1","#445F48"),      # (Enabled LightMode, Enabled DarkMode)      Background color
-                        ("#75a87d","#243F28"))      # (Disabled LightMode, Disabled DarkMode)    Background color
-
-    cell_colors = adjacent_colors
-
-    inavlid_colors = (  ("red","red"),              # (Enabled LightMode, Enabled DarkMode)     Text color
-                        ("#b29626","#403823"))      # (Disabled LightMode, Disabled DarkMode)   Background color
-
-    number_highlight_colors = ( ("#bfbf00", "#FFFF00"),     # (Enabled LightMode, Enabled DarkMode)
-                                ("#bfbf00", "#FFFF00") )    # (Disabled LightMode, Disabled DarkMode)
+    @staticmethod
+    def reset_disabled_text_color():
+        Colors.disabled_text_color = ("#545454", "#86ff7b")
     
+    @staticmethod
+    def reset_enabled_bg_color():
+        Colors.enabled_bg_color = ("#FFFFFF", "#343638")
+    
+    @staticmethod
+    def reset_enabled_text_color():
+        Colors.enabled_text_color = ("#000000", "#DDDDDD")
+    
+    @staticmethod
+    def reset_highlight_color_enabled():
+        Colors.highlight_color_enabled = ("#ca7f7f", "#5F4648")
+    
+    @staticmethod
+    def reset_highlight_color_disabled():
+        Colors.highlight_color_disabled = ("#c75252", "#3F2628")
+    
+    @staticmethod
+    def reset_adjacent_color_enabled():
+        Colors.adjacent_color_enabled = ("#baeac1", "#445F48")
+    
+    @staticmethod
+    def reset_adjacent_color_disabled():
+        Colors.adjacent_color_disabled = ("#75a87d", "#243F28")
+    
+    @staticmethod
+    def reset_invalid_text_color():
+        Colors.invalid_text_color = ("red", "red")
+    
+    @staticmethod
+    def reset_invalid_bg_color():
+        Colors.invalid_bg_color = ("#b29626", "#403823")
+    
+    @staticmethod
+    def reset_number_highlight_color_enabled():
+        Colors.number_highlight_color_enabled = ("#bfbf00", "#FFFF00")
+    
+    @staticmethod
+    def reset_number_highlight_color_disabled():
+        Colors.number_highlight_color_disabled = ("#bfbf00", "#FFFF00")
+
+
 class Settings:
-    
     mode = "normal"
     appearance = "system"
     scale = 1.0
     
-    
+    @staticmethod
     def get_settings():
-        var = {
+        return {
             "mode": Settings.mode,
             "appearance": Settings.appearance,
             "scale": Settings.scale
         }
-        return var
     
+    @staticmethod
     def get_default_settings():
-        var = {
+        return {
             "mode": "normal",
             "appearance": "System",
             "scale": 1.0
         }
-        return var
     
+    @staticmethod
     def set_settings(settings):
         Settings.mode = settings["mode"]
         Settings.appearance = settings["appearance"]
         Settings.scale = settings["scale"]
         
-    def set_mode(mode):
-        if mode == "reset":
-            Settings.mode = "normal"
-        else:
-            Settings.mode = mode
+    @staticmethod
+    def reset_mode():
+        Settings.mode = "normal"
     
-    def set_appearance(appearance):
-        if appearance == "reset":
-            Settings.appearance = "System"
-        else:
-            Settings.appearance = appearance
+    @staticmethod
+    def reset_appearance():
+        Settings.appearance = "System"
     
-    def set_scale(scale):
-        if scale == "reset":
-            Settings.scale = 1.0
-        else:
-            Settings.scale = scale
-        
+    @staticmethod
+    def reset_scale():
+        Settings.scale = 1.0
