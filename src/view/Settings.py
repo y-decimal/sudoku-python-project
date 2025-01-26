@@ -46,7 +46,7 @@ class Colors:
     
     @staticmethod
     def reset_invalid_text_color():
-        Colors.invalid_text_color = ("red", "red")
+        Colors.invalid_text_color = ("#FF0000", "#FFFF00")
     
     @staticmethod
     def reset_invalid_bg_color():
