@@ -1,6 +1,9 @@
 import customtkinter as ctk
 from view.customframes.SwitchFrame import SwitchFrame
 from view.Settings import Settings
+from view.Settings import Colors
+from view.customframes.ColorPicker import *
+
 
 class SettingsView(ctk.CTkFrame):
     
@@ -41,11 +44,14 @@ class SettingsView(ctk.CTkFrame):
         self.scale_frame.scale.grid(row=0, column=1, padx=10, pady=10, sticky="e")
         self.scale_frame.grid_rowconfigure(0, weight=1)
         
+        self.color_picker = SudokuColorSettings(self)
+        
         self.reset_button = ctk.CTkButton(self, text="Reset to defaults", command=self.reset_settings)
         
         self.debug_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.appearance_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.scale_frame.pack(padx=10, pady=10, fill="both", anchor="e")
+        self.color_picker.pack(padx=10, pady=10, fill="both", anchor="e")
         self.reset_button.pack(padx=10, pady=10, fill="both", anchor="e")
         
    
@@ -59,10 +65,10 @@ class SettingsView(ctk.CTkFrame):
         mode = self.debug_frame.switch.get()
         if mode:
             self.controller.set_mode("debug")
-            Settings.set_mode("debug")
+            Settings.mode="debug"
         else: 
             self.controller.set_mode("normal")
-            Settings.set_mode("normal")
+            Settings.mode="normal"
         self.save_settings()
 
 
@@ -70,13 +76,14 @@ class SettingsView(ctk.CTkFrame):
         scale = round(self.scale_frame.scale.get(), 2)
         self.controller.set_scale(scale)
         self.scale_frame.scale_value.configure(text=f"{round(scale*100)}%")
-        Settings.set_scale(scale)
+        Settings.scale = scale
         self.save_settings()
 
 
     def set_appearance(self, *args):
         self.controller.set_appearance(self.appearance_frame.setting.get())
-        Settings.set_appearance(self.appearance_frame.setting.get())
+        self.color_picker.set_appearance_mode(self.appearance_frame.setting.get())
+        Settings.appearance = self.appearance_frame.setting.get()
         self.save_settings()
 
     
@@ -108,3 +115,107 @@ class SettingsView(ctk.CTkFrame):
         
     
     
+    
+    
+class SudokuColorSettings(ctk.CTkFrame):
+    
+    def __init__(self, parent):
+        
+        super().__init__(parent)
+        
+        self.parent = parent
+        self.current_mode = ctk.get_appearance_mode()
+        self.pickers = []
+        
+        self.title = ctk.CTkLabel(self, text="Colors", font=("Arial", 18), justify="left")
+        
+        self.enabled_color = ColorPicker(self, "Editable", Colors.enabled_bg_color[1], Colors.enabled_text_color[1])
+        self.pickers.append(self.enabled_color)
+        self.enabled_color.update_button(["Background", "Text"])
+        self.disabled_color = ColorPicker(self, "Given", Colors.disabled_bg_color[1], Colors.disabled_text_color[1])
+        self.pickers.append(self.disabled_color)
+        self.disabled_color.update_button(["Background", "Text"]) 
+        self.invalid_color = ColorPicker(self, "Invalid", Colors.invalid_bg_color[1], Colors.invalid_text_color[1])
+        self.pickers.append(self.invalid_color)
+        self.invalid_color.update_button(["Background", "Text"]) 
+        
+        self.highlight_color = ColorPicker(self, "Highlight", Colors.highlight_color_enabled[1], Colors.highlight_color_disabled[1])
+        self.pickers.append(self.highlight_color)
+        self.adjacent_color = ColorPicker(self, "Adjacent", Colors.adjacent_color_enabled[1], Colors.adjacent_color_disabled[1])
+        self.pickers.append(self.adjacent_color)
+        self.number_highlight_color = ColorPicker(self, "Number Highlight", Colors.number_highlight_color_enabled[1], Colors.number_highlight_color_disabled[1])
+        self.pickers.append(self.number_highlight_color)
+        
+        self.button = ctk.CTkButton(self, text="Confirm", command=self.confirm)
+        
+        self.title.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        self.button.grid(row=0, column=5, padx=10, pady=10, sticky="e")
+        self.enabled_color.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.disabled_color.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+        self.invalid_color.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")
+        self.highlight_color.grid(row=1, column=3, padx=10, pady=10, sticky="nsew")
+        self.adjacent_color.grid(row=1, column=4, padx=10, pady=10, sticky="nsew")
+        self.number_highlight_color.grid(row=1, column=5, padx=10, pady=10, sticky="nsew")
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure((1,2,3,4,5), weight=1)
+        
+        
+    def set_appearance_mode(self, mode_string):
+        mode = 0 if mode_string == "Light" else 1
+        for picker in self.pickers:
+            ...
+        
+    def confirm(self):
+        mode = 0 if self.current_mode == "Light" else 1
+        
+        temp_list = list(Colors.enabled_bg_color)
+        temp_list[mode] = self.enabled_color.color_var1
+        Colors.enabled_bg_color = tuple(temp_list)
+        
+        temp_list = list(Colors.enabled_text_color)
+        temp_list[mode] = self.enabled_color.color_var2
+        Colors.enabled_text_color = tuple(temp_list)
+        
+        temp_list = list(Colors.disabled_bg_color)
+        temp_list[mode] = self.disabled_color.color_var1
+        Colors.disabled_bg_color = tuple(temp_list)
+        
+        temp_list = list(Colors.disabled_text_color)
+        temp_list[mode] = self.disabled_color.color_var2
+        Colors.disabled_text_color = tuple(temp_list)
+        
+        temp_list = list(Colors.invalid_bg_color)
+        temp_list[mode] = self.invalid_color.color_var1
+        Colors.invalid_bg_color = tuple(temp_list)
+        
+        temp_list = list(Colors.invalid_text_color)
+        temp_list[mode] = self.invalid_color.color_var2
+        Colors.invalid_text_color = tuple(temp_list)
+        
+        temp_list = list(Colors.highlight_color_enabled)
+        temp_list[mode] = self.highlight_color.color_var1
+        Colors.highlight_color_enabled = tuple(temp_list)
+        
+        temp_list = list(Colors.highlight_color_disabled)
+        temp_list[mode] = self.highlight_color.color_var2
+        Colors.highlight_color_disabled = tuple(temp_list)
+        
+        temp_list = list(Colors.adjacent_color_enabled)
+        temp_list[mode] = self.adjacent_color.color_var1
+        Colors.adjacent_color_enabled = tuple(temp_list)
+        
+        temp_list = list(Colors.adjacent_color_disabled)
+        temp_list[mode] = self.adjacent_color.color_var2
+        Colors.adjacent_color_disabled = tuple(temp_list)
+        
+        temp_list = list(Colors.number_highlight_color_enabled)
+        temp_list[mode] = self.number_highlight_color.color_var1
+        Colors.number_highlight_color_enabled = tuple(temp_list)
+        
+        temp_list = list(Colors.number_highlight_color_disabled)
+        temp_list[mode] = self.number_highlight_color.color_var2
+        Colors.number_highlight_color_disabled = tuple(temp_list)
+
+        self.parent.save_settings()
+        self.parent.controller.update_colors()
