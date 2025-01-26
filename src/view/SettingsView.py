@@ -226,5 +226,24 @@ class SudokuColorSettings(ctk.CTkFrame):
         self.parent.controller.update_colors()
         
     def reset(self):
-        for picker in self.pickers:
-            picker.reset_both_colors()
+        Colors.reset_colors()
+        self.load_settings()
+            
+    
+    def load_settings(self):
+        if self.current_mode == "Light":
+            self.enabled_color.load_new_colors(Colors.enabled_bg_color[0], Colors.enabled_text_color[0])
+            self.disabled_color.load_new_colors(Colors.disabled_bg_color[0], Colors.disabled_text_color[0])
+            self.invalid_color.load_new_colors(Colors.invalid_bg_color[0], Colors.invalid_text_color[0])
+            self.highlight_color.load_new_colors(Colors.highlight_color_enabled[0], Colors.highlight_color_disabled[0])
+            self.adjacent_color.load_new_colors(Colors.adjacent_color_enabled[0], Colors.adjacent_color_disabled[0])
+            self.number_highlight_color.load_new_colors(Colors.number_highlight_color_enabled[0], Colors.number_highlight_color_disabled[0])
+        else:
+            self.enabled_color.load_new_colors(Colors.enabled_bg_color[1], Colors.enabled_text_color[1])
+            self.disabled_color.load_new_colors(Colors.disabled_bg_color[1], Colors.disabled_text_color[1])
+            self.invalid_color.load_new_colors(Colors.invalid_bg_color[1], Colors.invalid_text_color[1])
+            self.highlight_color.load_new_colors(Colors.highlight_color_enabled[1], Colors.highlight_color_disabled[1])
+            self.adjacent_color.load_new_colors(Colors.adjacent_color_enabled[1], Colors.adjacent_color_disabled[1])
+            self.number_highlight_color.load_new_colors(Colors.number_highlight_color_enabled[1], Colors.number_highlight_color_disabled[1])
+            
+        self.parent.controller.update_colors()
