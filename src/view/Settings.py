@@ -63,7 +63,7 @@ class Colors:
 
 class Settings:
     mode = "normal"
-    appearance = "system"
+    appearance = "System"
     scale = 1.0
     
     @staticmethod
