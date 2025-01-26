@@ -653,6 +653,8 @@ class SudokuView(ctk.CTkFrame):
         ctk.set_appearance_mode(mode)
         
     def update_colors(self):
+        self.reset_highlighted_fields()
+        self.reset_highlighted_numbers()
         for row in range(9):
             for column in range(9):
                 if self.get_field_state(row, column):
