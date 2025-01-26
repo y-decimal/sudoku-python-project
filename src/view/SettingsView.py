@@ -1,23 +1,20 @@
 import customtkinter as ctk
 from view.customframes.SwitchFrame import SwitchFrame
 
-class SettingsWindow(ctk.CTkToplevel):
+class SettingsView(ctk.CTkFrame):
+    
+    parent = None
+    settings = None
+    controller = None
     
     def __init__(self, parent):
         
         super().__init__(parent)
         
-        self.title("Settings")
-        self.geometry("400x300")
-        self.resizable(False, False)
-        self.protocol("WM_DELETE_WINDOW", self.hide)
-
-        
         self.parent = parent
         
         self.settings = None
         
-        self.settings_frame_title = ctk.CTkLabel(self, text="Settings", font=("Arial", 34), justify="right", text_color="lightblue")
         
         self.debug_frame = ctk.CTkFrame(self)
         self.debug_frame.title = ctk.CTkLabel(self.debug_frame, text="Debug Mode", font=("Arial", 18), justify="right")
@@ -44,34 +41,41 @@ class SettingsWindow(ctk.CTkToplevel):
         self.scale_frame.scale.grid(row=0, column=1, padx=10, pady=10, sticky="e")
         self.scale_frame.grid_rowconfigure(0, weight=1)
         
-        self.settings_frame_title.pack(padx=10, pady=10, fill="x", anchor="ne")
         self.debug_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.appearance_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.scale_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         
    
    
+    def set_controller(self, controller):
+        self.controller = controller
+        self.load_settings()
+   
+   
     def set_mode(self, *args):
         mode = self.debug_frame.switch.get()
         if mode:
-            self.parent.set_mode("debug")
+            self.controller.set_mode("debug")
         else: 
-            self.parent.set_mode("normal")
+            self.controller.set_mode("normal")
+        self.save_settings()
 
 
     def set_scale(self, *args):
         scale = round(self.scale_frame.scale.get(), 2)
-        self.parent.set_scale(scale)
+        self.controller.set_scale(scale)
         self.scale_frame.scale_value.configure(text=f"{round(scale*100)}%")
+        self.save_settings()
 
 
     def set_appearance(self, *args):
-        self.parent.set_appearance(self.appearance_frame.setting.get())
+        self.controller.set_appearance(self.appearance_frame.setting.get())
+        self.save_settings()
 
     
     
     def load_settings(self):
-        settings = self.parent.controller.load_settings()
+        settings = self.controller.load_settings()
         if settings == self.settings:
             return
         if settings["mode"] == "debug":
@@ -94,16 +98,8 @@ class SettingsWindow(ctk.CTkToplevel):
             "appearance": self.appearance_frame.setting.get(),
             "scale": str(round(self.scale_frame.scale.get(), 2))
         }
-        self.parent.controller.save_settings(settings)
+        self.controller.save_settings(settings)
         
         self.settings = settings
     
     
-    def hide(self):
-        self.withdraw()
-        self.save_settings()
-        
-        
-    def show(self):
-        self.load_settings()
-        self.deiconify()

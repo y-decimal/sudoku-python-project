@@ -6,30 +6,29 @@ class Controller:
         '''Initializes the Controller'''
         self.model = model
         self.view = view
-        self.fetch()
 
     def fetch(self):
         '''Fetch updated values from the model'''
         Debug.log_level2("Fetching")
-        self.view.supress_entry_callback = True
+        self.view.sudoku_view.supress_entry_callback = True
         for row in range(9):
             for column in range(9):
                 value = self.model.get_field_value(row, column)
                 state = self.model.get_field_state(row, column)
-                self.view.set_field_value(row, column, value)
-                self.view.set_field_state(row, column, state)
-                self.view.set_field_valid(row, column)
+                self.view.sudoku_view.set_field_value(row, column, value)
+                self.view.sudoku_view.set_field_state(row, column, state)
+                self.view.sudoku_view.set_field_valid(row, column)
         invalid_fields = self.model.get_invalid_fields()
         for row, column in invalid_fields:
-            self.view.set_field_invalid(row, column)
-        self.view.supress_entry_callback = False
+            self.view.sudoku_view.set_field_invalid(row, column)
+        self.view.sudoku_view.supress_entry_callback = False
 
     def push(self):
         '''Push updated values to the model | To be replaced'''
         for row in range(9):
             for column in range(9):
-                value = self.view.get_field_value(row, column)
-                state = self.view.get_field_state(row, column)
+                value = self.view.sudoku_view.get_field_value(row, column)
+                state = self.view.sudoku_view.get_field_state(row, column)
                 self.model.set_field_value(row, column, value)
                 self.model.set_field_state(row, column, state)
         self.fetch()
@@ -41,13 +40,13 @@ class Controller:
     def push_value(self, row, column, value):
         '''Push updated value to the model'''
         self.model.set_field_value(row, column, value)
-        self.view.invalid_fields = self.model.get_invalid_fields()
+        self.view.sudoku_view.invalid_fields = self.model.get_invalid_fields()
 
     def generate(self):
         '''Callback for the generate button'''
         Debug.log_level2("Generating")
         self.model.generate_random_sudoku()
-        self.view.reset_highlighted_fields()
+        self.view.sudoku_view.reset_highlighted_fields()
         self.fetch()
     
     def clear(self):
@@ -56,14 +55,14 @@ class Controller:
         Debug.log_level2("Clearing")
         
         self.model.clear_sudoku()
-        self.view.reset_highlighted_fields()
+        self.view.sudoku_view.reset_highlighted_fields()
         self.fetch()
 
     def reset(self):
         '''Callback for the reset button'''
         Debug.log_level2("Resetting")
         self.model.reset_sudoku()
-        self.view.reset_highlighted_fields()
+        self.view.sudoku_view.reset_highlighted_fields()
         self.fetch()
     
     def save(self, file_name):
@@ -75,16 +74,11 @@ class Controller:
         '''Callback for the load button'''
         self.model.load_sudoku(file_name)
         self.fetch()
-
-    def set_mode(self, mode='normal'):
-        '''Callback for the mode button'''
-        self.model.set_mode(mode)
-        self.view.set_mode(mode)
         
     def set_file_mode(self, mode='normal'):
         '''Callback for the file mode button'''
         self.model.set_file_mode(mode)
-        self.view.set_file_mode(mode)
+        self.view.sudoku_view.set_file_mode(mode)
 
     def get_files(self):
         '''Callback for the get files method'''
@@ -111,3 +105,16 @@ class Controller:
     def save_settings(self, settings):
         '''Callback for the save_settings function'''
         self.model.save_settings(settings)
+        
+    def set_mode(self, mode='normal'):
+        '''Callback for the mode button'''
+        self.model.set_mode(mode)
+        self.view.sudoku_view.set_mode(mode)    
+        
+    def set_appearance(self, appearance):
+        '''Callback for the set_appearance function'''
+        self.view.sudoku_view.set_appearance(appearance)
+        
+    def set_scale(self, scale):
+        '''Callback for the set_scale function'''
+        self.view.sudoku_view.set_scale(scale)

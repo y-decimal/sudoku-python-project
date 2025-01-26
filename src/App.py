@@ -87,7 +87,7 @@ class App(ctk.CTk):
         self.window_width = self.winfo_width()
         
         if self.prev_window_height != self.window_height and self.prev_window_width != self.window_width:
-            self.view.update_field_size(self.window_height)
+            self.view.sudoku_view.update_field_size(self.window_height)
 
         
 
