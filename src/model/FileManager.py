@@ -1,14 +1,16 @@
 from pathlib import Path
 import os
 import shutil
+import json
 from view.Settings import Settings
+from DebugLog import Debug
 
 class FileManager:
     '''Dummy File Manager to use for testing or reference'''
     
     sudoku_testfiles_path = "/assets/TestFiles/"
     sudoku_files_path = "/assets/SudokuFiles/"
-    settings_path = "/assets/settings.txt"
+    settings_path = "/assets/settings.json"
     absolute_path = None
     root_dir = None
     read_only_files = ["sudoku_easy", "sudoku_medium", "sudoku_hard", "sudoku_easy_possible_solution"]
@@ -166,13 +168,10 @@ class FileManager:
     def save_settings(self, settings: dict):
         '''Saves the settings to the settings file'''
         
-        Settings.set_settings(settings)
-        
         path = self.root_dir + self.settings_path
         
         with open(path, 'w') as file:
-            for key, value in settings.items():
-                file.write(f"{key}={value}\n")
+            json.dump(settings, file)
         
         
     def generate_default_settings(self, override = False):
@@ -197,9 +196,6 @@ class FileManager:
             self.generate_default_settings()
         
         with open(path, 'r') as file:
-            settings = {}
-            for line in file:
-                key, value = line.split("=")
-                settings[key] = value.strip()
-            Settings.set_settings(settings)
+            settings = json.load(file)
+
             return settings

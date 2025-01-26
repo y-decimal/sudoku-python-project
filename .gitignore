@@ -178,4 +178,4 @@ cython_debug/
 
 # File Manager Test files
 assets/TestFiles/*
-assets/settings.txt
+assets/settings.*
