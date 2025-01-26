@@ -175,60 +175,41 @@ class SudokuColorSettings(ctk.CTkFrame):
         mode = 0 if mode_string == "Light" else 1
         for picker in self.pickers:
             ...
+            
+    
         
     def confirm(self):
-        mode = 0 if self.current_mode == "Light" else 1
         
-        temp_list = list(Colors.enabled_bg_color)
-        temp_list[mode] = self.enabled_color.color_var1
-        Colors.enabled_bg_color = tuple(temp_list)
+        if self.current_mode == "Light":
+            Colors.enabled_bg_color = (self.enabled_color.color_var1, Colors.enabled_bg_color[1])
+            Colors.enabled_text_color = (self.enabled_color.color_var2, Colors.enabled_text_color[1])
+            Colors.disabled_bg_color = (self.disabled_color.color_var1, Colors.disabled_bg_color[1])
+            Colors.disabled_text_color = (self.disabled_color.color_var2, Colors.disabled_text_color[1])
+            Colors.invalid_bg_color = (self.invalid_color.color_var1, Colors.invalid_bg_color[1])
+            Colors.invalid_text_color = (self.invalid_color.color_var2, Colors.invalid_text_color[1])
+            Colors.highlight_color_enabled = (self.highlight_color.color_var1, Colors.highlight_color_enabled[1])
+            Colors.highlight_color_disabled = (self.highlight_color.color_var2, Colors.highlight_color_disabled[1])
+            Colors.adjacent_color_enabled = (self.adjacent_color.color_var1, Colors.adjacent_color_enabled[1])
+            Colors.adjacent_color_disabled = (self.adjacent_color.color_var2, Colors.adjacent_color_disabled[1])
+            Colors.number_highlight_color_enabled = (self.number_highlight_color.color_var1, Colors.number_highlight_color_enabled[1])
+            Colors.number_highlight_color_disabled = (self.number_highlight_color.color_var2, Colors.number_highlight_color_disabled[1])
+        else:         
+            Colors.enabled_bg_color = (Colors.enabled_bg_color[0], self.enabled_color.color_var1)
+            Colors.enabled_text_color = (Colors.enabled_text_color[0], self.enabled_color.color_var2)
+            Colors.disabled_bg_color = (Colors.disabled_bg_color[0], self.disabled_color.color_var1)
+            Colors.disabled_text_color = (Colors.disabled_text_color[0], self.disabled_color.color_var2)
+            Colors.invalid_bg_color = (Colors.invalid_bg_color[0], self.invalid_color.color_var1)
+            Colors.invalid_text_color = (Colors.invalid_text_color[0], self.invalid_color.color_var2)
+            Colors.highlight_color_enabled = (Colors.highlight_color_enabled[0], self.highlight_color.color_var1)
+            Colors.highlight_color_disabled = (Colors.highlight_color_disabled[0], self.highlight_color.color_var2)
+            Colors.adjacent_color_enabled = (Colors.adjacent_color_enabled[0], self.adjacent_color.color_var1)
+            Colors.adjacent_color_disabled = (Colors.adjacent_color_disabled[0], self.adjacent_color.color_var2)
+            Colors.number_highlight_color_enabled = (Colors.number_highlight_color_enabled[0], self.number_highlight_color.color_var1)
+            Colors.number_highlight_color_disabled = (Colors.number_highlight_color_disabled[0], self.number_highlight_color.color_var2)
         
-        temp_list = list(Colors.enabled_text_color)
-        temp_list[mode] = self.enabled_color.color_var2
-        Colors.enabled_text_color = tuple(temp_list)
-        
-        temp_list = list(Colors.disabled_bg_color)
-        temp_list[mode] = self.disabled_color.color_var1
-        Colors.disabled_bg_color = tuple(temp_list)
-        
-        temp_list = list(Colors.disabled_text_color)
-        temp_list[mode] = self.disabled_color.color_var2
-        Colors.disabled_text_color = tuple(temp_list)
-        
-        temp_list = list(Colors.invalid_bg_color)
-        temp_list[mode] = self.invalid_color.color_var1
-        Colors.invalid_bg_color = tuple(temp_list)
-        
-        temp_list = list(Colors.invalid_text_color)
-        temp_list[mode] = self.invalid_color.color_var2
-        Colors.invalid_text_color = tuple(temp_list)
-        
-        temp_list = list(Colors.highlight_color_enabled)
-        temp_list[mode] = self.highlight_color.color_var1
-        Colors.highlight_color_enabled = tuple(temp_list)
-        
-        temp_list = list(Colors.highlight_color_disabled)
-        temp_list[mode] = self.highlight_color.color_var2
-        Colors.highlight_color_disabled = tuple(temp_list)
-        
-        temp_list = list(Colors.adjacent_color_enabled)
-        temp_list[mode] = self.adjacent_color.color_var1
-        Colors.adjacent_color_enabled = tuple(temp_list)
-        
-        temp_list = list(Colors.adjacent_color_disabled)
-        temp_list[mode] = self.adjacent_color.color_var2
-        Colors.adjacent_color_disabled = tuple(temp_list)
-        
-        temp_list = list(Colors.number_highlight_color_enabled)
-        temp_list[mode] = self.number_highlight_color.color_var1
-        Colors.number_highlight_color_enabled = tuple(temp_list)
-        
-        temp_list = list(Colors.number_highlight_color_disabled)
-        temp_list[mode] = self.number_highlight_color.color_var2
-        Colors.number_highlight_color_disabled = tuple(temp_list)
 
         self.parent.save_settings()
-        self.parent.controller.update_colors()
+        self.load_settings()
         
     def reset(self):
         Colors.reset_colors()
