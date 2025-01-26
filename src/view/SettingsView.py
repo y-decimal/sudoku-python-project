@@ -85,13 +85,16 @@ class SettingsView(ctk.CTkFrame):
         self.controller.set_appearance(self.appearance_frame.setting.get())
         self.color_picker.set_appearance_mode(self.appearance_frame.setting.get())
         Settings.appearance = self.appearance_frame.setting.get()
+        self.color_picker.current_mode = Settings.appearance
+        self.color_picker.load_settings()
         self.save_settings()
 
     
     
     def load_settings(self):
-        self.controller.load_settings()
-        settings = Settings.get_settings()
+        settings = self.controller.load_settings()
+        Settings.set_settings(settings)
+        
         if settings["mode"] == "debug":
             self.debug_frame.switch.select()
         else:
@@ -103,6 +106,8 @@ class SettingsView(ctk.CTkFrame):
         
         self.scale_frame.scale.set(float(settings["scale"]))
         self.set_scale()
+        
+        self.color_picker.load_settings()
   
     
     def save_settings(self):
