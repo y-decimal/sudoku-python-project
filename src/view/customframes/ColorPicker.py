@@ -18,6 +18,7 @@ class ColorPicker(ctk.CTkFrame):
         self.current_color_value = color_var1
         self.values = ["Editable", "Given"]
 
+        self.current_slider = None
                 
         self.title = ctk.CTkLabel(self, text=color_name, font=("Arial", 18), justify="left")
         
@@ -25,15 +26,31 @@ class ColorPicker(ctk.CTkFrame):
         self.toggle.set(self.values[0])
         
         self.color_slider_frame = ctk.CTkFrame(self)
-
-        self.color_slider_red = ctk.CTkSlider(self.color_slider_frame, from_=0, to=255, number_of_steps=255, progress_color="#FF0000",
-                                              orientation="horizontal", command=self.update_color)
-        self.color_slider_green = ctk.CTkSlider(self.color_slider_frame, from_=0, to=255, number_of_steps=255, progress_color="#00FF00",
-                                                orientation="horizontal", command=self.update_color)
-        self.color_slider_blue = ctk.CTkSlider(self.color_slider_frame, from_=0, to=255, number_of_steps=255, progress_color="#0000FF",
-                                               orientation="horizontal", command=self.update_color)
         
-        # self.reset_button = ctk.CTkButton(self, text="Reset", command=self.reset_color)
+        class ColorSlider(ctk.CTkSlider):
+            def __init__(self, parent, color, command, *args, **kwargs):
+                super().__init__(parent, from_=0, to=255, number_of_steps=255, command=command, *args, **kwargs)
+                self.configure(progress_color=color, )
+                self.focused = False
+                self.command = command
+                
+                self.bind("<Enter>", lambda event: self.set_focused(True))
+                self.bind("<Leave>", lambda event: self.set_focused(False))
+                self.bind("<MouseWheel>", lambda event: self.update_slider(event.delta/15))
+                self.bind("<Shift-MouseWheel>", lambda event: self.update_slider(event.delta/30))
+                self.bind("<Control-MouseWheel>", lambda event: self.update_slider(event.delta/90))  
+            
+            def set_focused(self, value):
+                self.focused = value
+            
+            def update_slider(self, value):
+                if self.focused:
+                    self.set(self.get() + value)
+                    self.command()
+
+        self.color_slider_red = ColorSlider(self.color_slider_frame, color="#FF0000", orientation="horizontal", command=self.update_color)
+        self.color_slider_green = ColorSlider(self.color_slider_frame, color="#00FF00", orientation="horizontal", command=self.update_color)
+        self.color_slider_blue = ColorSlider(self.color_slider_frame, color="#0000FF", orientation="horizontal", command=self.update_color)
         
         self.color_slider_red.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.color_slider_green.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
@@ -63,6 +80,15 @@ class ColorPicker(ctk.CTkFrame):
         self.grid_rowconfigure((0,1,2,3), weight=1)
         self.grid_columnconfigure(0, weight=5)
         self.grid_columnconfigure(1, weight=1)
+
+
+    def set_focus(self, slider):
+        self.current_slider = slider
+    
+    def update_slider(self, value):
+        self.current_slider.set(self.current_slider.get() + value)
+        print(self.current_slider.get())
+
 
     def update_color(self, *args):
         color = "#{:02X}{:02X}{:02X}".format(
