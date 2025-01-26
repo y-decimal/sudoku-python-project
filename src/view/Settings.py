@@ -116,11 +116,13 @@ class Settings:
     
     @staticmethod
     def get_settings():
-        return {
+        settings = {
             "mode": Settings.mode,
             "appearance": Settings.appearance,
-            "scale": Settings.scale
+            "scale": Settings.scale,         
         }
+        settings.update(Colors.get_colors())
+        return settings
     
     @staticmethod
     def get_default_settings():
@@ -134,7 +136,9 @@ class Settings:
     def set_settings(settings):
         Settings.mode = settings["mode"]
         Settings.appearance = settings["appearance"]
-        Settings.scale = settings["scale"]
+        Settings.scale = float(settings["scale"])
+        Colors.set_colors(settings)
+        
         
     @staticmethod
     def reset_mode():
