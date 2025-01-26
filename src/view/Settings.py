@@ -6,7 +6,7 @@ class Colors:
     DEFAULT_HIGHLIGHT_COLOR_ENABLED = highlight_color_enabled = ("#ca7f7f", "#5F4648")
     DEFAULT_HIGHLIGHT_COLOR_DISABLED = highlight_color_disabled = ("#c75252", "#3F2628")
     DEFAULT_ADJACENT_COLOR_ENABLED = adjacent_color_enabled = ("#baeac1", "#445F48")
-    DEFAULT_ADJACENT_COLOR_DISABLED = adjacent_color_disabled = ("#75a87d", "#243F28")
+    DEFAULT_ADJACENT_COLOR_DISABLED = adjacent_color_disabled = ("#75a87d", "#304734")
     DEFAULT_INVALID_TEXT_COLOR = invalid_text_color = ("#FF0000", "#FF0000")
     DEFAULT_INVALID_BG_COLOR = invalid_bg_color = ("#b29626", "#403823")
     DEFAULT_NUMBER_HIGHLIGHT_COLOR_ENABLED = number_highlight_color_enabled = ("#bfbf00", "#FFFF00")
