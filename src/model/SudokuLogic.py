@@ -1,4 +1,5 @@
 from model.ISudokuInterface import ISudokuInterface
+from DebugLog import Debug
 import random
 
 class SudokuLogic(ISudokuInterface):
@@ -50,8 +51,7 @@ class SudokuLogic(ISudokuInterface):
         '''Returns true if field is editable, returns false if field is not editable (e.g because it is a given field)'''
         
         check1 = not self.starterfield[self.rc_to_index(row, column)]
-        #print("Check1")
-        #print(check1)
+
         return check1
 
     def would_value_be_valid(self, row: int, column: int, value) -> bool:
@@ -62,8 +62,8 @@ class SudokuLogic(ISudokuInterface):
         possible_fields = [field for field in self.fields]
         possible_fields[self.rc_to_index(row,column)] = value
         check = self.invalid_rows2(possible_fields, row, column, value) == {} and self.invalid_columns2(possible_fields, row, column, value) == {} and self.invalid_blocks2(possible_fields, row, column, value) == {}
-        # if not check:
-        #     print(f'{self.rc_to_index(row,column)}:{check}:{value}:{row, column}')
+        if not check:
+            Debug.log_level_debug(f'{self.rc_to_index(row,column)}:{check}:{value}:{row, column}')
         return check
 
 
