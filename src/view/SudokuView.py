@@ -203,6 +203,7 @@ class SudokuView(ctk.CTkFrame):
             self.highlight_numbers(self.widget_at_mouse)
         else:
             self.reset_highlighted_fields()
+            self.reset_highlighted_numbers()
 
 
     def entry_callback(self, widget):
