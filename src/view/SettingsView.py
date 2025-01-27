@@ -1,9 +1,9 @@
 import customtkinter as ctk
+from tkinter import messagebox
 from view.customframes.SwitchFrame import SwitchFrame
 from view.Settings import Settings
 from view.Settings import Colors
 from view.customframes.ColorPicker import ColorPicker
-from view.customframes.ButtonFrame import ButtonFrame
 
 
 class SettingsView(ctk.CTkFrame):
@@ -48,12 +48,13 @@ class SettingsView(ctk.CTkFrame):
         self.color_picker = SudokuColorSettings(self)
         
         self.reset_button = ctk.CTkButton(self, text="Reset to defaults", command=self.reset_settings)
+        self.debug_only_test_button = ctk.CTkButton(self, text="See what changed from defaults", command=self.difference_default_settings)
         
         self.debug_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.appearance_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.scale_frame.pack(padx=10, pady=10, fill="both", anchor="e")
         self.color_picker.pack(padx=10, pady=10, fill="both", anchor="e")
-        self.reset_button.pack(padx=10, pady=10, fill="both", anchor="e")
+        self.reset_button.pack(padx=10, pady=10, fill="x", anchor="s")
         
    
    
@@ -66,9 +67,13 @@ class SettingsView(ctk.CTkFrame):
         mode = self.debug_frame.switch.get()
         if mode:
             self.controller.set_mode("debug")
+            self.debug_frame.switch.select()
+            self.debug_only_test_button.pack(padx=10, pady=10, fill="x", anchor="s")    
             Settings.mode="debug"
         else: 
             self.controller.set_mode("normal")
+            self.debug_frame.switch.deselect()
+            self.debug_only_test_button.pack_forget()
             Settings.mode="normal"
         self.save_settings()
 
@@ -118,6 +123,49 @@ class SettingsView(ctk.CTkFrame):
         Settings.set_settings(Settings.get_default_settings())
         self.save_settings()
         self.load_settings()
+        
+    
+    def difference_default_settings(self):
+        changes = []
+        if Settings.DEFAULT_MODE != Settings.mode:
+            changes.append(f"mode: {Settings.DEFAULT_MODE} -> {Settings.mode}")
+        if Settings.DEFAULT_APPEARANCE != Settings.appearance:
+            changes.append(f"appearance: {Settings.DEFAULT_APPEARANCE} -> {Settings.appearance}")
+        if Settings.DEFAULT_SCALE != Settings.scale:
+            changes.append(f"scale: {Settings.DEFAULT_SCALE} -> {Settings.scale}")
+        if Colors.DEFAULT_ADJACENT_COLOR_DISABLED[0] != Colors.adjacent_color_disabled[0] or Colors.DEFAULT_ADJACENT_COLOR_DISABLED[1] != Colors.adjacent_color_disabled[1]:
+            changes.append(f"adjacent color disabled: {Colors.DEFAULT_ADJACENT_COLOR_DISABLED} -> {Colors.adjacent_color_disabled}")
+        if Colors.DEFAULT_ADJACENT_COLOR_ENABLED[0] != Colors.adjacent_color_enabled[0] or Colors.DEFAULT_ADJACENT_COLOR_ENABLED[1] != Colors.adjacent_color_enabled[1]:
+            changes.append(f"adjacent color enabled: {Colors.DEFAULT_ADJACENT_COLOR_ENABLED} -> {Colors.adjacent_color_enabled}")
+        if Colors.DEFAULT_DISABLED_BG_COLOR[0] != Colors.disabled_bg_color[0] or Colors.DEFAULT_DISABLED_BG_COLOR[1] != Colors.disabled_bg_color[1]:
+            changes.append(f"disabled bg color: {Colors.DEFAULT_DISABLED_BG_COLOR} -> {Colors.disabled_bg_color}")
+        if Colors.DEFAULT_DISABLED_TEXT_COLOR[0] != Colors.disabled_text_color[0] or Colors.DEFAULT_DISABLED_TEXT_COLOR[1] != Colors.disabled_text_color[1]:
+            changes.append(f"disabled text color: {Colors.DEFAULT_DISABLED_TEXT_COLOR} -> {Colors.disabled_text_color}")
+        if Colors.DEFAULT_ENABLED_BG_COLOR[0] != Colors.enabled_bg_color[0] or Colors.DEFAULT_ENABLED_BG_COLOR[1] != Colors.enabled_bg_color[1]:
+            changes.append(f"enabled bg color: {Colors.DEFAULT_ENABLED_BG_COLOR} -> {Colors.enabled_bg_color}")
+        if Colors.DEFAULT_ENABLED_TEXT_COLOR[0] != Colors.enabled_text_color[0] or Colors.DEFAULT_ENABLED_TEXT_COLOR[1] != Colors.enabled_text_color[1]:
+            changes.append(f"enabled text color: {Colors.DEFAULT_ENABLED_TEXT_COLOR} -> {Colors.enabled_text_color}")
+        if Colors.DEFAULT_HIGHLIGHT_COLOR_DISABLED[0] != Colors.highlight_color_disabled[0] or Colors.DEFAULT_HIGHLIGHT_COLOR_DISABLED[1] != Colors.highlight_color_disabled[1]:
+            changes.append(f"highlight color disabled: {Colors.DEFAULT_HIGHLIGHT_COLOR_DISABLED} -> {Colors.highlight_color_disabled}")
+        if Colors.DEFAULT_HIGHLIGHT_COLOR_ENABLED[0] != Colors.highlight_color_enabled[0] or Colors.DEFAULT_HIGHLIGHT_COLOR_ENABLED[1] != Colors.highlight_color_enabled[1]:
+            changes.append(f"highlight color enabled: {Colors.DEFAULT_HIGHLIGHT_COLOR_ENABLED} -> {Colors.highlight_color_enabled}")
+        if Colors.DEFAULT_INVALID_BG_COLOR[0] != Colors.invalid_bg_color[0] or Colors.DEFAULT_INVALID_BG_COLOR[1] != Colors.invalid_bg_color[1]:
+            changes.append(f"invalid bg color: {Colors.DEFAULT_INVALID_BG_COLOR} -> {Colors.invalid_bg_color}")
+        if Colors.DEFAULT_INVALID_TEXT_COLOR[0] != Colors.invalid_text_color[0] or Colors.DEFAULT_INVALID_TEXT_COLOR[1] != Colors.invalid_text_color[1]:
+            changes.append(f"invalid text color: {Colors.DEFAULT_INVALID_TEXT_COLOR} -> {Colors.invalid_text_color}")
+        if Colors.DEFAULT_NUMBER_HIGHLIGHT_COLOR_DISABLED[0] != Colors.number_highlight_color_disabled[0] or Colors.DEFAULT_NUMBER_HIGHLIGHT_COLOR_DISABLED[1] != Colors.number_highlight_color_disabled[1]:
+            changes.append(f"number highlight color disabled: {Colors.DEFAULT_NUMBER_HIGHLIGHT_COLOR_DISABLED} -> {Colors.number_highlight_color_disabled}")
+        if Colors.DEFAULT_NUMBER_HIGHLIGHT_COLOR_ENABLED[0] != Colors.number_highlight_color_enabled[0] or Colors.DEFAULT_NUMBER_HIGHLIGHT_COLOR_ENABLED[1] != Colors.number_highlight_color_enabled[1]:
+            changes.append(f"number highlight color enabled: {Colors.DEFAULT_NUMBER_HIGHLIGHT_COLOR_ENABLED} -> {Colors.number_highlight_color_enabled}")
+        
+        
+        if len(changes) == 0:
+            messagebox.showinfo("No changes", "There are no changes from the default settings")
+        else:
+            messagebox.showinfo("Changed default settings", f"These settings have been changed from their defaults:\n\n" + "\n".join(changes))
+        
+        
+
         
     
     
