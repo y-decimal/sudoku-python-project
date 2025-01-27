@@ -123,7 +123,7 @@ class SudokuView(ctk.CTkFrame):
         
     	# Debug Checkbox Frame
         self.sudoku_checkbox_frame = CheckboxFrame(self.debug_frame, 2, 1)
-        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Save Locally", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.localsave_callback(widget))
+        self.sudoku_checkbox_frame.checkboxes[0].configure(text="Test Directory", command = lambda *args, widget = self.sudoku_checkbox_frame.checkboxes[0]: self.localsave_callback(widget))
         self.sudoku_checkbox_frame.checkboxes[0].select()   
         self.sudoku_checkbox_frame.checkboxes[1].configure(text="Edit Mode", command =  self.set_edit_mode)
     
