@@ -319,8 +319,10 @@ class SudokuView(ctk.CTkFrame):
             row, column = widget.get_position()
             if widget.get_state():
                 self.set_field_not_editable(row, column)
+                self.controller.set_field_state(row, column, False)
             else:
                 self.set_field_editable(row, column)
+                self.controller.set_field_state(row, column, True)
                
             self.reset_highlighted_fields()
 
