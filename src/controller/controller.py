@@ -119,6 +119,10 @@ class Controller:
         '''Callback for the set_scale function'''
         self.view.sudoku_view.set_scale(scale)
         
+    def update_colors(self):
+        '''Callback for the update_colors function'''
+        self.view.sudoku_view.update_colors()
+
     def set_field_state(self, row, column, state):
         '''Sets the state of a field'''
         self.model.set_field_state(row, column, state)
