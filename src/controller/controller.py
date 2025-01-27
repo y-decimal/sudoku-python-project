@@ -122,3 +122,8 @@ class Controller:
     def update_colors(self):
         '''Callback for the update_colors function'''
         self.view.sudoku_view.update_colors()
+
+    def set_field_state(self, row, column, state):
+        '''Sets the state of a field'''
+        self.model.set_field_state(row, column, state)
+
