@@ -185,3 +185,19 @@ class SudokuLogic(ISudokuInterface):
         if self.invalid_columns() !={} or self.invalid_blocks() !={} or self.invalid_rows() !={}:
             return False
         return True
+    
+    
+    
+    def solve(self, index = 0):
+        
+        if index == 81:
+            return True
+        if self.fields[index] != 0:
+            return self.solve(index+1)
+        for value in range(1,10):
+            if self.would_value_be_valid(index//9,index%9, value):
+                self.fields[index] = value
+                if self.solve(index+1):
+                    return True
+                self.fields[index] = 0
+        return False
