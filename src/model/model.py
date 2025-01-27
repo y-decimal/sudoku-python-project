@@ -130,4 +130,4 @@ class Model:
         return self.file_manager.save_settings(settings)
     
     def test_method(self):
-        return self.sudoku_logic.last_check_check24()
+        return self.sudoku_logic.solve()
